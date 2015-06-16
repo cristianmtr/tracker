@@ -11,40 +11,58 @@
     <script type="text/javascript" language="javascript" src="{{ url_for('static', filename='datatablesbootstrap.js') }}"></script>
     <script type="text/javascript" language="javascript" class="init">
 
+var dataSet;
+
+
 $(document).ready(function() {
-    $('#example').DataTable( {
-	"processing": true,
-	"serverSide": true,
-	"ajax": "/json",
-    } ); });
 
-		  </script>	
-		  </head>
-		  <body>
-		  <table id="example" class="display table-striped table-condensed table-bordered" cellspacing="0" width="100%">
-		  <thead>
-		  <tr>
-		  <th class="col-md-1">id</th>
-		  <th class="col-md-8">description</th>
-		  <th class="col-md-1">dead line</th>
-		  <th class="col-md-1">responsible</th>
-		  <th class="col-md-1">author</th>
-		  </tr>
-		  </thead>
-		  
-		  <tbody>
-		  
-		  <tr>
-		  
-		  <td class="col-md-1"></td>
-		  <td class="col-md-8"><pre></pre></td>
-		  <td class="col-md-1"></td>
-		  <td class="col-md-1"></td>
-		  <td class="col-md-1"></td>
+    function test() {
+	return $.getJSON('/json');
+    }
 
-		  </tr>
-		  
-		  </tbody>
-		  </table>
-		  </body>
-		  </html>
+    $.when(test()).then(function (data) {
+	dataSet = data['data'];
+	$('#example').DataTable( {
+	    "data": dataSet,
+	    "columns": [
+		{ "title" : "id" },
+		{ "title" : "description" },
+		{ "title" : "dead line" },
+		{ "title" : "responsible" },
+		{ "title" : "author" }
+	    ]
+	} );
+    });
+});
+
+</script>	
+    </head>
+    <body>
+    <div id="demo"></div>
+    <table id="example" class="display table-striped table-condensed table-bordered" cellspacing="0" width="100%">
+    <thead>
+    <tr>
+    <th class="col-md-1">id</th>
+    <th class="col-md-8">description</th>
+    <th class="col-md-1">dead line</th>
+    <th class="col-md-1">responsible</th>
+    <th class="col-md-1">author</th>
+    </tr>
+    </thead>
+    
+    <tbody>
+    
+    <tr>
+    
+    <td class="col-md-1"></td>
+    <td class="col-md-8"><pre></pre></td>
+    <td class="col-md-1"></td>
+    <td class="col-md-1"></td>
+    <td class="col-md-1"></td>
+
+</tr>
+    
+</tbody>
+    </table>
+    </body>
+    </html>
