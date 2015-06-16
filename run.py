@@ -1,6 +1,8 @@
 #! /usr/bin/python
 from flask import Flask, render_template, jsonify
 from models import create_session, create_task_object, create_user_object
+import logging
+from logging.handlers import RotatingFileHandler
 
 app = Flask(__name__)
 
@@ -20,11 +22,27 @@ def index():
 @app.route("/json")
 def json():
     data = [
-        {'id':'2', 'description':'adasda', 'dead_line':'2more', 'responsible':'moi', 'author':'the other guy'},
-        {'id':'3', 'description':'do that thing', 'dead_line':'never!', 'responsible':'Thor', 'author':'the other guy'},
+        [
+            "2",
+            "adsadas",
+            "2more",
+            "moi",
+            "you"
+        ],
+        [
+            "3",
+            "adsdasdasfasfas",
+            "never",
+            "Thor",
+            "Hulk"
+        ]
     ]
-    return jsonify(draw=1, recordsTotal=1, recordsFiltered=0, data=data)
+    app.logger.warning('data = {}'.format(data))
+    return jsonify(draw=0, recordsTotal=2, recordsFiltered=2, data=data)
 
 if __name__ == "__main__":
     app.debug = True
+    handler = RotatingFileHandler('app.log', maxBytes=10000, backupCount=1)
+    handler.setLevel(logging.INFO)
+    app.logger.addHandler(handler)
     app.run(host='0.0.0.0', port=5000)
