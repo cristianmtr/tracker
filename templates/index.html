@@ -1,0 +1,58 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>TaskFreak! - readonly mode</title>
+    <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
+    <link href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css" rel="stylesheet">
+    <script src="http://code.jquery.com/jquery-2.0.3.min.js"></script>
+    <script src="//netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='datatablesbootstrap.css') }}">
+    <script type="text/javascript" language="javascript" src="{{ url_for('static', filename='datatables.js') }}"></script>
+    <script type="text/javascript" language="javascript" src="{{ url_for('static', filename='datatablesbootstrap.js') }}"></script>
+    <script type="text/javascript" language="javascript" class="init">
+
+$(document).ready(function() {
+    $('#example').DataTable( {
+	"processing": true,
+	"serverSide": true,
+	"ajax": "/json",
+	"columns": [
+	    { "data": "id" },
+	    { "data": "description" },
+	    { "data": "dead_line" },
+	    { "data": "responsible" },
+	    { "data": "author" }
+	]
+    } );
+} );
+
+    </script>	
+</head>
+<body>
+<table id="example" class="display table-striped table-condensed table-bordered" cellspacing="0" width="100%">
+        <thead>
+		<tr>
+			<th class="col-md-1">id</th>
+			<th class="col-md-8">description</th>
+			<th class="col-md-1">dead line</th>
+			<th class="col-md-1">responsible</th>
+			<th class="col-md-1">author</th>
+		</tr>
+        </thead>
+	
+        <tbody>
+		
+		<tr>
+		
+			<td class="col-md-1"></td>
+			<td class="col-md-8"><pre></pre></td>
+			<td class="col-md-1"></td>
+			<td class="col-md-1"></td>
+			<td class="col-md-1"></td>
+
+		</tr>
+		
+        </tbody>
+</table>
+</body>
+</html>
