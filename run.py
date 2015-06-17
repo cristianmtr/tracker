@@ -1,13 +1,12 @@
 #! /usr/bin/python
-from flask import Flask, render_template, jsonify, request
+from flask import Flask, render_template, jsonify
 from models import create_session, create_task_object, create_user_object
 import logging
 from logging.handlers import RotatingFileHandler
-# debugging only
-import pprint
 
 
 app = Flask(__name__)
+
 
 # will store db globals
 class Globals(object):
@@ -16,9 +15,11 @@ class Globals(object):
         self.task = create_task_object()
         self.user = create_user_object()
 
+
 @app.route("/")
 def index():
     return render_template('index.html')
+
 
 @app.route("/json")
 def json():
@@ -39,14 +40,8 @@ def json():
         ]
     ]
 
-    # some debug info
-    app.logger.info('data = {}'.format(data))
-    args = dict(request.args)
-    app.logger.info(args.keys())
-    pp = pprint.PrettyPrinter(indent=4)
-    pp.pprint(args)
-    
     return jsonify(data=data)
+
 
 if __name__ == "__main__":
     app.debug = True
