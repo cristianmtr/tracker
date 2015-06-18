@@ -23,23 +23,10 @@ def index():
 
 @app.route("/json")
 def json():
-    data = [
-        [
-            "2",
-            "adsadas",
-            "2more",
-            "moi",
-            "you"
-        ],
-        [
-            "3",
-            "adsdasdasfasfas",
-            "never",
-            "Thor",
-            "Hulk"
-        ]
-    ]
-
+    data = []
+    tasks = globals.session.query(globals.task, globals.task.itemId, globals.task.description, globals.task.deadlineDate, globals.task.memberId, globals.task.authorId).all()
+    for t in tasks:
+        data.append([t.itemId, "<pre>" + t.description + "</pre>", t.deadlineDate.isoformat() if t.deadlineDate != None else None, t.memberId, t.authorId])
     return jsonify(data=data)
 
 
