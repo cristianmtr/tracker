@@ -6,6 +6,8 @@
 - [ ] edit in place
   - [ ] ajax call for that one
 
+- Check here for create in place js: http://vitalets.github.io/x-editable/docs.html#newrecord
+
 ###
 
 Example of config.json:
