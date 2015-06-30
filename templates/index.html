@@ -38,34 +38,59 @@
 	  </script>	
 	</head>
 	<body>
-	  <ul class="nav nav-pills nav-justified">
-	    <li role="presentation" class="active"><a href="#">Create new</a></li>
-	  </ul>
-	  <div id="demo"></div>
-	  <table id="example" class="display table-striped table-condensed table-bordered" cellspacing="0" width="100%">
-	    <thead>
-	      <tr>
-		<th class="col-md-1">id</th>
-		<th class="col-md-8">description</th>
-		<th class="col-md-1">dead line</th>
-		<th class="col-md-1">responsible</th>
-		<th class="col-md-1">author</th>
-	      </tr>
-	    </thead>
-	    
-	    <tbody>
-	      
-	      <tr>
-		
-		<td class="col-md-1"></td>
-		<td class="col-md-8"><pre></pre></td>
-		<td class="col-md-1"></td>
-		<td class="col-md-1"></td>
-		<td class="col-md-1"></td>
 
-	      </tr>
+	  <!-- button for creating new task -->
+	  <ul class="nav nav-pills nav-justified">
+	    <li button type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#createNewModal">
+	      Create new
+	  </button></li>
+	</ul>
+
+	<!-- Modal for creting new task -->
+	<div class="modal fade" id="createNewModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+	  <div class="modal-dialog" role="document">
+	    <div class="modal-content">
+	      <div class="modal-header">
+		<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+		<h4 class="modal-title" id="myModalLabel">Create new</h4>
+	      </div>
+	      <div class="modal-body">
+		form goes here
+	      </div>
+	      <div class="modal-footer">
+		<button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+		<button type="button" class="btn btn-primary">Submit</button>
+	      </div>
+	    </div>
+	  </div>
+	</div>
+
+	<!-- table for data -->
+	<div id="demo"></div>
+	<table id="example" class="display table-striped table-condensed table-bordered" cellspacing="0" width="100%">
+	  <thead>
+	    <tr>
+	      <th class="col-md-1">id</th>
+	      <th class="col-md-8">description</th>
+	      <th class="col-md-1">dead line</th>
+	      <th class="col-md-1">responsible</th>
+	      <th class="col-md-1">author</th>
+	    </tr>
+	  </thead>
+	  
+	  <tbody>
+	    
+	    <tr>
 	      
-	    </tbody>
-	  </table>
-	</body>
-      </html>
+	      <td class="col-md-1"></td>
+	      <td class="col-md-8"><pre></pre></td>
+	      <td class="col-md-1"></td>
+	      <td class="col-md-1"></td>
+	      <td class="col-md-1"></td>
+
+	    </tr>
+	    
+	  </tbody>
+	</table>
+      </body>
+    </html>
