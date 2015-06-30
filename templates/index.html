@@ -1,68 +1,71 @@
-    <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-    <html xmlns="http://www.w3.org/1999/xhtml">
-    <head>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
     <title>TaskFreak! - readonly mode</title>
     <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
-    <link href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css" rel="stylesheet">
-    <script src="http://code.jquery.com/jquery-2.0.3.min.js"></script>
-    <script src="//netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
-    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='datatablesbootstrap.css') }}">
-    <script type="text/javascript" language="javascript" src="{{ url_for('static', filename='datatables.js') }}"></script>
-    <script type="text/javascript" language="javascript" src="{{ url_for('static', filename='datatablesbootstrap.js') }}"></script>
-    <script type="text/javascript" language="javascript" class="init">
+      <link href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css" rel="stylesheet">
+	<script src="http://code.jquery.com/jquery-2.0.3.min.js"></script>
+	<script src="//netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
+	<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='datatablesbootstrap.css') }}">
+	  <script type="text/javascript" language="javascript" src="{{ url_for('static', filename='datatables.js') }}"></script>
+	  <script type="text/javascript" language="javascript" src="{{ url_for('static', filename='datatablesbootstrap.js') }}"></script>
+	  <script type="text/javascript" language="javascript" class="init">
 
-var dataSet;
+	    var dataSet;
 
 
-$(document).ready(function() {
+	    $(document).ready(function() {
 
-    function test() {
-	return $.getJSON('/json');
-    }
+	    function test() {
+	    return $.getJSON('/json');
+	    }
 
-    $.when(test()).then(function (data) {
-	dataSet = data['data'];
-	$('#example').DataTable( {
+	    $.when(test()).then(function (data) {
+	    dataSet = data['data'];
+	    $('#example').DataTable( {
 	    "data": dataSet,
 	    "columns": [
-		{ "title" : "id" },
-		{ "title" : "description" },
-		{ "title" : "dead line" },
-		{ "title" : "responsible" },
-		{ "title" : "author" }
+	    { "title" : "id" },
+	    { "title" : "description" },
+	    { "title" : "dead line" },
+	    { "title" : "responsible" },
+	    { "title" : "author" }
 	    ]
-	} );
-    });
-});
+	    } );
+	    });
+	    });
 
-</script>	
-    </head>
-    <body>
-    <div id="demo"></div>
-    <table id="example" class="display table-striped table-condensed table-bordered" cellspacing="0" width="100%">
-    <thead>
-    <tr>
-    <th class="col-md-1">id</th>
-    <th class="col-md-8">description</th>
-    <th class="col-md-1">dead line</th>
-    <th class="col-md-1">responsible</th>
-    <th class="col-md-1">author</th>
-    </tr>
-    </thead>
-    
-    <tbody>
-    
-    <tr>
-    
-    <td class="col-md-1"></td>
-    <td class="col-md-8"><pre></pre></td>
-    <td class="col-md-1"></td>
-    <td class="col-md-1"></td>
-    <td class="col-md-1"></td>
+	  </script>	
+	</head>
+	<body>
+	  <ul class="nav nav-pills nav-justified">
+	    <li role="presentation" class="active"><a href="#">Create new</a></li>
+	  </ul>
+	  <div id="demo"></div>
+	  <table id="example" class="display table-striped table-condensed table-bordered" cellspacing="0" width="100%">
+	    <thead>
+	      <tr>
+		<th class="col-md-1">id</th>
+		<th class="col-md-8">description</th>
+		<th class="col-md-1">dead line</th>
+		<th class="col-md-1">responsible</th>
+		<th class="col-md-1">author</th>
+	      </tr>
+	    </thead>
+	    
+	    <tbody>
+	      
+	      <tr>
+		
+		<td class="col-md-1"></td>
+		<td class="col-md-8"><pre></pre></td>
+		<td class="col-md-1"></td>
+		<td class="col-md-1"></td>
+		<td class="col-md-1"></td>
 
-</tr>
-    
-</tbody>
-    </table>
-    </body>
-    </html>
+	      </tr>
+	      
+	    </tbody>
+	  </table>
+	</body>
+      </html>
