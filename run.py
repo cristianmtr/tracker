@@ -14,6 +14,12 @@ class Globals(object):
         self.session = create_session()
         self.task = create_task_object()
         self.user = create_user_object()
+        self.user_id_to_name = {}
+        self.build_user_id_to_name()
+    def build_user_id_to_name(self):
+        users = self.session.query(self.user, self.user.memberId, self.user.firstName).all()
+        for u in users:
+            self.user_id_to_name[u.memberId] = u.firstName
 
 
 @app.route("/")
@@ -26,7 +32,15 @@ def json():
     data = []
     tasks = globals.session.query(globals.task, globals.task.itemId, globals.task.description, globals.task.deadlineDate, globals.task.memberId, globals.task.authorId).all()
     for t in tasks:
-        data.append([t.itemId, "<pre>" + t.description + "</pre>", t.deadlineDate.isoformat() if t.deadlineDate != None else None, t.memberId, t.authorId])
+        this_task = []
+        this_task.append(t.itemId)
+        # keep formatting when displaying description
+        this_task.append("<pre>" + t.description + "</pre>")
+        # handle empty fields, for deadlineDate or member info
+        this_task.append(t.deadlineDate.isoformat() if t.deadlineDate != None else None)
+        this_task.append(globals.user_id_to_name[t.memberId] if t.memberId != 0 else None)
+        this_task.append(globals.user_id_to_name[t.authorId] if t.authorId != 0 else None)
+        data.append(this_task)
     return jsonify(data=data)
 
 
@@ -36,4 +50,4 @@ if __name__ == "__main__":
     handler.setLevel(logging.INFO)
     app.logger.addHandler(handler)
     globals = Globals()
-    app.run(host='0.0.0.0', port=5000)
+    app.run(host='0.0.0.0', port=80)
