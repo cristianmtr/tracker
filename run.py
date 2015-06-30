@@ -8,8 +8,8 @@ from logging.handlers import RotatingFileHandler
 app = Flask(__name__)
 
 
-# will store db globals
 class Globals(object):
+    """Will store db globals"""
     def __init__(self):
         self.session = create_session()
         self.task = create_task_object()
