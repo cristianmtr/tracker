@@ -23,6 +23,11 @@
     <!-- moment js -->
     <script src="{{ url_for('static', filename='moment.js') }}"></script>
 
+    <!--date time picker for bs3-->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.14.30/js/bootstrap-datetimepicker.min.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.14.30/css/bootstrap-datetimepicker.min.css"
+          rel="stylesheet"/>
+
     <!-- main -->
     <script src="{{ url_for('static', filename='main.js') }}"></script>
 </head>
@@ -53,9 +58,23 @@
 
                 <!-- Deadline - datetime picker -->
                 <span>Deadline:</span>
-                <a href="#" id="deadline"></a></br>
+                <div class='input-group date' id='deadline'>
+                    <input type='text' class="form-control" id="deadlinetext"/>
+                    <span class="input-group-addon">
+                        <span class="glyphicon glyphicon-calendar"></span>
+                    </span>
 
-                <!-- tasklist - dropdown -->
+                    <script type="text/javascript">
+                        $(function () {
+                            $('#deadline').datetimepicker({
+                                format: 'DD/MMMM/YYYY',
+                            });
+                        });
+                    </script>
+                </div>
+
+
+                <!-- tasklist - dropdown
                 <span>Task list:</span>
                 <a href="#" id="tasklist"></a></br>
 
@@ -72,7 +91,7 @@
                 <a href="#" id="responsible"></a></br>
 
                 <!--todo-->
-                 <!--context - dropdown -->
+                <!--context - dropdown -->
                 <!-- availability - radio -->
                 <!-- status - dropdown -->
 

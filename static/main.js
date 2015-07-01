@@ -16,21 +16,6 @@ $(document).ready(function () {
 
     });
 
-    $('#deadline').editable({
-        type: 'combodate',
-	format: 'DD.MM.YYYY',
-	title: 'Deadline',
-        viewformat: 'DD.MMMM.YYYY',    
-        template: 'DD.MMMM.YYYY',
-	value: moment().format(new moment().format("DD.MM.YYYY")),
-        combodate: {
-                minYear: 2015,
-                maxYear: 2016,
-                minuteStep: 1
-           }
-	
-    })
-
     $('#tasklist').editable({
         type: 'select',
         title: 'Task list',
@@ -40,31 +25,31 @@ $(document).ready(function () {
             {value: 1, text: 'Dummy'},
             {value: 2, text: 'Fake'},
             {value: 3, text: 'Foo'},
-	    {value: 4, text: 'Bar'},
+            {value: 4, text: 'Bar'},
         ]
     });
 
     $("#title").editable({
-	type: 'text',
-	title: 'Title',
-	clear: true,
-	placeholder: 'task title',
+        type: 'text',
+        title: 'Title',
+        clear: true,
+        placeholder: 'task title',
     });
 
     $("#description").editable({
-	type: 'textarea',
-	escape: true,
+        type: 'textarea',
+        escape: true,
     });
 
     $("#responsible").editable({
-	type: 'select',
-	value: 1,
-	title: 'Responsible',
-	placement: 'right',
-	source: [
-	    {value: 1, text: 'Cristian'},
-	    {value: 2, text: 'Someone else'},
-	    ]
+        type: 'select',
+        value: 1,
+        title: 'Responsible',
+        placement: 'right',
+        source: [
+            {value: 1, text: 'Cristian'},
+            {value: 2, text: 'Someone else'},
+        ]
     });
 
     function test() {

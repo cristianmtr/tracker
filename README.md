@@ -12,6 +12,7 @@
   - x-editable provides a success callback;
 - when sending /post request, you can access value from fields using x-editable again:
   - e.g. $("#tasklist").editable('getValue');
+  - for datepicker, $('#deadline').data("DateTimePicker").date().format("DD/MMMM/YYYY");
   
 ### DEPLOYMENT
 
