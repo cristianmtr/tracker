@@ -35,7 +35,7 @@
 
 <!-- button for creating new task -->
 <ul class="nav nav-pills nav-justified">
-    <li button type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#createNewModal">
+    <li button type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#createNewModal" onclick="insertNewRow()">
         Create new
         </button></li>
 </ul>
@@ -50,49 +50,14 @@
                 <h4 class="modal-title" id="myModalLabel">Create new</h4>
             </div>
             <div class="modal-body">
-                <!-- form goes here -->
 
-                <!-- Priority - dropdown -->
-                <span>Priority:</span>
-                <a href="#" id="priority"></a></br>
-
-                <!-- Deadline - datetime picker -->
-                <span>Deadline:</span>
-                <div class='input-group date' id='deadline'>
-                    <input type='text' class="form-control" id="deadlinetext"/>
-                    <span class="input-group-addon">
-                        <span class="glyphicon glyphicon-calendar"></span>
-                    </span>
-
-                    <script type="text/javascript">
-                        $(function () {
-                            $('#deadline').datetimepicker({
-                                format: 'DD/MMMM/YYYY',
-                            });
-                        });
-                    </script>
-                </div>
-
-                
-                <span>Task list:</span>
-                <a href="#" id="tasklist"></a></br>
-
-                <!-- title - empty -->
-                <span>Title:</span>
-                <a href="#" id="title"></a></br>
-
-                <!-- Description - rich -->
-                <span>Description:</span>
-                <a href="#" id="description"></a></br>
-
-                <!-- user assgined - dropdown -->
-                <span>Responsible:</span>
-                <a href="#" id="responsible"></a></br>
-
-                <!--todo-->
-                <!--context - dropdown -->
-                <!-- availability - radio -->
-                <!-- status - dropdown -->
+                <!--table for modal window-->
+                <table id="modaltable" >
+                    <tr>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                </table>
 
             </div>
             <div class="modal-footer">
@@ -117,7 +82,7 @@
 
     <tbody>
 
-    <tr> 
+    <tr>
         <td class="col-md-1"></td>
         <td class="col-md-8"></td>
         <td class="col-md-1"></td>
