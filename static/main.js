@@ -42,9 +42,14 @@ $(document).ready(function () {
             {value: 3, text: 'Foo'},
 	    {value: 4, text: 'Bar'},
         ]
-
     });
 
+    $("#title").editable({
+	type: 'text',
+	title: 'Title',
+	clear: true,
+	placeholder: 'task title',
+    });
 
     function test() {
         return $.getJSON('/json');
