@@ -13,6 +13,15 @@
 - when sending /post request, you can access value from fields using x-editable again:
   - e.g. $("#tasklist").editable('getValue');
   - for datepicker, $('#deadline').data("DateTimePicker").date().format("DD/MMMM/YYYY");
+
+- use template from before;
+  - make it a table
+- make function to insert data into the cells;
+```python
+for entry in listObject:
+	insertIntoCell(tableRow[currindex], listObject[currIndex])
+```
+  - take data from example table cells;
   
 ### DEPLOYMENT
 
