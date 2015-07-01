@@ -2,109 +2,90 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <title>TaskFreak - Advanced</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
       <link href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css" rel="stylesheet">
+
 	<script src="http://code.jquery.com/jquery-2.0.3.min.js"></script>
 	<script src="//netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
 	<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='datatablesbootstrap.css') }}">
 	  <script type="text/javascript" language="javascript" src="{{ url_for('static', filename='datatables.js') }}"></script>
 	  <script type="text/javascript" language="javascript" src="{{ url_for('static', filename='datatablesbootstrap.js') }}"></script>
+	  
 	  <!-- cdn for edit in place functionality -->
-	  <link href="//cdnjs.cloudflare.com/ajax/libs/x-editable/1.5.0/bootstrap-editable/css/bootstrap-editable.css" rel="stylesheet"/>
-	  <script src="//cdnjs.cloudflare.com/ajax/libs/x-editable/1.5.0/bootstrap-editable/js/bootstrap-editable.min.js"></script>
-	  <script type="text/javascript" language="javascript" class="init">
+	  <link href="//cdnjs.cloudflare.com/ajax/libs/x-editable/1.5.0/bootstrap3-editable/css/bootstrap-editable.css" rel="stylesheet"/>
+	  <script src="//cdnjs.cloudflare.com/ajax/libs/x-editable/1.5.0/bootstrap3-editable/js/bootstrap-editable.min.js"></script>
 
-	    var dataSet;
+	  <!-- main -->
+	  <script src="{{ url_for('static', filename='main.js') }}"></script>
+  </head>
+  <body>
 
+    <!-- button for creating new task -->
+    <ul class="nav nav-pills nav-justified">
+      <li button type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#createNewModal">
+	Create new
+    </button></li>
+      </ul>
 
-	    $(document).ready(function() {
+      <!-- Modal for creting new task -->
+      <div class="modal fade" id="createNewModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+	<div class="modal-dialog" role="document">
+	  <div class="modal-content">
+	    <div class="modal-header">
+	      <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+	      <h4 class="modal-title" id="myModalLabel">Create new</h4>
+	    </div>
+	    <div class="modal-body">
+	      <!-- form goes here -->
 
-	    function test() {
-	    return $.getJSON('/json');
-	    }
+	      <!-- Priority - dropdown -->
+	      <span>Priority:</span>
+		<a href="#" id="priority"></a>
+	      <!-- Deadline - datetime picker -->
+	      <!-- tasklist - dropdown -->
+	      <!-- title - empty -->
+	      <!-- Description - rich -->
+	      <!-- context - dropdown -->
+	      <!-- user assgined - dropdown -->
+	      <!-- availability - radio -->
+	      <!-- status - dropdown -->
 
-	    $.when(test()).then(function (data) {
-	    dataSet = data['data'];
-	    $('#example').DataTable( {
-	    "data": dataSet,
-	    "columns": [
-	    { "title" : "id" },
-	    { "title" : "description" },
-	    { "title" : "dead line" },
-	    { "title" : "responsible" },
-	    { "title" : "author" }
-	    ]
-	    } );
-	    });
-	    });
-
-	  </script>	
-	</head>
-	<body>
-
-	  <!-- button for creating new task -->
-	  <ul class="nav nav-pills nav-justified">
-	    <li button type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#createNewModal">
-	      Create new
-	  </button></li>
-	</ul>
-
-	<!-- Modal for creting new task -->
-	<div class="modal fade" id="createNewModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-	  <div class="modal-dialog" role="document">
-	    <div class="modal-content">
-	      <div class="modal-header">
-		<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-		<h4 class="modal-title" id="myModalLabel">Create new</h4>
-	      </div>
-	      <div class="modal-body">
-		<!-- form goes here -->
-		<pre>
-		Priority - dropdown
-		Deadline - datetime picker
-		tasklist - dropdown
-		title - empty
-		Description - rich
-		context - dropdown
-		user assgined - dropdown
-		availability - radio
-		status - dropdown
-		</pre>
-	      </div>
-	      <div class="modal-footer">
-		<button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-		<button type="button" class="btn btn-primary">Submit</button>
-	      </div>
+	    </div>
+	    <div class="modal-footer">
+	      <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+	      <button type="button" class="btn btn-primary">Submit</button>
 	    </div>
 	  </div>
 	</div>
+      </div>
 
-	<!-- table for data -->
-	<div id="demo"></div>
-	<table id="example" class="display table-striped table-condensed table-bordered" cellspacing="0" width="100%">
-	  <thead>
-	    <tr>
-	      <th class="col-md-1">id</th>
-	      <th class="col-md-8">description</th>
-	      <th class="col-md-1">dead line</th>
-	      <th class="col-md-1">responsible</th>
-	      <th class="col-md-1">author</th>
-	    </tr>
-	  </thead>
+      <!-- table for data -->
+      <div id="demo"></div>
+      <table id="example" class="display table-striped table-condensed table-bordered" cellspacing="0" width="100%">
+	<thead>
+	  <tr>
+	    <th class="col-md-1">id</th>
+	    <th class="col-md-8">description</th>
+	    <th class="col-md-1">dead line</th>
+	    <th class="col-md-1">responsible</th>
+	    <th class="col-md-1">author</th>
+	  </tr>
+	</thead>
+	
+	<tbody>
 	  
-	  <tbody>
+	  <tr>
 	    
-	    <tr>
-	      
-	      <td class="col-md-1"></td>
-	      <td class="col-md-8"><pre></pre></td>
-	      <td class="col-md-1"></td>
-	      <td class="col-md-1"></td>
-	      <td class="col-md-1"></td>
+	    <td class="col-md-1"></td>
+	    <td class="col-md-8"><pre></pre></td>
+	    <td class="col-md-1"></td>
+	    <td class="col-md-1"></td>
+	    <td class="col-md-1"></td>
 
-	    </tr>
-	    
-	  </tbody>
-	</table>
-      </body>
-    </html>
+	  </tr>
+	  
+	</tbody>
+      </table>
+    </body>
+  </html>
