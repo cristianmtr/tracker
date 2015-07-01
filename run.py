@@ -9,7 +9,7 @@ app = Flask(__name__)
 
 
 class Globals(object):
-    """Will store db db"""
+    """Will store db globals"""
     def __init__(self):
         self.session = create_session()
         self.task = create_task_object()
@@ -41,6 +41,10 @@ def json():
         this_task.append(db.user_id_to_name[t.memberId] if t.memberId != 0 else None)
         this_task.append(db.user_id_to_name[t.authorId] if t.authorId != 0 else None)
         data.append(this_task)
+    # data = [
+    #     [1,"this is description", "2more", "responsible", "authorId"],
+    #     [2,"this is description nr 2", "2more", "responsible2", "authorId"],
+    # ]
     return jsonify(data=data)
 
 
@@ -50,4 +54,4 @@ if __name__ == "__main__":
     handler.setLevel(logging.INFO)
     app.logger.addHandler(handler)
     db = Globals()
-    app.run(host='0.0.0.0', port=80)
+    app.run(host='0.0.0.0', port=5000)
