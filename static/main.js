@@ -51,6 +51,22 @@ $(document).ready(function () {
 	placeholder: 'task title',
     });
 
+    $("#description").editable({
+	type: 'textarea',
+	escape: true,
+    });
+
+    $("#responsible").editable({
+	type: 'select',
+	value: 1,
+	title: 'Responsible',
+	placement: 'right',
+	source: [
+	    {value: 1, text: 'Cristian'},
+	    {value: 2, text: 'Someone else'},
+	    ]
+    });
+
     function test() {
         return $.getJSON('/json');
     }
