@@ -31,6 +31,20 @@ $(document).ready(function () {
 	
     })
 
+    $('#tasklist').editable({
+        type: 'select',
+        title: 'Task list',
+        placement: 'right',
+        value: 3,
+        source: [
+            {value: 1, text: 'Dummy'},
+            {value: 2, text: 'Fake'},
+            {value: 3, text: 'Foo'},
+	    {value: 4, text: 'Bar'},
+        ]
+
+    });
+
 
     function test() {
         return $.getJSON('/json');
