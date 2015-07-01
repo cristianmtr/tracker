@@ -12,7 +12,9 @@
   - x-editable provides a success callback;
 - when sending /post request, you can access value from fields using x-editable again:
   - e.g. $("#tasklist").editable('getValue');
+  
 ### DEPLOYMENT
+
 - I am using an existing database based on [taskfreak](http://www.taskfreak.com/);
 - username and password are provided in a config.json file;
 Example of config.json:
