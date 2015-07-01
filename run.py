@@ -9,7 +9,7 @@ app = Flask(__name__)
 
 
 class Globals(object):
-    """Will store db globals"""
+    """Will store db db"""
     def __init__(self):
         self.session = create_session()
         self.task = create_task_object()
@@ -30,7 +30,7 @@ def index():
 @app.route("/json")
 def json():
     data = []
-    tasks = globals.session.query(globals.task, globals.task.itemId, globals.task.description, globals.task.deadlineDate, globals.task.memberId, globals.task.authorId).all()
+    tasks = db.session.query(db.task, db.task.itemId, db.task.description, db.task.deadlineDate, db.task.memberId, db.task.authorId).all()
     for t in tasks:
         this_task = []
         this_task.append(t.itemId)
@@ -38,8 +38,8 @@ def json():
         this_task.append("<pre>" + t.description + "</pre>")
         # handle empty fields, for deadlineDate or member info
         this_task.append(t.deadlineDate.isoformat() if t.deadlineDate != None else None)
-        this_task.append(globals.user_id_to_name[t.memberId] if t.memberId != 0 else None)
-        this_task.append(globals.user_id_to_name[t.authorId] if t.authorId != 0 else None)
+        this_task.append(db.user_id_to_name[t.memberId] if t.memberId != 0 else None)
+        this_task.append(db.user_id_to_name[t.authorId] if t.authorId != 0 else None)
         data.append(this_task)
     return jsonify(data=data)
 
@@ -49,5 +49,5 @@ if __name__ == "__main__":
     handler = RotatingFileHandler('app.log', maxBytes=10000, backupCount=1)
     handler.setLevel(logging.INFO)
     app.logger.addHandler(handler)
-    globals = Globals()
+    db = Globals()
     app.run(host='0.0.0.0', port=80)
