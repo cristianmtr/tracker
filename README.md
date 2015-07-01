@@ -8,7 +8,7 @@
 
 - Check here for create in place js: http://vitalets.github.io/x-editable/docs.html#newrecord
 
-- consider how you want to handle the server's response to a /post request;
+- consider how you want to handle the server's response to a /post request
   - x-editable provides a success callback;
 - when sending /post request, you can access value from fields using x-editable again:
   - e.g. $("#tasklist").editable('getValue');
