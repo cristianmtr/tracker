@@ -1,91 +1,118 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
-  <head>
+<head>
     <title>TaskFreak - Advanced</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
-      <link href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css" rel="stylesheet">
+    <link href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css" rel="stylesheet">
 
-	<script src="http://code.jquery.com/jquery-2.0.3.min.js"></script>
-	<script src="//netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
-	<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='datatablesbootstrap.css') }}">
-	  <script type="text/javascript" language="javascript" src="{{ url_for('static', filename='datatables.js') }}"></script>
-	  <script type="text/javascript" language="javascript" src="{{ url_for('static', filename='datatablesbootstrap.js') }}"></script>
-	  
-	  <!-- cdn for edit in place functionality -->
-	  <link href="//cdnjs.cloudflare.com/ajax/libs/x-editable/1.5.0/bootstrap3-editable/css/bootstrap-editable.css" rel="stylesheet"/>
-	  <script src="//cdnjs.cloudflare.com/ajax/libs/x-editable/1.5.0/bootstrap3-editable/js/bootstrap-editable.min.js"></script>
+    <script src="http://code.jquery.com/jquery-2.0.3.min.js"></script>
+    <script src="//netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='datatablesbootstrap.css') }}">
+    <script type="text/javascript" language="javascript"
+            src="{{ url_for('static', filename='datatables.js') }}"></script>
+    <script type="text/javascript" language="javascript"
+            src="{{ url_for('static', filename='datatablesbootstrap.js') }}"></script>
 
-	  <!-- main -->
-	  <script src="{{ url_for('static', filename='main.js') }}"></script>
-  </head>
-  <body>
+    <!-- cdn for edit in place functionality -->
+    <link href="//cdnjs.cloudflare.com/ajax/libs/x-editable/1.5.0/bootstrap3-editable/css/bootstrap-editable.css"
+          rel="stylesheet"/>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/x-editable/1.5.0/bootstrap3-editable/js/bootstrap-editable.min.js"></script>
 
-    <!-- button for creating new task -->
-    <ul class="nav nav-pills nav-justified">
-      <li button type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#createNewModal">
-	Create new
-    </button></li>
-      </ul>
+    <!-- moment js -->
+    <script src="{{ url_for('static', filename='moment.js') }}"></script>
 
-      <!-- Modal for creting new task -->
-      <div class="modal fade" id="createNewModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-	<div class="modal-dialog" role="document">
-	  <div class="modal-content">
-	    <div class="modal-header">
-	      <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-	      <h4 class="modal-title" id="myModalLabel">Create new</h4>
-	    </div>
-	    <div class="modal-body">
-	      <!-- form goes here -->
+    <!-- main -->
+    <script src="{{ url_for('static', filename='main.js') }}"></script>
+</head>
+<body>
 
-	      <!-- Priority - dropdown -->
-	      <span>Priority:</span>
-		<a href="#" id="priority"></a>
-	      <!-- Deadline - datetime picker -->
-	      <!-- tasklist - dropdown -->
-	      <!-- title - empty -->
-	      <!-- Description - rich -->
-	      <!-- context - dropdown -->
-	      <!-- user assgined - dropdown -->
-	      <!-- availability - radio -->
-	      <!-- status - dropdown -->
+<!-- button for creating new task -->
+<ul class="nav nav-pills nav-justified">
+    <li button type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#createNewModal">
+        Create new
+        </button></li>
+</ul>
 
-	    </div>
-	    <div class="modal-footer">
-	      <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-	      <button type="button" class="btn btn-primary">Submit</button>
-	    </div>
-	  </div>
-	</div>
-      </div>
+<!-- Modal for creting new task -->
+<div class="modal fade" id="createNewModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                        aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">Create new</h4>
+            </div>
+            <div class="modal-body">
+                <!-- form goes here -->
 
-      <!-- table for data -->
-      <div id="demo"></div>
-      <table id="example" class="display table-striped table-condensed table-bordered" cellspacing="0" width="100%">
-	<thead>
-	  <tr>
-	    <th class="col-md-1">id</th>
-	    <th class="col-md-8">description</th>
-	    <th class="col-md-1">dead line</th>
-	    <th class="col-md-1">responsible</th>
-	    <th class="col-md-1">author</th>
-	  </tr>
-	</thead>
-	
-	<tbody>
-	  
-	  <tr>
-	    
-	    <td class="col-md-1"></td>
-	    <td class="col-md-8"><pre></pre></td>
-	    <td class="col-md-1"></td>
-	    <td class="col-md-1"></td>
-	    <td class="col-md-1"></td>
+                <!-- Priority - dropdown -->
+                <span>Priority:</span>
+                <a href="#" id="priority"></a></br>
 
-	  </tr>
-	  
-	</tbody>
-      </table>
-    </body>
-  </html>
+                <!-- Deadline - datetime picker -->
+                <span>Deadline:</span>
+                <a href="#" id="deadline"></a></br>
+
+                <!-- tasklist - dropdown -->
+                <span>Task list:</span>
+                <a href="#" id="tasklist"></a></br>
+
+                <!-- title - empty -->
+                <span>Title:</span>
+                <a href="#" id="title"></a></br>
+
+                <!-- Description - rich -->
+                <span>Description:</span>
+                <a href="#" id="description"></a></br>
+
+                <!-- user assgined - dropdown -->
+                <span>Responsible:</span>
+                <a href="#" id="responsible"></a></br>
+
+                <!--todo-->
+                 <!--context - dropdown -->
+                <!-- availability - radio -->
+                <!-- status - dropdown -->
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-primary">Submit</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- table for data -->
+<div id="demo"></div>
+<table id="example" class="display table-striped table-condensed table-bordered" cellspacing="0" width="100%">
+    <thead>
+    <tr>
+        <th class="col-md-1">id</th>
+        <th class="col-md-8">description</th>
+        <th class="col-md-1">dead line</th>
+        <th class="col-md-1">responsible</th>
+        <th class="col-md-1">author</th>
+    </tr>
+    </thead>
+
+    <tbody>
+
+    <tr>
+
+        <td class="col-md-1"></td>
+        <td class="col-md-8">
+            <pre></pre>
+        </td>
+        <td class="col-md-1"></td>
+        <td class="col-md-1"></td>
+        <td class="col-md-1"></td>
+
+    </tr>
+
+    </tbody>
+</table>
+</body>
+</html>
