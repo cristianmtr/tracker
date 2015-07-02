@@ -22,12 +22,16 @@ for entry in listObject:
 	insertIntoCell(tableRow[currindex], listObject[currIndex])
 ```
   - take data from example table cells;
+
+- when calling Create New: execute make fields in modal editable with defaults as per new task;
+    - otoh, when calling Edit Task (todo), call the function in js to fill the fields in the modal with the values from the task;
+    - options for selects should be provided by the server on the initial call and stored in some client-side variable; 
   
 ### DEPLOYMENT
 
 - I am using an existing database based on [taskfreak](http://www.taskfreak.com/);
 - username and password are provided in a config.json file;
-Example of config.json:
+- Example of config.json:
 ```javascript
 {
     'username' : 'youruser',
