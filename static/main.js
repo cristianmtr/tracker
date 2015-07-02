@@ -24,6 +24,12 @@ function insertNewRowEmpty() {
     return;
 }
 
+var currentItemId;
+
+function updateCurrentItemId(e) {
+    current = $(e).text();
+    };
+
 $(document).ready(function () {
 
     $.fn.editable.defaults.mode = 'inline';

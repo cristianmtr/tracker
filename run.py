@@ -32,16 +32,18 @@ def json():
     data = []
     tasks = db.session.query(db.task, db.task.itemId, db.task.description, db.task.deadlineDate, db.task.memberId, db.task.authorId).all()
     for t in tasks:
+        this_task = []
+        this_task.append(t.itemId)
         # keep formatting when displaying description
+        this_task.append('<onclick="updateCurrentItemId(this);"><pre>' + t.description + "</pre>")
         # handle empty fields, for deadlineDate or member info
-        this_task = [t.itemId, "<pre>" + t.description + "</pre>",
-                     t.deadlineDate.isoformat() if t.deadlineDate else None,
-                     db.user_id_to_name[t.memberId] if t.memberId != 0 else None,
-                     db.user_id_to_name[t.authorId] if t.authorId != 0 else None]
+        this_task.append(t.deadlineDate.isoformat() if t.deadlineDate != None else None)
+        this_task.append(db.user_id_to_name[t.memberId] if t.memberId != 0 else None)
+        this_task.append(db.user_id_to_name[t.authorId] if t.authorId != 0 else None)
         data.append(this_task)
     # data = [
-    #     [1,"this is description", "2more", "responsible", "authorId"],
-    #     [2,"this is description nr 2", "2more", "responsible2", "authorId"],
+        # ['<a id="edit1" data-toggle="modal" data-target="#createNewModal" data-target="#createNewModal">1</a>', "this is description", "2more", "responsible", "authorId"],
+        # ['<button onclick="btnclick(this);">2</button>',"this is description nr 2", "2more", "responsible2", "authorId"],
     # ]
     return jsonify(data=data)
 
