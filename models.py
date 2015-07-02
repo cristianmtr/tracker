@@ -1,6 +1,6 @@
-from sqlalchemy import create_engine
+from sqlalchemy import create_engine, Column, String, ForeignKey
 from sqlalchemy.ext.automap import automap_base
-from sqlalchemy.orm import Session
+from sqlalchemy.orm import Session, relationship, backref
 
 ## load config secrets
 import json
@@ -11,17 +11,21 @@ engine = create_engine('mysql+mysqlconnector://{}:{}@localhost:3306/taskfreak'.f
 
 Base = automap_base()
 # declare objects
+
+
+class Task(Base):
+    __tablename__ = 'frk_item'
+    responsible = Column("memberId", ForeignKey('frk_member.memberId'))
+    author = Column("authorId", ForeignKey('frk_member.memberId'))
+    # responsible = relationship(User, backref='tasks_assigned')
+    # author = relationship(User, )
+
+
+class User(Base):
+    __tablename__ = 'frk_member'
+    username = Column('firstName', String)
+    # tasks_assigned = relationship("Task", backref="responsible")
+    # tasks_created = relationship("Task", backref="author")
+
+session = Session(engine)
 Base.prepare(engine, reflect=True)
-
-def create_session():
-    session = Session(engine)
-    return session
-
-def create_task_object():
-    return Base.classes.frk_item
-
-def create_user_object():
-    return Base.classes.frk_member
-    
-
-
