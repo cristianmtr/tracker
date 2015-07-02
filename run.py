@@ -37,7 +37,7 @@ def json():
         # keep formatting when displaying description
         this_task.append("<pre>" + t.description + "</pre>")
         # handle empty fields, for deadlineDate or member info
-        this_task.append(t.deadlineDate.isoformat() if t.deadlineDate != None else None)
+        this_task.append(t.deadlineDate.isoformat() if t.deadlineDate else None)
         this_task.append(db.user_id_to_name[t.memberId] if t.memberId != 0 else None)
         this_task.append(db.user_id_to_name[t.authorId] if t.authorId != 0 else None)
         data.append(this_task)
@@ -54,4 +54,4 @@ if __name__ == "__main__":
     handler.setLevel(logging.INFO)
     app.logger.addHandler(handler)
     db = Globals()
-    app.run(host='0.0.0.0', port=5000)
+    app.run(host='0.0.0.0', port=80)
