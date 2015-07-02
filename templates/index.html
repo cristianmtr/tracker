@@ -35,7 +35,8 @@
 
 <!-- button for creating new task -->
 <ul class="nav nav-pills nav-justified">
-    <li button type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#createNewModal" onclick="insertNewRow()">
+    <li button type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#createNewModal"
+        onclick="insertNewRow()">
         Create new
         </button></li>
 </ul>
@@ -50,13 +51,88 @@
                 <h4 class="modal-title" id="myModalLabel">Create new</h4>
             </div>
             <div class="modal-body">
+                <!-- form goes here -->
 
-                <!--table for modal window-->
-                <table id="modaltable" >
+                <table id="modaltable">
                     <tr>
-                        <td></td>
-                        <td></td>
+                        <td>
+                            <!-- Priority - dropdown -->
+                            <span>Priority:</span>
+                        </td>
+                        <td>
+                            <a href="#" id="priority"></a></br>
+                        </td>
                     </tr>
+
+                    <tr>
+                        <!-- Deadline - datetime picker -->
+                        <td>
+                            <span>Deadline:</span>
+                        </td>
+
+                        <td>
+                            <div class='input-group date' id='deadline'>
+                                <input type='text' class="form-control" id="deadlinetext"/>
+                    <span class="input-group-addon">
+                        <span class="glyphicon glyphicon-calendar"></span>
+                    </span>
+
+                                <script type="text/javascript">
+                                    $(function () {
+                                        $('#deadline').datetimepicker({
+                                            format: 'DD/MMMM/YYYY',
+                                        });
+                                    });
+                                </script>
+                            </div>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td>
+                            <span>Task list:</span>
+                        </td>
+                        <td>
+                            <a href="#" id="tasklist"></a></br>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td>
+                            <!-- title - empty -->
+                            <span>Title:</span>
+                        </td>
+                        <td>
+                            <a href="#" id="title"></a></br>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <!-- Description - rich -->
+                        <td>
+                            <span>Description:</span>
+                        </td>
+                        <td>
+                            <a href="#" id="description"></a></br>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <!-- user assgined - dropdown -->
+                        <td>
+                            <span>Responsible:</span>
+                        </td>
+                        <td>
+                            <a href="#" id="responsible"></a></br>
+                        </td>
+                    </tr>
+
+                    <!--todo-->
+                    <!--context - dropdown -->
+                    <!-- availability - radio -->
+                    <!-- status - dropdown -->
+                    <!--table for modal window-->
+
                 </table>
 
             </div>
