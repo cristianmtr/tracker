@@ -32,14 +32,12 @@ def json():
     data = []
     tasks = db.session.query(db.task, db.task.itemId, db.task.description, db.task.deadlineDate, db.task.memberId, db.task.authorId).all()
     for t in tasks:
-        this_task = []
-        this_task.append(t.itemId)
         # keep formatting when displaying description
-        this_task.append("<pre>" + t.description + "</pre>")
         # handle empty fields, for deadlineDate or member info
-        this_task.append(t.deadlineDate.isoformat() if t.deadlineDate else None)
-        this_task.append(db.user_id_to_name[t.memberId] if t.memberId != 0 else None)
-        this_task.append(db.user_id_to_name[t.authorId] if t.authorId != 0 else None)
+        this_task = [t.itemId, "<pre>" + t.description + "</pre>",
+                     t.deadlineDate.isoformat() if t.deadlineDate else None,
+                     db.user_id_to_name[t.memberId] if t.memberId != 0 else None,
+                     db.user_id_to_name[t.authorId] if t.authorId != 0 else None]
         data.append(this_task)
     # data = [
     #     [1,"this is description", "2more", "responsible", "authorId"],
