@@ -86,4 +86,4 @@ if __name__ == "__main__":
     handler.setLevel(logging.INFO)
     app.logger.addHandler(handler)
     db = Globals()
-    app.run(host='0.0.0.0', port=80)
+    app.run(host='0.0.0.0', port=5000)

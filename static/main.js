@@ -1,12 +1,13 @@
 // TODO
-const newItemForModal = [
-    2,
-    new moment().format("YYYY-MM-DD"),
-    1,
-    '',
-    '',
-    '',
-]    
+const newItemForModal = {
+    'title': '',
+    'deadline' : new moment().format("YYYY-MM-DD"),
+    'priority':2,
+    'responsible':'',
+    'description':'',
+    'author':'',
+    'tasklist':1,
+}
 
 function iterateDataSources() {
     for (var key in dataSources) {
@@ -58,15 +59,15 @@ function updateCurrentItemId(e) {
     });
 };
 
-function setDataInModal(dataList) {
-    $('#priority').editable('setValue',dataList[0]);
-    $('#deadline').data("DateTimePicker").date(dataList[1]);
-    $('#tasklist').editable('setValue',dataList[2]);
-    $('#title').editable('setValue',dataList[3]);
-    $('#description').editable('setValue',dataList[4]);
-    $('#responsible').editable('setValue',dataList[5]);
+function setDataInModal(modalDataObject) {
+    $('#priority').editable('setValue',modalDataObject['priority']);
+    $('#deadline').data("DateTimePicker").date(modalDataObject['deadline']);
+    $('#tasklist').editable('setValue',modalDataObject['tasklist']);
+    $('#title').editable('setValue',modalDataObject['title']);
+    $('#description').editable('setValue',modalDataObject['description']);
+    $('#responsible').editable('setValue',modalDataObject['responsible']);
     
-    console.log('data modal has been updated with ' + JSON.stringify(dataList));
+    console.log('data modal has been updated with ' + JSON.stringify(modalDataObject));
 };
 
 function initializeEditablesWithDefaults(dataSources) {
