@@ -67,12 +67,6 @@ def json():
             2: 'Builds',
             3: 'Whoknows',
         },
-        'deadline':{
-            1: 'Dummy',
-            2: 'Fake',
-            3: 'Foo',
-            4: 'Bar',
-        },
         'responsible':{
             1: 'Cristian',
             2: 'Someone else',
