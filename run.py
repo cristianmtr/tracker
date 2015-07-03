@@ -29,14 +29,17 @@ def index():
 
 @app.route("/json/<taskid>")
 def jsontask(taskid):
+    print taskid
+    task = db.session.query(db.task, db.task.itemId, db.task.title, db.task.description, db.task.deadlineDate, db.task.memberId, db.task.authorId,db.task.priority, db.task.projectId).filter(db.task.itemId == taskid).one()
+    print task
     data = {
-        'title':'the title',
-        'priority':1,
-        'description':'this is the description'.encode('utf-8'),
-        'deadline':'2015-10-22',
-        'tasklist':'2',
-        'responsible':'1',
-        'author':'2',
+        'title':task.title if task.title else None,
+        'priority':task.priority if task.priority else None,
+        'description':task.description.encode('utf-8') if task.description else None,
+        'deadline':task.deadlineDate.isoformat() if task.deadlineDate else None,
+        'tasklist':task.projectId if task.projectId else None,
+        'responsible':task.memberId if task.memberId else None,
+        'author':task.authorId if task.authorId else None,
     }
     return jsonify(data=data)
 
