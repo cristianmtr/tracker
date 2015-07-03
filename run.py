@@ -29,13 +29,15 @@ def index():
 
 @app.route("/json/<taskid>")
 def jsontask(taskid):
-    data = [
-        'the title',
-        'this is the description'.encode('utf-8'),
-        '2015-10-22',
-        'responsible',
-        'author',
-        ]
+    data = {
+        'title':'the title',
+        'priority':1,
+        'description':'this is the description'.encode('utf-8'),
+        'deadline':'2015-10-22',
+        'tasklist':'2',
+        'responsible':'1',
+        'author':'2',
+    }
     return jsonify(data=data)
 
 @app.route("/json/")
