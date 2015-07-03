@@ -29,9 +29,7 @@ def index():
 
 @app.route("/json/<taskid>")
 def jsontask(taskid):
-    print taskid
     task = db.session.query(db.task, db.task.itemId, db.task.title, db.task.description, db.task.deadlineDate, db.task.memberId, db.task.authorId,db.task.priority, db.task.projectId).filter(db.task.itemId == taskid).one()
-    print task
     data = {
         'title':task.title if task.title else None,
         'priority':task.priority if task.priority else None,
