@@ -1,3 +1,13 @@
+// TODO
+const newItemForModal = [
+    2,
+    new moment().format("YYYY-MM-DD"),
+    1,
+    '',
+    '',
+    '',
+]    
+
 function iterateDataSources() {
     for (var key in dataSources) {
 	if (dataSources.hasOwnProperty(key)) {
@@ -41,6 +51,7 @@ function updateCurrentItemId(e) {
 	async: true,
 	dataType: 'json',
 	success: function(dataList) {
+	    dataList = dataList['data'];
 	    console.log("got data from server: " + JSON.stringify(dataList));
 	    setDataInModal(dataList);
 	}
@@ -48,15 +59,15 @@ function updateCurrentItemId(e) {
 };
 
 function setDataInModal(dataList) {
-    $('#priority').editable('setValue',3);
-    // $('#deadline').editable('setValue',);
-    $('#tasklist').editable('setValue',2);
-    $('#title').editable('setValue','Modified title');
-    $('#description').editable('setValue','This is some description text');
-    $('#responsible').editable('setValue',2);
+    $('#priority').editable('setValue',dataList[0]);
+    $('#deadline').data("DateTimePicker").date(dataList[1]);
+    $('#tasklist').editable('setValue',dataList[2]);
+    $('#title').editable('setValue',dataList[3]);
+    $('#description').editable('setValue',dataList[4]);
+    $('#responsible').editable('setValue',dataList[5]);
+    
     console.log('data modal has been updated with ' + JSON.stringify(dataList));
 };
-
 
 function initializeEditablesWithDefaults(dataSources) {
     $.fn.editable.defaults.mode = 'inline';

@@ -40,7 +40,7 @@
 
 	    <!-- button for creating new task -->
 	    <ul class="nav nav-pills nav-justified">
-	      <li button type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#createNewModal">
+	      <li button type="button" class="btn btn-primary btn-lg" data-toggle="modal" onclick="setDataInModal(newItemForModal);" data-target="#createNewModal">
 		Create new
             </button></li>
 	  </ul>
@@ -84,7 +84,7 @@
                         <script type="text/javascript">
                           $(function () {
                           $("#deadline").datetimepicker({
-                          format: "DD/MMMM/YYYY",
+                          format: "YYYY-MM-DD",
                           });
                           });
                         </script>
