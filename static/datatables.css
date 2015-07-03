@@ -1,6 +1,12 @@
 /*
  * Table styles
  */
+tfoot input {
+        width: 100%;
+        padding: 3px;
+        box-sizing: border-box;
+    }
+
 th, td { white-space: nowrap; }
     div.dataTables_wrapper {
         width: 1700;

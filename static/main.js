@@ -101,15 +101,21 @@ function initializeEditablesWithDefaults(dataSources) {
 
 $(document).ready(function () {
 
+    // Setup - add a text input to each footer cell
+    $('#example tfoot th').each( function () {
+        var title = $('#example thead th').eq( $(this).index() ).text();
+        $(this).html( '<input type="text" placeholder="Search '+title+'" />' );
+    } );
+
     function test() {
         return $.getJSON('/json');
     }
 
     $.when(test()).then(function (data) {
-	console.log('got data from /json');
+    	console.log('got data from /json');
         dataSet = data['data'];
-	dataSources = data['dataSources'],
-        $('#example').DataTable({
+    	dataSources = data['dataSources'];
+	var table = $('#example').DataTable({
             "data": dataSet,
             "columns": [{
                 "title": "title"
@@ -123,8 +129,19 @@ $(document).ready(function () {
                 "title": "author"
             }]
         });
+	
+	// Apply the search
+	table.columns().every( function () {
+            var that = this;
+	    
+            $( 'input', this.footer() ).on( 'keyup change', function () {
+		that
+                    .search( this.value )
+                    .draw();
+            } );
+	} );
+
 	initializeEditablesWithDefaults(dataSources);
-    });
+    } );
+    
 });
-
-
