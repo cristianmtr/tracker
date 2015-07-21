@@ -23,29 +23,8 @@ function iterateDataSources() {
     }
 };
 
-function insertNewRow(listObject) {
-    var table = document.getElementById("modaltable");
-    var row = table.insertRow(0);
-    var cell1 = row.insertCell(0);
-    var cell2 = row.insertCell(1);
-    cell1.innerHTML = listObject[0];
-    cell2.innerHTML = listObject[1];
-}
-
-function insertNewRowEmpty() {
-    var table = document.getElementById("modaltable");
-    var row = table.insertRow(0);
-    var cell1 = row.insertCell(0);
-    var cell2 = row.insertCell(1);
-    cell1.innerHTML = "deadline";
-    cell2.innerHTML = "2more";
-    return;
-}
-
-var currentItemId;
-
 function updateCurrentItemId(e) {
-    currentItemId = $(e).attr('id');
+    var currentItemId = $(e).attr('id');
     console.log(currentItemId);
     $.ajax({
 	url: '/json/'+currentItemId,
