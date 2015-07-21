@@ -23,5 +23,6 @@ def create_task_object():
 def create_user_object():
     return Base.classes.frk_member
     
-
+def create_tasklist_object():
+    return Base.classes.frk_project
 

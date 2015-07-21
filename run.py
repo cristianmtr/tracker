@@ -1,6 +1,6 @@
 #! /usr/bin/python
 from flask import Flask, render_template, jsonify
-from models import create_session, create_task_object, create_user_object
+from models import create_session, create_task_object, create_user_object, create_tasklist_object
 import logging
 from logging.handlers import RotatingFileHandler
 
@@ -14,6 +14,7 @@ class Globals(object):
         self.session = create_session()
         self.task = create_task_object()
         self.user = create_user_object()
+        self.tasklist = create_tasklist_object()
         self.user_id_to_name = {}
         self.build_user_id_to_name()
 
@@ -58,18 +59,18 @@ def json():
         # data = [
         # ['<a id="edit1" data-toggle="modal" data-target="#createNewModal" data-target="#createNewModal">1</a>', "this is description", "2more", "responsible", "authorId"],
         # ['<button onclick="btnclick(this);">2</button>',"this is description nr 2", "2more", "responsible2", "authorId"],
-    # ]
+        # ]
+    tasklists_dict = {}
+    all_tasklists = db.session.query(db.tasklist, db.tasklist.projectId, db.tasklist.name).all()
+    for tsklst in all_tasklists:
+        tasklists_dict[tsklst.projectId] = tsklst.name
     dataSources = {
         'priority':{
             1: 'Urgent',
             2: 'Medium',
             3: 'Low',
         },
-        'tasklist':{
-            1: 'Ops',
-            2: 'Builds',
-            3: 'Whoknows',
-        },
+        'tasklist': tasklists_dict,
         'responsible':{
             1: 'Cristian',
             2: 'Someone else',
