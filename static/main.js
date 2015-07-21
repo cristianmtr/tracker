@@ -51,10 +51,10 @@ function updateCurrentItemId(e) {
 	url: '/json/'+currentItemId,
 	async: true,
 	dataType: 'json',
-	success: function(dataList) {
+	success: function(modalDataObject) {
 	    dataList = dataList['data'];
-	    console.log("got data from server: " + JSON.stringify(dataList));
-	    setDataInModal(dataList);
+	    console.log("got data from server: " + JSON.stringify(modalDataObject));
+	    setDataInModal(modalDataObject);
 	}
     });
 };
@@ -114,6 +114,8 @@ function initializeEditablesWithDefaults(dataSources) {
 $(document).ready(function () {
 
     // Setup - add a text input to each footer cell
+    // but they become header cells due to the CSS added in index.html
+    //   <tfoot style="display: table-header-group;">
     $('#example tfoot th').each( function () {
         var title = $('#example thead th').eq( $(this).index() ).text();
         $(this).html( '<input type="text" placeholder="Search '+title+'" />' );
