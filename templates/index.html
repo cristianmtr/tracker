@@ -7,9 +7,10 @@
       <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
 	<link href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css" rel="stylesheet">
 
-
+	  <!-- jquery -->
 	  <script src="http://code.jquery.com/jquery-2.0.3.min.js"></script>
 
+	  <!-- bootstrap3 -->
 	  <script src="//netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
 	  <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='datatablesbootstrap.css') }}">
 
@@ -45,36 +46,38 @@
             </button></li>
 	  </ul>
 
-	  <!-- Modal for creting new task -->
+	  <!-- Modal for creating and editing tasks -->
 	  <div class="modal fade" id="createNewModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
 	    <div class="modal-dialog" role="document">
               <div class="modal-content">
 		<div class="modal-header">
                   <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
 												 aria-hidden="true">&times;</span></button>
-                  <h4 class="modal-title" id="myModalLabel">Create new</h4>
+                  <h4 class="modal-title" id="myModalLabel">Task</h4>
 		</div>
 		<div id="modalbody" class="modal-body">
-                  <!-- form goes here -->
 
-                  <table id="modaltable">
+		  <!-- table with form goes here -->
+
+                  <table id="modaltable" class="display table-striped table-condensed table-bordered" cellspacing="0" width="100%">
+
+		    <!-- Priority - dropdown -->
                     <tr>
-                      <td>
-                        <!-- Priority - dropdown -->
+                      <td class="col-md-1">
                         <span>Priority:</span>
                       </td>
-                      <td>
+                      <td class="col-md-3">
                         <a href="#" id="priority"></a></br>
                     </td>
                   </tr>
 
                   <tr>
                     <!-- Deadline - datetime picker -->
-                    <td>
+                    <td class="col-md-1">
                       <span>Deadline:</span>
                     </td>
 
-                    <td>
+                    <td class="col-md-3">
                       <div class="input-group date" id="deadline">
                         <input type="text" class="form-control" id="deadlinetext"/>
 			<span class="input-group-addon">
@@ -93,40 +96,40 @@
                   </tr>
 
                   <tr>
-                    <td>
+                    <td class="col-md-1">
                       <span>Task list:</span>
                     </td>
-                    <td>
+                    <td class="col-md-3">
                       <a href="#" id="tasklist"></a></br>
                   </td>
                 </tr>
 
                 <tr>
-                  <td>
+                  <td class="col-md-1">
                     <!-- title - empty -->
                     <span>Title:</span>
                   </td>
-                  <td>
+                  <td class="col-md-3">
                     <a href="#" id="title"></a></br>
                 </td>
               </tr>
 
               <tr>
                 <!-- Description - rich -->
-                <td>
+                <td class="col-md-1">
                   <span>Description:</span>
                 </td>
-                <td>
+                <td class="col-md-3">
                   <a href="#" id="description"></a></br>
               </td>
             </tr>
 
             <tr>
               <!-- user assgined - dropdown -->
-              <td>
+              <td class="col-md-1">
                 <span>Responsible:</span>
               </td>
-              <td>
+              <td class="col-md-3">
                 <a href="#" id="responsible"></a></br>
             </td>
           </tr>
