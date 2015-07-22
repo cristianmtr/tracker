@@ -1,8 +1,9 @@
 #! /usr/bin/python
-from flask import Flask, render_template, jsonify
+from flask import Flask, render_template, jsonify, request
 from models import create_session, create_task_object, create_user_object, create_tasklist_object
 import logging
 from logging.handlers import RotatingFileHandler
+import json
 
 app = Flask(__name__)
 
@@ -28,6 +29,14 @@ class Globals(object):
 def index():
     return render_template('index.html')
 
+
+@app.route("/post", methods=["POST", "GET"])
+def post():
+    submitData = request.get_json()
+    print '/post : server received data: {}'.format(json.dumps(submitData))
+    return 'server received data: {}'.format(json.dumps(submitData))
+
+
 @app.route("/json/<taskid>")
 def jsontask(taskid):
     task = db.session.query(db.task, db.task.itemId, db.task.title, db.task.description, db.task.deadlineDate, db.task.memberId, db.task.authorId,db.task.priority, db.task.projectId).filter(db.task.itemId == taskid).one()
@@ -43,7 +52,7 @@ def jsontask(taskid):
     return jsonify(data=data)
 
 @app.route("/json/")
-def json():
+def jsonall():
     data = []
     tasks = db.session.query(db.task, db.task.itemId, db.task.title, db.task.description, db.task.deadlineDate, db.task.memberId, db.task.authorId).all()
     for t in tasks:

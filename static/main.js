@@ -1,4 +1,6 @@
 // TODO
+var currentItemId = -1;
+
 const newItemForModal = {
     'title': '',
     'deadline' : new moment().format("YYYY-MM-DD"),
@@ -10,6 +12,27 @@ const newItemForModal = {
 }
 
 var globalDataSources;
+
+function submitTaskFromModal() {
+    var dataToSubmit = JSON.stringify(
+	{
+	    'id': currentItemId,
+	    'title': 'task title',
+	    'description': 'task description',
+	}
+    )
+    $.ajax({
+	url:'/post',
+	type:'POST',
+	data:dataToSubmit,
+	contentType:"application/json; charset=utf-8",
+	success: submitTaskSuccessCallback,
+	});
+};
+
+function submitTaskSuccessCallback(response) {
+    console.log(response);
+};
 
 function iterateDataSources() {
     for (var key in globalDataSources) {
@@ -26,7 +49,7 @@ function iterateDataSources() {
 };
 
 function updateCurrentItemId(e) {
-    var currentItemId = $(e).attr('id');
+    currentItemId = $(e).attr('id');
     console.log(currentItemId);
     $.ajax({
 	url: '/json/'+currentItemId,
@@ -77,8 +100,8 @@ function initializeEditables() {
         placeholder: 'task title',
     });
 
-// description is now an independent textarea
-// not using editable because it doesn't look nice
+    // description is now an independent textarea
+    // not using editable because it doesn't look nice
 
     $("#responsible").editable({
         type: 'select',
