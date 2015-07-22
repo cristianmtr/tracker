@@ -45,7 +45,7 @@ function setDataInModal(modalDataObject) {
     $('#deadline').data("DateTimePicker").date(modalDataObject['deadline']);
     $('#tasklist').editable('setValue',modalDataObject['tasklist']);
     $('#title').editable('setValue',modalDataObject['title']);
-    $('#description').editable('setValue',modalDataObject['description']);
+    $('#description').val(modalDataObject['description']);
     $('#responsible').editable('setValue',modalDataObject['responsible']);
     
     console.log('data modal has been updated with ' + JSON.stringify(modalDataObject));
@@ -77,10 +77,8 @@ function initializeEditables() {
         placeholder: 'task title',
     });
 
-    $("#description").editable({
-        type: 'textarea',
-        escape: true,
-    });
+// description is now an independent textarea
+// not using editable because it doesn't look nice
 
     $("#responsible").editable({
         type: 'select',
