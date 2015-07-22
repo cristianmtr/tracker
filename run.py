@@ -71,10 +71,7 @@ def json():
             3: 'Low',
         },
         'tasklist': tasklists_dict,
-        'responsible':{
-            1: 'Cristian',
-            2: 'Someone else',
-        },
+        'responsible':db.user_id_to_name,
     }
     return jsonify(
         data=data,
