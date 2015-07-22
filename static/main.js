@@ -9,11 +9,13 @@ const newItemForModal = {
     'tasklist':1,
 }
 
+var globalDataSources;
+
 function iterateDataSources() {
-    for (var key in dataSources) {
-	if (dataSources.hasOwnProperty(key)) {
-	    console.log(key + " -> " + dataSources[key]);
-	    var subobj = dataSources[key];
+    for (var key in globalDataSources) {
+	if (globalDataSources.hasOwnProperty(key)) {
+	    console.log(key + " -> " + globalDataSources[key]);
+	    var subobj = globalDataSources[key];
 	    for (var subkey in subobj) {
 		if (subobj.hasOwnProperty(subkey)) {
 		    console.log(subkey + " -> " + subobj[subkey]);
@@ -31,7 +33,7 @@ function updateCurrentItemId(e) {
 	async: true,
 	dataType: 'json',
 	success: function(modalDataObject) {
-	    dataList = dataList['data'];
+	    modalDataObject = modalDataObject['data'];
 	    console.log("got data from server: " + JSON.stringify(modalDataObject));
 	    setDataInModal(modalDataObject);
 	}
@@ -49,7 +51,7 @@ function setDataInModal(modalDataObject) {
     console.log('data modal has been updated with ' + JSON.stringify(modalDataObject));
 };
 
-function initializeEditablesWithDefaults(dataSources) {
+function initializeEditables() {
     $.fn.editable.defaults.mode = 'inline';
 
     $('#priority').editable({
@@ -57,7 +59,7 @@ function initializeEditablesWithDefaults(dataSources) {
         title: 'Priority',
         placement: 'right',
         value: 2,
-	source: dataSources['priority'],
+	source: globalDataSources['priority'],
     });
 
     $('#tasklist').editable({
@@ -65,7 +67,7 @@ function initializeEditablesWithDefaults(dataSources) {
         title: 'Task list',
         placement: 'right',
         value: 1,
-	source: dataSources['tasklist'],
+	source: globalDataSources['tasklist'],
     });
 
     $("#title").editable({
@@ -85,7 +87,7 @@ function initializeEditablesWithDefaults(dataSources) {
         value: 1,
         title: 'Responsible',
         placement: 'right',
-	source: dataSources['responsible'],
+	source: globalDataSources['responsible'],
     });
 
 };
@@ -134,7 +136,8 @@ $(document).ready(function () {
             } );
 	} );
 
-	initializeEditablesWithDefaults(dataSources);
+	globalDataSources = dataSources;
+	initializeEditables();
     } );
     
 });
