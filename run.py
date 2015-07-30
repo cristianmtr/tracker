@@ -30,11 +30,50 @@ def index():
     return render_template('index.html')
 
 
+def isNewTask(submitDataId):
+    if submitDataId == -1:
+        return True
+    return False
+
+
+def createNewTask(submitData):
+    newTask = db.task(
+        priority = submitData['priority'],
+        deadlineDate = submitData['deadline'],
+        projectId = submitData['tasklist'],
+        title = submitData['title'],
+        description = submitData['description'],
+        memberId = submitData['responsible'],
+    )
+    db.session.add(newTask)
+    db.session.flush()
+    db.session.refresh(newTask)
+    return newTask.itemId
+
+
+def updateExistingTask(submitData):
+    taskToModify = db.session.query(db.task).filter(db.task.itemId==submitData['id']).one()
+    taskToModify.priority = submitData['priority']
+    taskToModify.deadlineDate = submitData['deadline']
+    taskToModify.projectId = submitData['tasklist']
+    taskToModify.title = submitData['title']
+    taskToModify.description = submitData['description']
+    taskToModify.memberId = submitData['responsible']
+    db.session.add(taskToModify)
+    db.session.flush()
+    return
+
+
 @app.route("/post", methods=["POST", "GET"])
 def post():
     submitData = request.get_json()
     print '/post : server received data: {}'.format(json.dumps(submitData))
-    return 'server received data: {}'.format(json.dumps(submitData))
+    idToUpdateInTable = submitData['id']
+    if isNewTask(submitData['id']):
+        idToUpdateInTable = createNewTask(submitData)
+    else:
+        updateExistingTask(submitData)
+    return jsonify(data=idToUpdateInTable)
 
 
 @app.route("/json/<taskid>")
@@ -51,6 +90,7 @@ def jsontask(taskid):
     }
     return jsonify(data=data)
 
+
 @app.route("/json/")
 def jsonall():
     data = []
@@ -60,15 +100,15 @@ def jsonall():
 
         this_task['DT_RowId'] = t.itemId
         
-        this_task['0'] = t.title
+        this_task['title'] = t.title
         
         # keep formatting when displaying description
-        this_task['1'] = '<pre>{}</pre>'.format(t.description.encode('utf-8'))
+        this_task['description'] = '<pre>{}</pre>'.format(t.description.encode('utf-8'))
         
         # handle empty fields, for deadlineDate or member info
-        this_task['2'] = t.deadlineDate.isoformat() if t.deadlineDate else None
-        this_task['3'] = db.user_id_to_name[t.memberId] if t.memberId != 0 else None
-        this_task['4'] = db.user_id_to_name[t.authorId] if t.authorId != 0 else None
+        this_task['deadline'] = t.deadlineDate.isoformat() if t.deadlineDate else None
+        this_task['responsible'] = db.user_id_to_name[t.memberId] if t.memberId != 0 else None
+        this_task['author'] = db.user_id_to_name[t.authorId] if t.authorId != 0 else None
         data.append(this_task)
 
         # uncomment the following for sample data when no db is available
@@ -82,15 +122,15 @@ def jsonall():
     all_tasklists = db.session.query(db.tasklist, db.tasklist.projectId, db.tasklist.name).all()
     for tsklst in all_tasklists:
         tasklists_dict[tsklst.projectId] = tsklst.name
-    dataSources = {
-        'priority':{
-            1: 'Urgent',
-            2: 'Medium',
-            3: 'Low',
-        },
-        'tasklist': tasklists_dict,
-        'responsible':db.user_id_to_name,
-    }
+        dataSources = {
+            'priority':{
+                1: 'Urgent',
+                2: 'Medium',
+                3: 'Low',
+            },
+            'tasklist': tasklists_dict,
+            'responsible':db.user_id_to_name,
+        }
     return jsonify(
         data=data,
         dataSources=dataSources

@@ -18,12 +18,21 @@ const newItemForModal = {
 
 var globalDataSources;
 
+function prepareModalForNewTask() {
+    currentItemId = -1;
+    setDataInModal(newItemForModal);
+    };
+
 function submitTaskFromModal() {
     var dataToSubmit = JSON.stringify(
 	{
 	    'id': currentItemId,
-	    'title': 'task title',
-	    'description': 'task description',
+	    'priority' : $('#priority').editable('getValue')['priority'],
+	    'deadline' : $('#deadline').data("DateTimePicker").date().format("YYYY-MM-DD"),
+	    'tasklist' : $('#tasklist').editable('getValue')['tasklist'],
+	    'title' : $('#title').editable('getValue')['title'],
+	    'description' : $('#description').val(),
+	    'responsible' : $('#responsible').editable('getValue')['responsible'],
 	}
     )
     $.ajax({
@@ -32,11 +41,18 @@ function submitTaskFromModal() {
 	data:dataToSubmit,
 	contentType:"application/json; charset=utf-8",
 	success: submitTaskSuccessCallback,
-	});
+    });
 };
+
+
+//TODO delete when done
+var globalResponse;
 
 function submitTaskSuccessCallback(response) {
     console.log(response);
+    globalResponse = response;
+    // if response
+    // setDataInRowById
 };
 
 function iterateDataSources() {
@@ -68,7 +84,7 @@ function updateDataInModalFromId() {
 
 function toggleModal() {
     $("#createNewModal").modal('toggle');
-    };
+};
 
 function setDataInModal(modalDataObject) {
     $('#priority').editable('setValue',modalDataObject['priority']);
@@ -84,7 +100,7 @@ function setDataInModal(modalDataObject) {
 function setDataInRowById(DT_RowId, dataObjectArray) {
     console.log("trying to update row " + DT_RowId + " with data " + dataObjectArray);
     table.row("#"+DT_RowId).data(dataObjectArray);
-    };
+};
 
 function initializeEditables() {
     $.fn.editable.defaults.mode = 'inline';
@@ -145,17 +161,13 @@ $(document).ready(function () {
     	dataSources = data['dataSources'];
 	table = $('#example').DataTable({
             "data": dataSet,
-            "columns": [{
-                "title": "title"
-            }, {
-                "title": "description"
-            }, {
-                "title": "dead line"
-            }, {
-                "title": "responsible"
-            }, {
-                "title": "author"
-            }]
+            "columns": [
+		{"data":"title"},
+		{"data":"description"},
+		{"data":"deadline"},
+		{"data":"responsible"},
+		{"data":"author"}
+	    ]
         });
 
 	//on click functionality
