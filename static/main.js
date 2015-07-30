@@ -81,6 +81,11 @@ function setDataInModal(modalDataObject) {
     console.log('data modal has been updated with ' + JSON.stringify(modalDataObject));
 };
 
+function setDataInRowById(DT_RowId, dataObjectArray) {
+    console.log("trying to update row " + DT_RowId + " with data " + dataObjectArray);
+    table.row("#"+DT_RowId).data(dataObjectArray);
+    };
+
 function initializeEditables() {
     $.fn.editable.defaults.mode = 'inline';
 
