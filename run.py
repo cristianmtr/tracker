@@ -56,19 +56,28 @@ def jsonall():
     data = []
     tasks = db.session.query(db.task, db.task.itemId, db.task.title, db.task.description, db.task.deadlineDate, db.task.memberId, db.task.authorId).all()
     for t in tasks:
-        this_task = []
-        this_task.append(t.title)
+        this_task = {}
+
+        this_task['DT_RowId'] = t.itemId
+        
+        this_task['0'] = t.title
+        
         # keep formatting when displaying description
-        this_task.append('<div id="{}" data-toggle="modal" data-target="#createNewModal" onclick="updateCurrentItemId(this);"><pre>{}</pre></div>'.format(t.itemId, t.description.encode('utf-8')))
+        this_task['1'] = '<pre>{}</pre>'.format(t.description.encode('utf-8'))
+        
         # handle empty fields, for deadlineDate or member info
-        this_task.append(t.deadlineDate.isoformat() if t.deadlineDate else None)
-        this_task.append(db.user_id_to_name[t.memberId] if t.memberId != 0 else None)
-        this_task.append(db.user_id_to_name[t.authorId] if t.authorId != 0 else None)
+        this_task['2'] = t.deadlineDate.isoformat() if t.deadlineDate else None
+        this_task['3'] = db.user_id_to_name[t.memberId] if t.memberId != 0 else None
+        this_task['4'] = db.user_id_to_name[t.authorId] if t.authorId != 0 else None
         data.append(this_task)
+
+        # uncomment the following for sample data when no db is available
+        # 
         # data = [
         # ['<a id="edit1" data-toggle="modal" data-target="#createNewModal" data-target="#createNewModal">1</a>', "this is description", "2more", "responsible", "authorId"],
         # ['<button onclick="btnclick(this);">2</button>',"this is description nr 2", "2more", "responsible2", "authorId"],
         # ]
+        
     tasklists_dict = {}
     all_tasklists = db.session.query(db.tasklist, db.tasklist.projectId, db.tasklist.name).all()
     for tsklst in all_tasklists:
@@ -94,4 +103,4 @@ if __name__ == "__main__":
     handler.setLevel(logging.INFO)
     app.logger.addHandler(handler)
     db = Globals()
-    app.run(host='0.0.0.0', port=5000)
+    app.run(host='0.0.0.0', port=80)

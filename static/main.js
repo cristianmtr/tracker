@@ -1,4 +1,9 @@
 // TODO
+var table;
+
+// this will be used for submitting POST data to server
+// should be -1 if the item submitted is new (doesn't exist in db)
+// should be a specific id for an existing item if it's an UPDATE
 var currentItemId = -1;
 
 const newItemForModal = {
@@ -48,9 +53,7 @@ function iterateDataSources() {
     }
 };
 
-function updateCurrentItemId(e) {
-    currentItemId = $(e).attr('id');
-    console.log(currentItemId);
+function updateDataInModalFromId() {
     $.ajax({
 	url: '/json/'+currentItemId,
 	async: true,
@@ -62,6 +65,10 @@ function updateCurrentItemId(e) {
 	}
     });
 };
+
+function toggleModal() {
+    $("#createNewModal").modal('toggle');
+    };
 
 function setDataInModal(modalDataObject) {
     $('#priority').editable('setValue',modalDataObject['priority']);
@@ -131,7 +138,7 @@ $(document).ready(function () {
     	console.log('got data from /json');
         dataSet = data['data'];
     	dataSources = data['dataSources'];
-	var table = $('#example').DataTable({
+	table = $('#example').DataTable({
             "data": dataSet,
             "columns": [{
                 "title": "title"
@@ -145,6 +152,14 @@ $(document).ready(function () {
                 "title": "author"
             }]
         });
+
+	//on click functionality
+	$('#example tbody').on('click', 'tr', function () {
+            currentItemId = this.id;
+	    console.log('clicked on row with id ', currentItemId);
+	    updateDataInModalFromId();
+	    toggleModal();
+	});
 	
 	// Apply the search
 	table.columns().every( function () {
