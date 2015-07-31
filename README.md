@@ -1,5 +1,11 @@
 # TODO
 
+- in order to accomodate for multiple users modifying and creating tasks in the database, I should do the following:
+  - create a queue with submitData objects;
+  - have a process pop from the queue and do the task;
+  - after each task is processed, the client browser should be informed what row_id it needs to update;
+  
+
 - [x] jsonify database
 - [ ] create in place
   - [ ] ajax call to last created
