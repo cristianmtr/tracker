@@ -1,4 +1,4 @@
-#! /usr/bin/python
+#! /usr/bin/env python
 from flask import Flask, render_template, jsonify, request
 from models import create_session, create_task_object, create_user_object, create_tasklist_object
 import logging
@@ -16,13 +16,34 @@ class Globals(object):
         self.task = create_task_object()
         self.user = create_user_object()
         self.tasklist = create_tasklist_object()
-        self.user_id_to_name = {}
-        self.build_user_id_to_name()
 
-    def build_user_id_to_name(self):
-        users = self.session.query(self.user, self.user.memberId, self.user.firstName).all()
-        for u in users:
-            self.user_id_to_name[u.memberId] = u.firstName
+
+def build_user_id_to_name():
+    """returns dictionary mapping users ids to user names"""
+    user_id_to_name = {}
+    users = db.session.query(db.user, db.user.memberId, db.user.firstName).all()
+    for u in users:
+        user_id_to_name[u.memberId] = u.firstName
+    return user_id_to_name
+
+def build_tasklist_id_to_name():
+    """returns dictionary mapping tasklist (projects) IDs to their names"""
+    tasklists_dict = {}
+    all_tasklists = db.session.query(db.tasklist, db.tasklist.projectId, db.tasklist.name).all()
+    for tsklst in all_tasklists:
+        tasklists_dict[tsklst.projectId] = tsklst.name
+    return tasklists_dict
+
+
+def build_priority_id_to_name():
+    """returns dictionary mapping priority ids to names"""
+    # TODO: get actual data
+    priority = {
+        1: 'Urgent',
+        2: 'Medium',
+        3: 'Low',
+    }
+    return priority
 
 
 @app.route("/")
@@ -107,8 +128,8 @@ def jsonall():
         
         # handle empty fields, for deadlineDate or member info
         this_task['deadline'] = t.deadlineDate.isoformat() if t.deadlineDate else None
-        this_task['responsible'] = db.user_id_to_name[t.memberId] if t.memberId != 0 else None
-        this_task['author'] = db.user_id_to_name[t.authorId] if t.authorId != 0 else None
+        this_task['responsible'] = t.memberId if t.memberId != 0 else None
+        this_task['author'] = t.authorId if t.authorId != 0 else None
         data.append(this_task)
 
         # uncomment the following for sample data when no db is available
@@ -117,20 +138,11 @@ def jsonall():
         # ['<a id="edit1" data-toggle="modal" data-target="#createNewModal" data-target="#createNewModal">1</a>', "this is description", "2more", "responsible", "authorId"],
         # ['<button onclick="btnclick(this);">2</button>',"this is description nr 2", "2more", "responsible2", "authorId"],
         # ]
-        
-    tasklists_dict = {}
-    all_tasklists = db.session.query(db.tasklist, db.tasklist.projectId, db.tasklist.name).all()
-    for tsklst in all_tasklists:
-        tasklists_dict[tsklst.projectId] = tsklst.name
-        dataSources = {
-            'priority':{
-                1: 'Urgent',
-                2: 'Medium',
-                3: 'Low',
-            },
-            'tasklist': tasklists_dict,
-            'responsible':db.user_id_to_name,
-        }
+    dataSources = {
+        'priority': build_priority_id_to_name(),
+        'tasklist': build_tasklist_id_to_name(),
+        'responsible':build_user_id_to_name(),
+    }
     return jsonify(
         data=data,
         dataSources=dataSources

@@ -157,8 +157,20 @@ $(document).ready(function () {
 
     $.when(test()).then(function (data) {
     	console.log('got data from /json');
+	dataSources = data['dataSources'];
         dataSet = data['data'];
-    	dataSources = data['dataSources'];
+	// we replace the ID numbers we get from the server
+	// with the names from the dictionary mapping we will store client-side
+	for (var i = 0; i < dataSet.length; i++) {
+	    var responsible_id = dataSet[i]['responsible'];
+	    var author_id = dataSet[i]['author'];
+	    if (responsible_id != null) {
+		dataSet[i]['responsible'] = dataSources['responsible'][responsible_id];
+	    };
+	    if (author_id != null) {
+		dataSet[i]['author'] = dataSources['responsible'][author_id];
+	    };
+	};
 	table = $('#example').DataTable({
             "data": dataSet,
             "columns": [
