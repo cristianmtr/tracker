@@ -4,7 +4,13 @@
   - create a queue with submitData objects;
   - have a process pop from the queue and do the task;
   - after each task is processed, the client browser should be informed what row_id it needs to update;
-  
+
+## PROBLEMATIC
+- caching dictionary of user ids to user names (and others) will need to be refreshed when there's a change;
+  - poss. solution: if a submitData req. affects any of these, the row_id to be updated will be a reserved code (e.g. -1);
+  - stress the client, not the server;
+
+## OLDER TODOS
 
 - [x] jsonify database
 - [ ] create in place
