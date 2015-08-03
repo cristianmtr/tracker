@@ -10,8 +10,12 @@
   - poss. solution: if a submitData req. affects any of these, the row_id to be updated will be a reserved code (e.g. -1);
   - stress the client, not the server;
 
-## OLDER TODOS
+## NOTES
 
+- in order to access data from a specific row:
+```javascript
+table.row("#93").data();
+```
 - [x] jsonify database
 - [ ] create in place
   - [ ] ajax call to last created
