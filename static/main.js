@@ -83,6 +83,11 @@ function addNewRowAndRedrawTable(newTaskId, jsonDataObject) {
 function submitTaskSuccessCallback(response) {
     console.log(response);
     var idToUpdate = response['data'];
+    if (idToUpdate == -1)
+    {
+	alert ("There was a problem processing your request. Try again later");
+	return;
+    }
     $.ajax({
 	url: '/json/'+idToUpdate,
 	async: true,

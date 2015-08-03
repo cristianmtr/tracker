@@ -57,49 +57,72 @@ def isNewTask(submitDataId):
     return False
 
 
+def conditionalUpdateTaskWithSubmitDataIfExists(taskObject, dataToProcess):
+    """checks if the data to be submitted contains data in the keys specific to the task table
+if so, adds them to the task object
+return newly updated task object"""
+    if 'priority' in dataToProcess.keys():
+        taskObject.priority = dataToProcess['priority']
+    if 'deadline' in dataToProcess.keys():
+        taskObject.deadlineDate = dataToProcess['deadline']
+    if 'tasklist' in dataToProcess.keys():
+        taskObject.projectId = dataToProcess['tasklist']
+    if 'title' in dataToProcess.keys():
+        taskObject.title = dataToProcess['title']
+    if 'description' in dataToProcess.keys():
+        taskObject.description = dataToProcess['description']
+    # memberId is REQUIRED        
+    taskObject.memberId = dataToProcess['responsible']
+    return taskObject
+
+
+def tryFlushSession():
+    """tries to flush session
+if it fails, it rolls back and returns -1
+it it's ok, return 0"""
+    try:
+        db.session.flush()
+        return 0
+    except Exception as e:
+        print 'ERROR FLUSHING DB: {}\nROLLING BACK'.format(e)
+        db.session.rollback()
+        return -1
+
+
 def createNewTask(submitData):
-    newTask = db.task(
-        priority = submitData['priority'],
-        deadlineDate = submitData['deadline'],
-        projectId = submitData['tasklist'],
-        title = submitData['title'],
-        description = submitData['description'],
-        memberId = submitData['responsible'],
-    )
+    newTask = db.task()
+    newTask = conditionalUpdateTaskWithSubmitDataIfExists(newTask, submitData)
     db.session.add(newTask)
-    db.session.flush()
-    db.session.refresh(newTask)
-    return newTask.itemId
+    if tryFlushSession() == 0:
+        db.session.refresh(newTask)
+        return newTask.itemId
+    return -1
 
 
 def updateExistingTask(submitData):
     taskToModify = db.session.query(db.task).filter(db.task.itemId==submitData['id']).one()
-    if 'priority' in submitData.keys():
-        taskToModify.priority = submitData['priority']
-    if 'deadline' in submitData.keys():
-        taskToModify.deadlineDate = submitData['deadline']
-    if 'tasklist' in submitData.keys():
-        taskToModify.projectId = submitData['tasklist']
-    if 'title' in submitData.keys():
-        taskToModify.title = submitData['title']
-    if 'description' in submitData.keys():
-        taskToModify.description = submitData['description']
-    if 'responsible' in submitData.keys():
-        taskToModify.memberId = submitData['responsible']
+    taskToModify = conditionalUpdateTaskWithSubmitDataIfExists(taskToModify, submitData)
     db.session.add(taskToModify)
-    db.session.flush()
-    return
+    if tryFlushSession() == 0:
+        return submitData['id']
+    return -1
 
 
 @app.route("/post", methods=["POST", "GET"])
 def post():
+    """if the submitData is assoc. with an existing task entry, we will get its id
+if it's not, we get -1 instead for that id field
+depending on the success of either creating or updating a task
+returns ID of the newly created task (or updated) if successful
+returns -1 if there was a problem
+"""
     submitData = request.get_json()
     print '/post : server received data: {}'.format(json.dumps(submitData))
-    idToUpdateInTable = submitData['id']
+    idToUpdateInTable = -1
     if isNewTask(submitData['id']):
         idToUpdateInTable = createNewTask(submitData)
     else:
-        updateExistingTask(submitData)
+        idToUpdateInTable = updateExistingTask(submitData)
     return jsonify(data=idToUpdateInTable)
 
 
