@@ -108,7 +108,7 @@ function submitTaskSuccessCallback(response) {
 };
 
 function setDataInRowById(DT_RowId, dataObject) {
-    console.log("trying to update row " + DT_RowId + " with data " + dataObject);
+    console.log("trying to update row " + DT_RowId + " with data " + JSON.stringify(dataObject));
     table.row("#"+DT_RowId).data(dataObject);
 };
 
@@ -213,6 +213,7 @@ $(document).ready(function () {
         dataSet = data['data'];
 	dataSet = replaceIdsWithValues(dataSet);
 	table = $('#example').DataTable({
+	    "dom":'<"toolbar">frtip',
             "data": dataSet,
             "columns": [
 		{"data":"title"},
@@ -223,6 +224,8 @@ $(document).ready(function () {
 	    ]
         });
 
+	$("div.toolbar").html("<b>this will be a nav bar!</b>");
+	
 	//on click functionality
 	$('#example tbody').on('click', 'tr', function () {
             currentItemId = this.id;
