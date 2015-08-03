@@ -37,11 +37,16 @@ def build_tasklist_id_to_name():
 
 def build_priority_id_to_name():
     """returns dictionary mapping priority ids to names"""
-    # TODO: get actual data
     priority = {
         1: 'Urgent',
-        2: 'Medium',
-        3: 'Low',
+        2: 'High priority',
+        3: 'Medium',
+        4: 'Normal',
+        5: 'Low priority',
+        6: 'Low priority',
+        7: 'Very Low priority',
+        8: 'Very Low priority',
+        9: 'Whatever',
     }
     return priority
 
@@ -144,7 +149,7 @@ def jsontask(taskid):
 @app.route("/json/")
 def jsonall():
     data = []
-    tasks = db.session.query(db.task, db.task.itemId, db.task.title, db.task.description, db.task.deadlineDate, db.task.memberId, db.task.authorId).all()
+    tasks = db.session.query(db.task, db.task.projectId, db.task.priority, db.task.itemId, db.task.title, db.task.description, db.task.deadlineDate, db.task.memberId, db.task.authorId).all()
     for t in tasks:
         this_task = {}
 
@@ -159,6 +164,8 @@ def jsonall():
         this_task['deadline'] = t.deadlineDate.isoformat() if t.deadlineDate else None
         this_task['responsible'] = t.memberId if t.memberId != 0 else None
         this_task['author'] = t.authorId if t.authorId != 0 else None
+        this_task['tasklist'] = t.projectId if t.projectId else None
+        this_task['priority'] = t.priority if t.priority else None
         data.append(this_task)
 
         # uncomment the following for sample data when no db is available

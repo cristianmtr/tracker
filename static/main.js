@@ -50,11 +50,19 @@ function replaceIdsWithValues(dataSet) {
     for (var i = 0; i < dataSet.length; i++) {
 	var responsible_id = dataSet[i]['responsible'];
 	var author_id = dataSet[i]['author'];
+	var tasklist_id = dataSet[i]['tasklist'];
+	var priority = dataSet[i]['priority'];
 	if (responsible_id != null) {
 	    dataSet[i]['responsible'] = dataSources['responsible'][responsible_id];
 	};
 	if (author_id != null) {
 	    dataSet[i]['author'] = dataSources['responsible'][author_id];
+	};
+	if (tasklist_id != null) {
+	    dataSet[i]['tasklist'] = dataSources['tasklist'][tasklist_id];
+	};
+	if (priority != null) {
+	    dataSet[i]['priority'] = dataSources['priority'][priority];
 	};
     };
     return dataSet;
@@ -220,7 +228,9 @@ $(document).ready(function () {
 		{"data":"description"},
 		{"data":"deadline"},
 		{"data":"responsible"},
-		{"data":"author"}
+		{"data":"author"},
+		{"data":"tasklist"},
+		{"data":"priority"},
 	    ]
         });
 
