@@ -108,7 +108,7 @@ function submitTaskSuccessCallback(response) {
 
 function setDataInRowById(DT_RowId, dataObject) {
     console.log("trying to update row " + DT_RowId + " with data " + dataObject);
-    table.row("#"+DT_RowId).data(dataObject);
+    table.row("#"+DT_RowId).data(dataObject).draw();
 };
 
 function iterateDataSources() {
