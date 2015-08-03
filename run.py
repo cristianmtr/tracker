@@ -74,12 +74,18 @@ def createNewTask(submitData):
 
 def updateExistingTask(submitData):
     taskToModify = db.session.query(db.task).filter(db.task.itemId==submitData['id']).one()
-    taskToModify.priority = submitData['priority']
-    taskToModify.deadlineDate = submitData['deadline']
-    taskToModify.projectId = submitData['tasklist']
-    taskToModify.title = submitData['title']
-    taskToModify.description = submitData['description']
-    taskToModify.memberId = submitData['responsible']
+    if 'priority' in submitData.keys():
+        taskToModify.priority = submitData['priority']
+    if 'deadline' in submitData.keys():
+        taskToModify.deadlineDate = submitData['deadline']
+    if 'tasklist' in submitData.keys():
+        taskToModify.projectId = submitData['tasklist']
+    if 'title' in submitData.keys():
+        taskToModify.title = submitData['title']
+    if 'description' in submitData.keys():
+        taskToModify.description = submitData['description']
+    if 'responsible' in submitData.keys():
+        taskToModify.memberId = submitData['responsible']
     db.session.add(taskToModify)
     db.session.flush()
     return

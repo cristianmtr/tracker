@@ -21,7 +21,7 @@ var globalDataSources;
 function prepareModalForNewTask() {
     currentItemId = -1;
     setDataInModal(newItemForModal);
-    };
+};
 
 function submitTaskFromModal() {
     var dataToSubmit = JSON.stringify(
@@ -44,15 +44,66 @@ function submitTaskFromModal() {
     });
 };
 
+function replaceIdsWithValues(dataSet) {
+    // we replace the ID numbers we get from the server
+    // with the names from the dictionary mapping we will store client-side
+    for (var i = 0; i < dataSet.length; i++) {
+	var responsible_id = dataSet[i]['responsible'];
+	var author_id = dataSet[i]['author'];
+	if (responsible_id != null) {
+	    dataSet[i]['responsible'] = dataSources['responsible'][responsible_id];
+	};
+	if (author_id != null) {
+	    dataSet[i]['author'] = dataSources['responsible'][author_id];
+	};
+    };
+    return dataSet;
 
-//TODO delete when done
-var globalResponse;
+};
+
+function idExistsInTableRows(idToCheck) {
+    if (table.row("#" + idToCheck).data() == undefined )
+    {
+	return false;
+    }
+    return true;
+};
+
+function addNewRowAndRedrawTable(newTaskId, jsonDataObject) {
+    table.row.add({
+	"title":jsonDataObject['title'],
+	"description":jsonDataObject['description'],
+	"deadline" : jsonDataObject["deadline"],
+	"responsible" : jsonDataObject["responsible"],
+	"author" : jsonDataObject["author"],
+	"DT_RowId" : newTaskId,
+    }).draw();
+};
 
 function submitTaskSuccessCallback(response) {
     console.log(response);
-    globalResponse = response;
-    // if response
-    // setDataInRowById
+    var idToUpdate = response['data'];
+    $.ajax({
+	url: '/json/'+idToUpdate,
+	async: true,
+	dataType: 'json',
+	success: function(jsonDataObject) {
+	    jsonDataObject = jsonDataObject['data'];
+	    jsonDataObject = replaceIdsWithValues([jsonDataObject])[0];
+	    if ( idExistsInTableRows(idToUpdate) )
+	    {
+		setDataInRowById(idToUpdate, jsonDataObject);
+	    }
+	    else {
+		addNewRowAndRedrawTable(idToUpdate, jsonDataObject);
+	    }
+	}
+    });
+};
+
+function setDataInRowById(DT_RowId, dataObject) {
+    console.log("trying to update row " + DT_RowId + " with data " + dataObject);
+    table.row("#"+DT_RowId).data(dataObject);
 };
 
 function iterateDataSources() {
@@ -95,11 +146,6 @@ function setDataInModal(modalDataObject) {
     $('#responsible').editable('setValue',modalDataObject['responsible']);
     
     console.log('data modal has been updated with ' + JSON.stringify(modalDataObject));
-};
-
-function setDataInRowById(DT_RowId, dataObjectArray) {
-    console.log("trying to update row " + DT_RowId + " with data " + dataObjectArray);
-    table.row("#"+DT_RowId).data(dataObjectArray);
 };
 
 function initializeEditables() {
@@ -159,18 +205,7 @@ $(document).ready(function () {
     	console.log('got data from /json');
 	dataSources = data['dataSources'];
         dataSet = data['data'];
-	// we replace the ID numbers we get from the server
-	// with the names from the dictionary mapping we will store client-side
-	for (var i = 0; i < dataSet.length; i++) {
-	    var responsible_id = dataSet[i]['responsible'];
-	    var author_id = dataSet[i]['author'];
-	    if (responsible_id != null) {
-		dataSet[i]['responsible'] = dataSources['responsible'][responsible_id];
-	    };
-	    if (author_id != null) {
-		dataSet[i]['author'] = dataSources['responsible'][author_id];
-	    };
-	};
+	dataSet = replaceIdsWithValues(dataSet);
 	table = $('#example').DataTable({
             "data": dataSet,
             "columns": [
