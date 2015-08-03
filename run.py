@@ -26,6 +26,7 @@ def build_user_id_to_name():
         user_id_to_name[u.memberId] = u.firstName
     return user_id_to_name
 
+
 def build_tasklist_id_to_name():
     """returns dictionary mapping tasklist (projects) IDs to their names"""
     tasklists_dict = {}
@@ -76,8 +77,8 @@ return newly updated task object"""
         taskObject.title = dataToProcess['title']
     if 'description' in dataToProcess.keys():
         taskObject.description = dataToProcess['description']
-    # memberId is REQUIRED        
-    taskObject.memberId = dataToProcess['responsible']
+    if 'responsible' in dataToProcess.keys():
+        taskObject.memberId = dataToProcess['responsible']
     return taskObject
 
 
@@ -137,7 +138,7 @@ def jsontask(taskid):
     data = {
         'title':task.title if task.title else None,
         'priority':task.priority if task.priority else None,
-        'description':task.description.encode('utf-8') if task.description else None,
+        'description':task.description.encode('utf-8')if task.description else None,
         'deadline':task.deadlineDate.isoformat() if task.deadlineDate else None,
         'tasklist':task.projectId if task.projectId else None,
         'responsible':task.memberId if task.memberId else None,
@@ -158,7 +159,7 @@ def jsonall():
         this_task['title'] = t.title
         
         # keep formatting when displaying description
-        this_task['description'] = '<pre>{}</pre>'.format(t.description.encode('utf-8'))
+        this_task['description'] = t.description.encode('utf-8')
         
         # handle empty fields, for deadlineDate or member info
         this_task['deadline'] = t.deadlineDate.isoformat() if t.deadlineDate else None

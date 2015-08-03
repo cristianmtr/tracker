@@ -13,7 +13,7 @@ const newItemForModal = {
     'responsible':'',
     'description':'',
     'author':'',
-    'tasklist':1,
+    'tasklist':2,
 }
 
 var globalDataSources;
@@ -77,10 +77,12 @@ function idExistsInTableRows(idToCheck) {
     return true;
 };
 
-function addNewRowAndRedrawTable(newTaskId, jsonDataObject) {
+function addNewRow(newTaskId, jsonDataObject) {
     table.row.add({
 	"title":jsonDataObject['title'],
 	"description":jsonDataObject['description'],
+	"tasklist":jsonDataObject["tasklist"],
+	"priority":jsonDataObject["priority"],
 	"deadline" : jsonDataObject["deadline"],
 	"responsible" : jsonDataObject["responsible"],
 	"author" : jsonDataObject["author"],
