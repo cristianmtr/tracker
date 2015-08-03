@@ -77,7 +77,7 @@ function addNewRowAndRedrawTable(newTaskId, jsonDataObject) {
 	"responsible" : jsonDataObject["responsible"],
 	"author" : jsonDataObject["author"],
 	"DT_RowId" : newTaskId,
-    }).draw();
+    });
 };
 
 function submitTaskSuccessCallback(response) {
@@ -100,15 +100,16 @@ function submitTaskSuccessCallback(response) {
 		setDataInRowById(idToUpdate, jsonDataObject);
 	    }
 	    else {
-		addNewRowAndRedrawTable(idToUpdate, jsonDataObject);
+		addNewRow(idToUpdate, jsonDataObject);
 	    }
+	    table.draw();
 	}
     });
 };
 
 function setDataInRowById(DT_RowId, dataObject) {
     console.log("trying to update row " + DT_RowId + " with data " + dataObject);
-    table.row("#"+DT_RowId).data(dataObject).draw();
+    table.row("#"+DT_RowId).data(dataObject);
 };
 
 function iterateDataSources() {
