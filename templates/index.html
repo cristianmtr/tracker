@@ -3,152 +3,163 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <title>TaskFreak - Advanced</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-      <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
-	<link href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"></meta>
+    <!-- icon -->
+    <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}"></link>
 
-	  <!-- jquery -->
-	  <script src="http://code.jquery.com/jquery-2.0.3.min.js"></script>
+    <!-- jquery -->
+    <script type="text/javascript" language="javascript"
+	    src="{{ url_for('static', filename='thirdparty/jquery.js') }}"></script>
+    
+    <!-- bootstrap css -->
+    <link href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css" rel="stylesheet"></link>
+    
+    <!-- bootstrap3 js -->
+    <script src="//netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
 
-	  <!-- bootstrap3 -->
-	  <script src="//netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
-	  <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='datatablesbootstrap.css') }}">
+    <!-- datatables js -->
+    <script type="text/javascript" language="javascript"
+	    src="{{ url_for('static', filename='thirdparty/datatables.js') }}"></script>
 
-	    <!-- datatables js -->
-	    <script type="text/javascript" language="javascript"
-		    src="{{ url_for('static', filename='datatables.js') }}"></script>
-	    <script type="text/javascript" language="javascript"
-		    src="{{ url_for('static', filename='datatablesbootstrap.js') }}"></script>
-	    <script src="https://cdn.datatables.net/1.10.7/js/jquery.dataTables.min.js"></script>
-	    
-	    <!-- cdn for edit in place functionality -->
-	    <link href="//cdnjs.cloudflare.com/ajax/libs/x-editable/1.5.0/bootstrap3-editable/css/bootstrap-editable.css"
-		  rel="stylesheet"/>
-	    <script src="//cdnjs.cloudflare.com/ajax/libs/x-editable/1.5.0/bootstrap3-editable/js/bootstrap-editable.min.js"></script>
+    <!-- datatables jquery js -->
+    <script src="https://cdn.datatables.net/1.10.7/js/jquery.dataTables.min.js"></script>
+    
+    <!-- datatables bootstrap css -->
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='thirdparty/datatablesbootstrap.css') }}"></link>
 
-	    <!-- moment js -->
-	    <script src="{{ url_for('static', filename='moment.js') }}"></script>
+    <!-- datatables bootstrap js -->
+    <script type="text/javascript" language="javascript"
+	    src="{{ url_for('static', filename='thirdparty/datatablesbootstrap.js') }}"></script>
+    
+    <!-- cdn for edit in place functionality -->
+    <!-- css -->
+    <link href="//cdnjs.cloudflare.com/ajax/libs/x-editable/1.5.0/bootstrap3-editable/css/bootstrap-editable.css" rel="stylesheet"/>
+    
+    <!-- js -->
+    <script src="//cdnjs.cloudflare.com/ajax/libs/x-editable/1.5.0/bootstrap3-editable/js/bootstrap-editable.min.js"></script>
 
-	    <!--date time picker for bs3-->
-	    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.14.30/js/bootstrap-datetimepicker.min.js"></script>
-	    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.14.30/css/bootstrap-datetimepicker.min.css"
-		  rel="stylesheet"/>
+    <!-- moment js -->
+    <script src="{{ url_for('static', filename='thirdparty/moment.js') }}"></script>
 
-	    <!-- main -->
-	    <script src="{{ url_for('static', filename='main.js') }}"></script>
-	  </head>
-	  <body>
+    <!--date time picker for bs3-->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.14.30/js/bootstrap-datetimepicker.min.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.14.30/css/bootstrap-datetimepicker.min.css" rel="stylesheet"/>
 
-	    <!-- button for creating new task -->
-	    <ul class="nav nav-pills nav-justified">
-	      <li button type="button" class="btn btn-primary btn-lg" data-toggle="modal" onclick="prepareModalForNewTask();" data-target="#createNewModal">
-		Create new
-            </button></li>
-	  </ul>
+    <!-- main -->
+    <script src="{{ url_for('static', filename='main.js') }}"></script>
+  </head>
+  <body>
 
-	  <!-- Modal for creating and editing tasks -->
-	  <div class="modal fade" id="createNewModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-	    <div class="modal-dialog" role="document">
-              <div class="modal-content">
-		<div class="modal-header">
-                  <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
-												 aria-hidden="true">&times;</span></button>
-                  <h4 class="modal-title" id="myModalLabel">Task</h4>
-		</div>
-		<div id="modalbody" class="modal-body">
+    <!-- button for creating new task -->
+    <ul class="nav nav-pills nav-justified">
+      <li button type="button" class="btn btn-primary btn-lg" data-toggle="modal" onclick="prepareModalForNewTask();" data-target="#createNewModal">
+	Create new
+    </button></li>
+  </ul>
 
-		  <!-- table with form goes here -->
+  <!-- Modal for creating and editing tasks -->
+  <div class="modal fade" id="createNewModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+	<div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+											 aria-hidden="true">&times;</span></button>
+          <h4 class="modal-title" id="myModalLabel">Task</h4>
+	</div>
+	<div id="modalbody" class="modal-body">
 
-                  <table id="modaltable" class="display table-striped table-condensed table-bordered" cellspacing="0" width="100%">
+	  <!-- table with form goes here -->
 
-		    <!-- Priority - dropdown -->
-                    <tr>
-                      <td class="col-md-1">
-                        <span>Priority:</span>
-                      </td>
-                      <td class="col-md-3">
-                        <a href="#" id="priority"></a></br>
-                    </td>
-                  </tr>
+          <table id="modaltable" class="display table-striped table-condensed table-bordered" cellspacing="0" width="100%">
 
-                  <tr>
-                    <!-- Deadline - datetime picker -->
-                    <td class="col-md-1">
-                      <span>Deadline:</span>
-                    </td>
-
-                    <td class="col-md-3">
-                      <div class="input-group date" id="deadline">
-                        <input type="text" class="form-control" id="deadlinetext"/>
-			<span class="input-group-addon">
-                          <span class="glyphicon glyphicon-calendar"></span>
-			</span>
-
-                        <script type="text/javascript">
-                          $(function () {
-                          $("#deadline").datetimepicker({
-                          format: "YYYY-MM-DD",
-                          });
-                          });
-                        </script>
-                      </div>
-                    </td>
-                  </tr>
-
-                  <tr>
-                    <td class="col-md-1">
-                      <span>Task list:</span>
-                    </td>
-                    <td class="col-md-3">
-                      <a href="#" id="tasklist"></a></br>
-                  </td>
-                </tr>
-
-                <tr>
-                  <td class="col-md-1">
-                    <!-- title - empty -->
-                    <span>Title:</span>
-                  </td>
-                  <td class="col-md-3">
-                    <a href="#" id="title"></a></br>
-                </td>
-              </tr>
-
-              <tr>
-                <!-- Description - rich -->
-                <td class="col-md-1">
-                  <span>Description:</span>
-                </td>
-                <td class="col-md-8">
-		  <textarea style="resize:none" rows="10" cols="60" id="description"></textarea>
-              </td>
-            </tr>
-
+	    <!-- Priority - dropdown -->
             <tr>
-              <!-- user assgined - dropdown -->
               <td class="col-md-1">
-                <span>Responsible:</span>
+                <span>Priority:</span>
               </td>
               <td class="col-md-3">
-                <a href="#" id="responsible"></a></br>
+                <a href="#" id="priority"></a></br>
             </td>
           </tr>
 
-          <!--todo-->
-          <!--context - dropdown -->
-          <!-- availability - radio -->
-          <!-- status - dropdown -->
-          <!--table for modal window-->
+          <tr>
+            <!-- Deadline - datetime picker -->
+            <td class="col-md-1">
+              <span>Deadline:</span>
+            </td>
 
-        </table>
+            <td class="col-md-3">
+              <div class="input-group date" id="deadline">
+                <input type="text" class="form-control" id="deadlinetext"/>
+		<span class="input-group-addon">
+                  <span class="glyphicon glyphicon-calendar"></span>
+		</span>
 
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-        <button type="button" onclick="submitTaskFromModal();" class="btn btn-primary">Submit</button>
-      </div>
-    </div>
-  </div>
+                <script type="text/javascript">
+                  $(function () {
+                  $("#deadline").datetimepicker({
+                  format: "YYYY-MM-DD",
+                  });
+                  });
+                </script>
+              </div>
+            </td>
+          </tr>
+
+          <tr>
+            <td class="col-md-1">
+              <span>Task list:</span>
+            </td>
+            <td class="col-md-3">
+              <a href="#" id="tasklist"></a></br>
+          </td>
+        </tr>
+
+        <tr>
+          <td class="col-md-1">
+            <!-- title - empty -->
+            <span>Title:</span>
+          </td>
+          <td class="col-md-3">
+            <a href="#" id="title"></a></br>
+        </td>
+      </tr>
+
+      <tr>
+        <!-- Description - rich -->
+        <td class="col-md-1">
+          <span>Description:</span>
+        </td>
+        <td class="col-md-8">
+	  <textarea style="resize:none" rows="10" cols="60" id="description"></textarea>
+        </td>
+      </tr>
+
+      <tr>
+        <!-- user assgined - dropdown -->
+        <td class="col-md-1">
+          <span>Responsible:</span>
+        </td>
+        <td class="col-md-3">
+          <a href="#" id="responsible"></a></br>
+      </td>
+    </tr>
+
+    <!--todo-->
+    <!--context - dropdown -->
+    <!-- availability - radio -->
+    <!-- status - dropdown -->
+    <!--table for modal window-->
+
+  </table>
+
+</div>
+<div class="modal-footer">
+  <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+  <button type="button" onclick="submitTaskFromModal();" class="btn btn-primary">Submit</button>
+</div>
+</div>
+</div>
 </div>
 
 <!-- table for data -->
