@@ -213,7 +213,7 @@ $(document).ready(function () {
         dataSet = data['data'];
 	dataSet = replaceIdsWithValues(dataSet);
 	table = $('#example').DataTable({
-	    "dom":'<"toolbar">frtip',
+	    "dom": 'C<"clear"><"toolbar">lfrtip',
             "data": dataSet,
             "columns": [
 		{"data":"title"},
