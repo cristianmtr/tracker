@@ -1,6 +1,6 @@
 #! /usr/bin/env python
 from flask import Flask, render_template, jsonify, request
-from models import create_session, create_task_object, create_user_object, create_tasklist_object
+from models import create_session, create_task_object, create_user_object, create_tasklist_object, create_comment_object
 import logging
 from logging.handlers import RotatingFileHandler
 import json
@@ -16,6 +16,7 @@ class Globals(object):
         self.task = create_task_object()
         self.user = create_user_object()
         self.tasklist = create_tasklist_object()
+        self.comment = create_comment_object()
 
 
 def build_user_id_to_name():
@@ -117,7 +118,15 @@ def updateExistingTask(submitData):
 
 @app.route("/comments/<taskid>", methods=["POST", "GET"])
 def comments(taskid):
-    comments = ['comment 1', 'comment 2', 'comment 3']
+    # comments = ['comment 1', 'comment 2', 'comment 3']
+    commentsDb = db.session.query(db.comment).filter(db.comment.itemId==taskid).all()
+    comments = []
+    for comm in commentsDb:
+        newComm = {}
+        newComm["author_id"] = comm.memberId
+        newComm["postDate"] = comm.postDate
+        newComm["body"] = comm.body
+        comments.append(newComm)
     return jsonify(data=comments)
 
 

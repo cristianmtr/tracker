@@ -26,3 +26,5 @@ def create_user_object():
 def create_tasklist_object():
     return Base.classes.frk_project
 
+def create_comment_object():
+    return Base.classes.frk_itemComment

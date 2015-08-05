@@ -235,9 +235,10 @@ function initializeEditables() {
 function fillCommentSection(comments) {
     var commentsContainer = $("#commentsList");
     commentsContainer.html("");
-    for (var i = 0; i<comments.length; i++)
+    for (var i in comments)
     {
-	commentsContainer.prepend("<p>" + comments[i] + "</p>");
+	// TODO proper
+	commentsContainer.prepend("<p>" + JSON.stringify(comments[i]) + "</p>");
     };
 };
 
