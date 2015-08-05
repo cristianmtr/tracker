@@ -115,6 +115,18 @@ def updateExistingTask(submitData):
     return -1
 
 
+@app.route("/comments/<taskid>", methods=["POST", "GET"])
+def comments(taskid):
+    comments = ['comment 1', 'comment 2', 'comment 3']
+    return jsonify(data=comments)
+
+
+@app.route("/history/<taskid>", methods=["POST","GET"])
+def history(taskid):
+    historyEntries = ["change 1", "change 2"]
+    return jsonify(data=historyEntries)
+
+
 @app.route("/post", methods=["POST", "GET"])
 def post():
     """if the submitData is assoc. with an existing task entry, we will get its id

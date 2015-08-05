@@ -165,6 +165,20 @@
   <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
   <button type="button" onclick="submitTaskFromModal();" class="btn btn-primary">Submit</button>
 </div>
+<div id="content">
+  <ul id="modaltabs" class="nav nav-tabs" data-tabs="tabs">
+    <li class="active"><a href="#comments" data-toggle="tab">Comments</a></li>
+    <li><a href="#history" data-toggle="tab">History</a></li>
+  </ul>
+  <div id="my-tab-content" style="padding: 0px 15px 15px;" class="tab-content">
+    <div class="tab-pane active" id="comments">
+      <ul id="commentsList"></ul>
+    </div>
+    <div class="tab-pane" id="history">
+      <ul id="historyList"></ul>
+    </div>
+  </div>
+</div>  
 </div>
 </div>
 </div>

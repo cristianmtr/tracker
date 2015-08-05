@@ -21,6 +21,7 @@ var globalDataSources;
 function prepareModalForNewTask() {
     currentItemId = -1;
     setDataInModal(newItemForModal);
+    $("#content").hide();
 };
 
 function submitTaskFromModal() {
@@ -136,6 +137,14 @@ function iterateDataSources() {
     }
 };
 
+function onClickTableRow(e) {
+    currentItemId = e.id;
+    console.log('clicked on row with id ', currentItemId);
+    updateDataInModalFromId();
+    toggleModal();
+    $("#content").show();
+};
+
 function updateDataInModalFromId() {
     $.ajax({
 	url: '/json/'+currentItemId,
@@ -145,6 +154,26 @@ function updateDataInModalFromId() {
 	    modalDataObject = modalDataObject['data'];
 	    console.log("got data from server: " + JSON.stringify(modalDataObject));
 	    setDataInModal(modalDataObject);
+	}
+    });
+    $.ajax({
+	url: '/comments/'+currentItemId,
+	async: true,
+	dataType: 'json',
+	success: function(comments) {
+	    comments = comments['data'];
+	    console.log("got data from server: " + JSON.stringify(comments));
+	    fillCommentSection(comments);
+	}
+    });
+    $.ajax({
+	url: '/history/'+currentItemId,
+	async: true,
+	dataType: 'json',
+	success: function(historyEntries) {
+	    historyEntries = historyEntries['data'];
+	    console.log("got data from server: " + JSON.stringify(historyEntries));
+	    fillHistorySection(historyEntries);
 	}
     });
 };
@@ -160,7 +189,7 @@ function setDataInModal(modalDataObject) {
     $('#title').editable('setValue',modalDataObject['title']);
     $('#description').val(modalDataObject['description']);
     $('#responsible').editable('setValue',modalDataObject['responsible']);
-    
+
     console.log('data modal has been updated with ' + JSON.stringify(modalDataObject));
 };
 
@@ -203,6 +232,24 @@ function initializeEditables() {
 
 };
 
+function fillCommentSection(comments) {
+    var commentsContainer = $("#commentsList");
+    commentsContainer.html("");
+    for (var i = 0; i<comments.length; i++)
+    {
+	commentsContainer.prepend("<p>" + comments[i] + "</p>");
+    };
+};
+
+function fillHistorySection(historyEntries) {
+    var historyContainer = $("#historyList");
+    historyContainer.html("");
+    for (var i = 0; i<historyEntries.length; i++)
+    {
+	historyContainer.prepend("<p>" + historyEntries[i] + "</p>");
+    };
+};
+
 $(document).ready(function () {
 
     // Setup - add a text input to each footer cell
@@ -216,6 +263,9 @@ $(document).ready(function () {
     function test() {
         return $.getJSON('/json');
     }
+
+    // init bootstrap tab menu in modal
+    $('#modaltabs').tab();
 
     $.when(test()).then(function (data) {
     	console.log('got data from /json');
@@ -240,10 +290,7 @@ $(document).ready(function () {
 	
 	//on click functionality
 	$('#example tbody').on('click', 'tr', function () {
-            currentItemId = this.id;
-	    console.log('clicked on row with id ', currentItemId);
-	    updateDataInModalFromId();
-	    toggleModal();
+	    onClickTableRow(this);
 	});
 	
 	// Apply the search
