@@ -210,7 +210,7 @@ $(document).ready(function () {
     //   <tfoot style="display: table-header-group;">
     $('#example tfoot th').each( function () {
         var title = $('#example thead th').eq( $(this).index() ).text();
-        $(this).html( '<input type="text" placeholder="Search '+title+'" />' );
+        $(this).html( '<input style="width: 100%;" type="text" placeholder="search..." />' );
     } );
 
     function test() {
