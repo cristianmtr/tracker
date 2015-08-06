@@ -28,3 +28,6 @@ def create_tasklist_object():
 
 def create_comment_object():
     return Base.classes.frk_itemComment
+
+def create_history_object():
+    return Base.classes.frk_itemStatus

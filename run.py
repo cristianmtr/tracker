@@ -1,6 +1,6 @@
 #! /usr/bin/env python
 from flask import Flask, render_template, jsonify, request
-from models import create_session, create_task_object, create_user_object, create_tasklist_object, create_comment_object
+from models import create_session, create_task_object, create_user_object, create_tasklist_object, create_comment_object, create_history_object
 import logging
 from logging.handlers import RotatingFileHandler
 import json
@@ -17,6 +17,7 @@ class Globals(object):
         self.user = create_user_object()
         self.tasklist = create_tasklist_object()
         self.comment = create_comment_object()
+        self.history = create_history_object()
 
 
 def build_user_id_to_name():
@@ -132,7 +133,14 @@ def comments(taskid):
 
 @app.route("/history/<taskid>", methods=["POST","GET"])
 def history(taskid):
-    historyEntries = ["change 1", "change 2"]
+    historyEntriesDb = db.session.query(db.history).filter(db.history.itemId==taskid).all()
+    historyEntries = []
+    for entry in historyEntriesDb:
+        newEntry = {}
+        newEntry["statusKey"] = entry.statusKey
+        newEntry["memberId"] = entry.memberId
+        newEntry["statusDate"] = entry.statusDate
+        historyEntries.append(newEntry)
     return jsonify(data=historyEntries)
 
 
