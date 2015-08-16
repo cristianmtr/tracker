@@ -247,7 +247,7 @@ function fillHistorySection(historyEntries) {
     historyContainer.html("");
     for (var i = 0; i<historyEntries.length; i++)
     {
-	historyContainer.prepend("<p>" + historyEntries[i] + "</p>");
+	historyContainer.prepend("<p>" + JSON.stringify(historyEntries[i]) + "</p>");
     };
 };
 
