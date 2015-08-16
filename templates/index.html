@@ -64,6 +64,30 @@
     </button></li>
   </ul>
 
+  <!-- Modal for authentication -->
+  <div id="authModal" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+
+      <!-- Modal content-->
+      <div class="modal-content">
+	<div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+          <h4 class="modal-title">Authenticate</h4>
+	</div>
+	<div class="modal-body">
+	  <div class="row"><span class="col-md-1">Username</span><input class="col-md-1" type="text" id="username"></input></div>
+	  <div class="row" style="margin-top:20px;"><span class="col-md-1">Password</span><input class="col-md-1" type="password" id="password"></input></div>
+	</div>
+
+	<div class="modal-footer">
+	  <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+	  <button type="button" onclick="tryAuthenticate();" class="btn btn-primary">Login</button>
+	</div>
+	
+      </div>
+    </div>
+  </div>
+  
   <!-- Modal for creating and editing tasks -->
   <div class="modal fade" id="createNewModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
     <div class="modal-dialog" role="document">
@@ -188,36 +212,36 @@
   <thead>
     <tr>
       <th class="col-md-1"">Title</th>
-      <th class="col-md-3">Description</th>
-      <th class="col-md-1">Deadline</th>
-      <th class="col-md-1">Responsible</th>
-      <th class="col-md-1">Author</th>
-      <th class="col-md-1">Tasklist</th>
-      <th class="col-md-1">Priority</th>
-    </tr>
-  </thead>
-  
-  <tfoot style="display: table-header-group;">
-    <tr>
-      <th>Title</th>
-      <th>Description</th>
-      <th>Deadline</th>
-      <th>Responsible</th>
-      <th>Author</th>
-      <th>Tasklist</th>
-      <th>Priority</th>
-    </tr>
-  </tfoot>
-  
-  <tr>
-    <td ></td>
-    <td ></td>
-    <td ></td>
-    <td ></td>
-    <td ></td>
-    <td ></td>
-    <td ></td>
+			   <th class="col-md-3">Description</th>
+    <th class="col-md-1">Deadline</th>
+    <th class="col-md-1">Responsible</th>
+    <th class="col-md-1">Author</th>
+    <th class="col-md-1">Tasklist</th>
+    <th class="col-md-1">Priority</th>
   </tr>
+</thead>
+
+<tfoot style="display: table-header-group;">
+  <tr>
+    <th>Title</th>
+    <th>Description</th>
+    <th>Deadline</th>
+    <th>Responsible</th>
+    <th>Author</th>
+    <th>Tasklist</th>
+    <th>Priority</th>
+  </tr>
+</tfoot>
+
+<tr>
+  <td ></td>
+  <td ></td>
+  <td ></td>
+  <td ></td>
+  <td ></td>
+  <td ></td>
+  <td ></td>
+</tr>
 </table>
 </body>
 </html>

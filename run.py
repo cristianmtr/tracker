@@ -1,5 +1,5 @@
 #! /usr/bin/env python
-from flask import Flask, render_template, jsonify, request
+from flask import Flask, render_template, jsonify, request, make_response, session
 from models import create_session, create_task_object, create_user_object, create_tasklist_object, create_comment_object, create_history_object
 import logging
 from logging.handlers import RotatingFileHandler
@@ -131,6 +131,19 @@ def comments(taskid):
     return jsonify(data=comments)
 
 
+@app.route("/auth", methods=["POST", "GET"])
+def cookie():
+    if request.method == 'POST':
+        submitData = request.get_json()
+        # hardcoded for testing
+        if submitData['username'] == 'admin' and submitData['password'] == 'admin':
+            session['username'] = 'admin'
+            return jsonify(data="success")
+        return jsonify(data="failure")
+    elif request.method == 'GET':
+        return "session: {}".format(session['username'])
+
+    
 @app.route("/history/<taskid>", methods=["POST","GET"])
 def history(taskid):
     historyEntriesDb = db.session.query(db.history).filter(db.history.itemId==taskid).all()
@@ -218,6 +231,7 @@ def jsonall():
 
 if __name__ == "__main__":
     app.debug = True
+    app.secret_key = "123456"
     handler = RotatingFileHandler('app.log', maxBytes=10000, backupCount=1)
     handler.setLevel(logging.INFO)
     app.logger.addHandler(handler)

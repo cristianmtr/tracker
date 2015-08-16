@@ -24,6 +24,41 @@ function prepareModalForNewTask() {
     $("#content").hide();
 };
 
+function authenticationResponseHandler(response) {
+    console.log(JSON.stringify(response));
+    console.log(response['data']);
+    if (response['data'] == 'success')
+	{
+	    // close modal and change some html in the nav bar or
+	    // somewhere else, to say the username
+	}
+    if (response['data'] == 'failure')
+	{
+	    // add some red text html to the modal
+	    // saying 'try again'
+	}
+    
+    
+};
+
+function tryAuthenticate() {
+    var username = $("#username").val();
+    var password = $("#password").val();
+    var dataToSubmit = JSON.stringify(
+	{
+	    'username': username,
+	    'password': password,
+	}
+    )
+    $.ajax({
+	url:'/auth',
+	type:'POST',
+	data:dataToSubmit,
+	contentType:"application/json; charset=utf-8",
+	success: authenticationResponseHandler,
+    });
+}
+
 function submitTaskFromModal() {
     var dataToSubmit = JSON.stringify(
 	{
@@ -275,8 +310,8 @@ $(document).ready(function () {
 	dataSet = replaceIdsWithValues(dataSet);
 	table = $('#example').DataTable({
 	    "dom": 'C<"clear"><"toolbar">lfrtip',
-            "data": dataSet,
-            "columns": [
+	    "data": dataSet,
+	    "columns": [
 		{"data":"title"},
 		{"data":"description"},
 		{"data":"deadline"},
@@ -287,7 +322,7 @@ $(document).ready(function () {
 	    ]
         });
 
-	$("div.toolbar").html("<b>this will be a nav bar!</b>");
+	$("div.toolbar").html('<button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#authModal">Authenticate</button>');
 	
 	//on click functionality
 	$('#example tbody').on('click', 'tr', function () {
@@ -296,13 +331,13 @@ $(document).ready(function () {
 	
 	// Apply the search
 	table.columns().every( function () {
-            var that = this;
+	    var that = this;
 	    
-            $( 'input', this.footer() ).on( 'keyup ', function () {
+	    $( 'input', this.footer() ).on( 'keyup ', function () {
 		that
-                    .search( this.value )
-                    .draw();
-            } );
+		    .search( this.value )
+		    .draw();
+	    } );
 	} );
 
 	globalDataSources = dataSources;
