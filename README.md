@@ -1,4 +1,5 @@
 # TODO
+- encrypt session cookie
 - figure out how to fit description textarea to proper size;
 - in order to accomodate for multiple users modifying and creating tasks in the database, I should do the following:
   - create a queue with submitData objects;
