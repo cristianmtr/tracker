@@ -1,6 +1,10 @@
 // TODO
 var table;
 
+var rtncodes_messages = {
+	"-2": "not logged in",
+	}
+
 // this will be used for submitting POST data to server
 // should be -1 if the item submitted is new (doesn't exist in db)
 // should be a specific id for an existing item if it's an UPDATE
@@ -131,9 +135,14 @@ function submitTaskSuccessCallback(response) {
     var idToUpdate = response['data'];
     if (idToUpdate == -1)
     {
-	alert ("There was a problem processing your request. Try again later");
-	return;
+        alert ("There was a problem processing your request. Try again later");
+        return;
     }
+	if (rtncodes_messages.hasOwnProperty(idToUpdate))
+	{
+        alert(rtncodes_messages[idToUpdate]);
+        return;
+	}
     $.ajax({
 	url: '/json/'+idToUpdate,
 	async: true,
