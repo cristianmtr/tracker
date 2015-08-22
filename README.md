@@ -1,7 +1,7 @@
 # TODO
 - encrypt session cookie
 - figure out how to fit description textarea to proper size;
-- in order to accomodate for multiple users modifying and creating tasks in the database, I should do the following:
+- in order to accommodate for multiple users modifying and creating tasks in the database, I should do the following:
   - create a queue with submitData objects;
   - have a process pop from the queue and do the task;
   - after each task is processed, the client browser should be informed what row_id it needs to update;
@@ -12,6 +12,13 @@
   - stress the client, not the server;
 
 ## NOTES
+
+- in frk_memberProject you have mappings informing about each user's position within each of the projects;
+    - as far as I can tell, it's 0 - request, 
+    1 - member (can post tasks, can post comments, can modify tasks)
+    ...
+    4 - moderator (can delete tasks)
+    5 - admin (can delete the list itself)
 
 - in order to access data from a specific row:
 ```javascript
