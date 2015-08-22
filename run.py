@@ -118,6 +118,16 @@ def updateExistingTask(submitData):
     return -1
 
 
+def is_loggedin(f):
+    """checks if the user is logged in"""
+    def wrapper():
+        if 'username' in session.keys() and session['username'].strip() != "":
+            return f()
+        else:
+            return jsonify(data=-2)
+    return wrapper
+
+
 @app.route("/comments/<taskid>", methods=["POST", "GET"])
 def comments(taskid):
     # comments = ['comment 1', 'comment 2', 'comment 3']
@@ -159,6 +169,7 @@ def history(taskid):
 
 
 @app.route("/post", methods=["POST", "GET"])
+@is_loggedin
 def post():
     """if the submitData is assoc. with an existing task entry, we will get its id
 if it's not, we get -1 instead for that id field
@@ -166,17 +177,14 @@ depending on the success of either creating or updating a task
 returns ID of the newly created task (or updated) if successful
 returns -1 if there was a problem
 """
-    if session.has_key('username'):
-        submitData = request.get_json()
-        print '/post : server received data: {}'.format(json.dumps(submitData))
-        idToUpdateInTable = -1
-        if isNewTask(submitData['id']):
-            idToUpdateInTable = createNewTask(submitData)
-        else:
-            idToUpdateInTable = updateExistingTask(submitData)
-        return jsonify(data=idToUpdateInTable)
+    submitData = request.get_json()
+    print '/post : server received data: {}'.format(json.dumps(submitData))
+    idToUpdateInTable = -1
+    if isNewTask(submitData['id']):
+        idToUpdateInTable = createNewTask(submitData)
     else:
-        return jsonify(data=-2)
+        idToUpdateInTable = updateExistingTask(submitData)
+    return jsonify(data=idToUpdateInTable)
 
 
 @app.route("/json/<taskid>")
