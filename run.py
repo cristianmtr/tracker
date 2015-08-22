@@ -4,6 +4,7 @@ from models import create_session, create_task_object, create_user_object, creat
 import logging
 from logging.handlers import RotatingFileHandler
 import json
+from functools import wraps
 
 app = Flask(__name__)
 
@@ -120,9 +121,10 @@ def updateExistingTask(submitData):
 
 def is_loggedin(f):
     """checks if the user is logged in"""
-    def wrapper():
+    @wraps(f)
+    def wrapper(*args, **kwargs):
         if 'username' in session.keys() and session['username'].strip() != "":
-            return f()
+            return f(*args, **kwargs)
         else:
             return jsonify(data=-2)
     return wrapper
@@ -140,6 +142,16 @@ def comments(taskid):
         newComm["body"] = comm.body
         comments.append(newComm)
     return jsonify(data=comments)
+
+
+@app.route("/logout", methods=["POST", "GET"])
+@is_loggedin
+def logout():
+    if request.method == 'POST':
+        del session['username']
+        return jsonify(data="success")
+    else:
+        return "nothing to see here"
 
 
 @app.route("/auth", methods=["POST", "GET"])
