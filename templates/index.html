@@ -1,11 +1,15 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
           "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
-  <head>
+  <link>
     <title>TaskFreak - Advanced</title>
+  <head>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"></meta>
     <!-- icon -->
     <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}"></link>
+
+    <!--main css-->
+    <link rel="stylesheet" href="{{ url_for('static', filename='main.css') }}"></link>
 
     <!-- jquery -->
     <script type="text/javascript" language="javascript"
@@ -75,6 +79,7 @@
           <h4 class="modal-title">Authenticate</h4>
 	</div>
 	<div class="modal-body">
+      <div id="authmessage" class="row"></div>
 	  <div class="row"><span class="col-md-3">Username</span><input class="col-md-3" type="text" id="username"></input></div>
 	  <div class="row" style="margin-top:20px;"><span class="col-md-3">Password</span><input class="col-md-3" type="password" id="password"></input></div>
 	</div>

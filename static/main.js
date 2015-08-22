@@ -1,6 +1,8 @@
 // TODO
 var table;
 
+var username;
+
 var rtncodes_messages = {
 	"-2": "not logged in",
 	}
@@ -35,25 +37,30 @@ function authenticationResponseHandler(response) {
 	{
 	    // close modal and change some html in the nav bar or
 	    // somewhere else, to say the username
+        $("#authModal").modal("hide");
+        $("#userstatus").text(username);
+
 	}
     if (response['data'] == 'failure')
 	{
 	    // add some red text html to the modal
 	    // saying 'try again'
+        $("#authmessage").text("Failure. Try again");
 	}
     
     
 };
 
 function tryAuthenticate() {
-    var username = $("#username").val();
+    username = $("#username").val();
     var password = $("#password").val();
     var dataToSubmit = JSON.stringify(
 	{
 	    'username': username,
 	    'password': password,
 	}
-    )
+    );
+    $("#authmessage").text("");
     $.ajax({
 	url:'/auth',
 	type:'POST',
@@ -331,7 +338,7 @@ $(document).ready(function () {
 	    ]
         });
 
-	$("div.toolbar").html('<button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#authModal">Authenticate</button>');
+	$("div.toolbar").html('<button id="userstatus" type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#authModal">Not logged in</button><div id="otherdiv"></div>');
 	
 	//on click functionality
 	$('#example tbody').on('click', 'tr', function () {
