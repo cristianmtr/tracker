@@ -8,6 +8,12 @@
   - after each task is processed, the client browser should be informed what row_id it needs to update;
 
 ## PROBLEMATIC
+- to handle token authorization
+    - client sends username and password to /auth;
+    - server generates token (with TTL) and returns it to client;
+        - is stored in memory;
+    - client js stores it as cookie (?);
+    - is used as parameter for every request;
 - caching dictionary of user ids to user names (and others) will need to be refreshed when there's a change;
   - poss. solution: if a submitData req. affects any of these, the row_id to be updated will be a reserved code (e.g. -1);
   - stress the client, not the server;
