@@ -12,6 +12,7 @@
   - stress the client, not the server;
 
 ## NOTES
+- on page load, check if session['username'] is set, and update html accordingly;
 
 - in frk_memberProject you have mappings informing about each user's position within each of the projects;
     - as far as I can tell, it's 0 - request, 
