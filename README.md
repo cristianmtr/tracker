@@ -1,4 +1,5 @@
 # TODO
+- unified json format: either with "data": { } or without;
 - encrypt session cookie
 - figure out how to fit description textarea to proper size;
 - in order to accommodate for multiple users modifying and creating tasks in the database, I should do the following:
