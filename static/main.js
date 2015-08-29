@@ -1,9 +1,9 @@
-// TODO
 var table;
 
 var username;
 
 var rtncodes_messages = {
+    "-1": "There was a problem processing your request. Try again later",
     "-2": "not logged in",
 }
 
@@ -179,10 +179,6 @@ function addNewRow(newTaskId, jsonDataObject) {
 function submitTaskSuccessCallback(response) {
     console.log(response);
     var idToUpdate = response['data'];
-    if (idToUpdate == -1) {
-        alert("There was a problem processing your request. Try again later");
-        return;
-    }
     if (rtncodes_messages.hasOwnProperty(idToUpdate)) {
         alert(rtncodes_messages[idToUpdate]);
         return;
