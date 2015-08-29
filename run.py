@@ -99,7 +99,7 @@ returns -1 if there was a problem
 
 
 @app.route("/task/<taskid>")
-def jsontask(taskid):
+def task(taskid):
     task = db.session.query(db.task, db.task.itemId, db.task.title, db.task.description, db.task.deadlineDate, db.task.memberId, db.task.authorId,db.task.priority, db.task.projectId).filter(db.task.itemId == taskid).one()
     data = {
         'title':task.title if task.title else None,
@@ -114,7 +114,7 @@ def jsontask(taskid):
 
 
 @app.route("/json/")
-def jsonall():
+def jsonInit():
     data = []
     tasks = db.session.query(db.task, db.task.projectId, db.task.priority, db.task.itemId, db.task.title, db.task.description, db.task.deadlineDate, db.task.memberId, db.task.authorId).all()
     for t in tasks:
