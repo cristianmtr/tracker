@@ -47,9 +47,16 @@ function logOut() {
     // send POST to /auth
     // auth deletes session
     // returns success
+    var dataToSubmit = JSON.stringify(
+        {
+            "username": docCookies.getItem("username"),
+            "token": docCookies.getItem("token"),
+        }
+    );
     $.ajax({
         url: '/logout',
         type: 'POST',
+        data: dataToSubmit,
         contentType: "application/json; charset=utf-8",
         success: logoutSuccessCallback,
     });
@@ -62,8 +69,13 @@ function prepareModalForNewTask() {
 };
 
 function setUItoLoggedIn() {
+    username = docCookies.getItem("username");
+    var d =$("#userstatus");
+    console.log(d);
     $("#userstatus").text(username);
     $("#authHolder").hide();
+    var d =$("#loggedInAs");
+    console.log(d);
     $("#loggedInAs").text("Logged in as " + username);
     $("#userInfo").show();
     $("#loginButton").hide();
@@ -79,7 +91,8 @@ function authenticationResponseHandler(response) {
         var expirationDate = new Date();
         expirationDate.setDate(expirationDate.getDate()+14);
         //TODO change last parameter (https only) to true
-        docCookies.setItem("token",response['data'], expirationDate.toGMTString(),null,null,null);
+        docCookies.setItem("token",response['data']['token'], expirationDate.toGMTString(),null,null,null);
+        docCookies.setItem("username",response['data']['username']);
         setUItoLoggedIn();
     }
     else {
@@ -92,7 +105,7 @@ function authenticationResponseHandler(response) {
 };
 
 function tryAuthenticate() {
-    username = $("#username").val();
+    var username = $("#username").val();
     var password = $("#password").val();
     var dataToSubmit = JSON.stringify(
         {
@@ -339,6 +352,43 @@ function fillHistorySection(historyEntries) {
     ;
 };
 
+function checkTokenAndUsernameCombinationCallback(response) {
+    console.log(response);
+    if (response['code'] === 200) {
+        setUItoLoggedIn();
+    }
+    else {
+        setUItoLoggedOut();
+        alert("There was a problem with your credentials. Please try logging in again");
+    }
+}
+
+function checkTokenAndUsernameCombination() {
+    var dataToSubmit = JSON.stringify(
+        {
+            "username": docCookies.getItem("username"),
+            "token": docCookies.getItem("token"),
+        }
+    );
+    $.ajax({
+        url: '/check',
+        type: 'POST',
+        data: dataToSubmit,
+        contentType: "application/json; charset=utf-8",
+        success: checkTokenAndUsernameCombinationCallback,
+    });
+}
+
+function checkForTokenCookie() {
+    if (docCookies.hasItem("token") === true && docCookies.hasItem("username") === true) {
+        checkTokenAndUsernameCombination();
+    }
+    else {
+        setUItoLoggedOut();
+    }
+
+}
+
 $(document).ready(function () {
 
     // Setup - add a text input to each footer cell
@@ -348,9 +398,6 @@ $(document).ready(function () {
         var title = $('#example thead th').eq($(this).index()).text();
         $(this).html('<input style="width: 100%;" type="text" placeholder="search..." />');
     });
-
-    // hide parts of the auth modal
-    setUItoLoggedOut();
 
     function test() {
         return $.getJSON('/json');
@@ -398,6 +445,8 @@ $(document).ready(function () {
 
         globalDataSources = dataSources;
         initializeEditables();
+        checkForTokenCookie();
     });
+
 
 });

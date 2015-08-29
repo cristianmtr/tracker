@@ -1,5 +1,5 @@
 #! /usr/bin/env python
-from models import db, tryFlushSession
+from models import db, try_flush_session
 
 
 def isNewTask(submitDataId):
@@ -33,7 +33,7 @@ def createNewTask(submitData):
     newTask = db.task()
     newTask = conditionalUpdateTaskWithSubmitDataIfExists(newTask, submitData)
     db.session.add(newTask)
-    if tryFlushSession() == 0:
+    if try_flush_session() == 0:
         db.session.refresh(newTask)
         return newTask.itemId
     return -1
@@ -43,6 +43,6 @@ def updateExistingTask(submitData):
     taskToModify = db.session.query(db.task).filter(db.task.itemId == submitData['id']).one()
     taskToModify = conditionalUpdateTaskWithSubmitDataIfExists(taskToModify, submitData)
     db.session.add(taskToModify)
-    if tryFlushSession() == 0:
+    if try_flush_session() == 0:
         return submitData['id']
     return -1

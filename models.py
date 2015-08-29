@@ -2,7 +2,7 @@ from sqlalchemy import create_engine
 from sqlalchemy.ext.automap import automap_base
 from sqlalchemy.orm import Session
 
-## load config secrets
+# load config secrets
 import json
 with open('config.json') as config_file:
     config = json.load(config_file)
@@ -12,6 +12,14 @@ engine = create_engine('mysql+mysqlconnector://{}:{}@localhost:3306/taskfreak'.f
 Base = automap_base()
 # declare objects
 Base.prepare(engine, reflect=True)
+
+
+def check_token_username_combination(username, token):
+    # TODO actual work
+    if username == "admin" and token == "123456":
+        return True
+    return False
+
 
 class Globals(object):
     """Will store db globals"""
@@ -59,7 +67,7 @@ def build_priority_id_to_name():
     return priority
 
 
-def tryFlushSession():
+def try_flush_session():
     """tries to flush session
 if it fails, it rolls back and returns -1
 it it's ok, return 0"""
@@ -76,17 +84,22 @@ def create_session():
     session = Session(engine)
     return session
 
+
 def create_task_object():
     return Base.classes.frk_item
 
+
 def create_user_object():
     return Base.classes.frk_member
-    
+
+
 def create_tasklist_object():
     return Base.classes.frk_project
 
+
 def create_comment_object():
     return Base.classes.frk_itemComment
+
 
 def create_history_object():
     return Base.classes.frk_itemStatus

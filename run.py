@@ -1,7 +1,7 @@
 #! /usr/bin/env python
 from flask import Flask, render_template, jsonify, request, session
-from models import db, tryFlushSession, build_priority_id_to_name,\
-    build_tasklist_id_to_name, build_user_id_to_name
+from models import db, try_flush_session, build_priority_id_to_name,\
+    build_tasklist_id_to_name, build_user_id_to_name, check_token_username_combination
 import logging
 from logging.handlers import RotatingFileHandler
 import json
@@ -55,20 +55,32 @@ def logout():
         return "nothing to see here"
 
 
-@app.route("/auth", methods=["POST", "GET"])
+@app.route("/auth", methods=["POST"])
 def cookie():
     if request.method == 'POST':
-        submitData = request.get_json()
+        submit_data = request.get_json()
         # hardcoded for testing
-        if submitData['username'] == 'admin' and submitData['password'] == 'admin':
+        if submit_data['username'] == 'admin' and submit_data['password'] == 'admin':
             # same for token
             # TODO generate token
             # with TTL 14 days
             # save it in memory (or DB?) (or in memory db?)
-            return jsonify(code=200, data="123456")
-        return jsonify(code=400)
-    elif request.method == 'GET':
-        return "session: {}".format(request.cookies.get('token'))
+            data = {
+                "token": "123456",
+                "username": submit_data['username']
+            }
+            return jsonify(code=200, data=data)
+        return jsonify(code=422)
+
+
+@app.route("/check", methods=["POST"])
+def check():
+    if request.method == "POST":
+        submit_data = request.get_json()
+        yes = check_token_username_combination(submit_data['username'], submit_data['token'])
+        if yes:
+            return jsonify(code=200)
+        return jsonify(code=422)
 
     
 @app.route("/history/<taskid>", methods=["POST","GET"])
