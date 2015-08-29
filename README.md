@@ -1,4 +1,5 @@
 # TODO
+- rewrite POST requests to get token from cookie;
 - unified json format: either with "data": { } or without;
 - encrypt session cookie
 - figure out how to fit description textarea to proper size;
