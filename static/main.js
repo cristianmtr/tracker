@@ -188,7 +188,7 @@ function submitTaskSuccessCallback(response) {
         return;
     }
     $.ajax({
-        url: '/json/' + idToUpdate,
+        url: '/task/' + idToUpdate,
         async: true,
         dataType: 'json',
         success: function (jsonDataObject) {
@@ -234,7 +234,7 @@ function onClickTableRow(e) {
 
 function updateDataInModalFromId() {
     $.ajax({
-        url: '/json/' + currentItemId,
+        url: '/task/' + currentItemId,
         async: true,
         dataType: 'json',
         success: function (modalDataObject) {

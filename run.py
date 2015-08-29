@@ -98,7 +98,7 @@ returns -1 if there was a problem
     return jsonify(data=idToUpdateInTable)
 
 
-@app.route("/json/<taskid>")
+@app.route("/task/<taskid>")
 def jsontask(taskid):
     task = db.session.query(db.task, db.task.itemId, db.task.title, db.task.description, db.task.deadlineDate, db.task.memberId, db.task.authorId,db.task.priority, db.task.projectId).filter(db.task.itemId == taskid).one()
     data = {
