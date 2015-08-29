@@ -35,7 +35,7 @@ function setUItoLoggedOut() {
 }
 
 function logoutSuccessCallback(response) {
-    if (response['data'] == 'success') {
+    if (response['code'] == 200) {
         setUItoLoggedOut();
     }
     else {
@@ -72,12 +72,17 @@ function setUItoLoggedIn() {
 
 function authenticationResponseHandler(response) {
     console.log(JSON.stringify(response));
-    console.log(response['data']);
-    if (response['data'] == 'success') {
+    console.log(response);
+    if (response['code'] == 200) {
         $("#authModal").modal("hide");
+        // as per server, it's 14 days
+        var expirationDate = new Date();
+        expirationDate.setDate(expirationDate.getDate()+14);
+        //TODO change last parameter (https only) to true
+        docCookies.setItem("token",response['data'], expirationDate.toGMTString(),null,null,null);
         setUItoLoggedIn();
     }
-    if (response['data'] == 'failure') {
+    else {
         // add some red text html to the modal
         // saying 'try again'
         $("#authmessage").text("Failure. Try again");

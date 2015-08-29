@@ -1,9 +1,8 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-          "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
-  <link>
+<head>
     <title>TaskFreak - Advanced</title>
-  <head>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"></meta>
     <!-- icon -->
     <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}"></link>
@@ -13,7 +12,7 @@
 
     <!-- jquery -->
     <script type="text/javascript" language="javascript"
-	    src="{{ url_for('static', filename='thirdparty/jquery.js') }}"></script>
+            src="{{ url_for('static', filename='thirdparty/jquery.js') }}"></script>
 
     <!-- bootstrap css -->
     <link href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css" rel="stylesheet"></link>
@@ -23,28 +22,31 @@
 
     <!-- datatables js -->
     <script type="text/javascript" language="javascript"
-	    src="{{ url_for('static', filename='thirdparty/datatables.js') }}"></script>
+            src="{{ url_for('static', filename='thirdparty/datatables.js') }}"></script>
 
     <!-- datatables jquery js -->
     <script src="https://cdn.datatables.net/1.10.7/js/jquery.dataTables.min.js"></script>
 
     <!-- datatables col vis selector js -->
     <script type="text/javascript" language="javascript"
-	    src="{{ url_for('static', filename='thirdparty/datatables.colvis.js') }}"></script>
+            src="{{ url_for('static', filename='thirdparty/datatables.colvis.js') }}"></script>
 
     <!-- datatables col vis selector css -->
-    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='thirdparty/datatables.colvis.css') }}"></link>
+    <link rel="stylesheet" type="text/css"
+          href="{{ url_for('static', filename='thirdparty/datatables.colvis.css') }}"></link>
 
     <!-- datatables bootstrap css -->
-    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='thirdparty/datatablesbootstrap.css') }}"></link>
+    <link rel="stylesheet" type="text/css"
+          href="{{ url_for('static', filename='thirdparty/datatablesbootstrap.css') }}"></link>
 
     <!-- datatables bootstrap js -->
     <script type="text/javascript" language="javascript"
-	    src="{{ url_for('static', filename='thirdparty/datatablesbootstrap.js') }}"></script>
+            src="{{ url_for('static', filename='thirdparty/datatablesbootstrap.js') }}"></script>
 
     <!-- cdn for edit in place functionality -->
     <!-- css -->
-    <link href="//cdnjs.cloudflare.com/ajax/libs/x-editable/1.5.0/bootstrap3-editable/css/bootstrap-editable.css" rel="stylesheet"/>
+    <link href="//cdnjs.cloudflare.com/ajax/libs/x-editable/1.5.0/bootstrap3-editable/css/bootstrap-editable.css"
+          rel="stylesheet"/>
 
     <!-- js -->
     <script src="//cdnjs.cloudflare.com/ajax/libs/x-editable/1.5.0/bootstrap3-editable/js/bootstrap-editable.min.js"></script>
@@ -54,211 +56,220 @@
 
     <!--date time picker for bs3-->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.14.30/js/bootstrap-datetimepicker.min.js"></script>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.14.30/css/bootstrap-datetimepicker.min.css" rel="stylesheet"/>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.14.30/css/bootstrap-datetimepicker.min.css"
+          rel="stylesheet"/>
+
+    <!--cookies lib-->
+    <script src="{{ url_for('static', filename='thirdparty/cookies.js') }}"></script>
 
     <!-- main -->
     <script src="{{ url_for('static', filename='main.js') }}"></script>
-  </head>
-  <body>
+</head>
+<body>
 
-    <!-- button for creating new task -->
-    <ul class="nav nav-pills nav-justified">
-      <li button type="button" class="btn btn-primary btn-lg" data-toggle="modal" onclick="prepareModalForNewTask();" data-target="#createNewModal">
-	Create new
-    </button></li>
-  </ul>
+<!-- button for creating new task -->
+<ul class="nav nav-pills nav-justified">
+    <li button type="button" class="btn btn-primary btn-lg" data-toggle="modal" onclick="prepareModalForNewTask();"
+        data-target="#createNewModal">
+        Create new
+        </button></li>
+</ul>
 
-  <!-- Modal for authentication -->
-  <div id="authModal" class="modal fade" role="dialog">
+<!-- Modal for authentication -->
+<div id="authModal" class="modal fade" role="dialog">
     <div class="modal-dialog">
 
-      <!-- Modal content-->
-      <div class="modal-content">
-	<div class="modal-header">
-          <button type="button" class="close" data-dismiss="modal">&times;</button>
-          <h4 class="modal-title">Authenticate</h4>
-	</div>
-	<div class="modal-body">
-      <div id="authHolder">
-        <div id="authmessage" class="row"></div>
-        <div class="row"><span class="col-md-3">Username</span><input class="col-md-3" type="text"
-                                                                      id="username"></input></div>
-        <div class="row" style="margin-top:20px;"><span class="col-md-3">Password</span><input class="col-md-3"
-                                                                                               type="password"
-                                                                                               id="password"></input>
-        </div>
-      </div>
-      <div id="userInfo">
-        <div class="row">
-          <div id="loggedInAs" class="col-md-6"></div>
-        </div>
-      </div>
-	</div>
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Authenticate</h4>
+            </div>
+            <div class="modal-body">
+                <div id="authHolder">
+                    <div id="authmessage" class="row"></div>
+                    <div class="row"><span class="col-md-3">Username</span><input class="col-md-3" type="text"
+                                                                                  id="username"></input></div>
+                    <div class="row" style="margin-top:20px;"><span class="col-md-3">Password</span><input
+                            class="col-md-3"
+                            type="password"
+                            id="password"></input>
+                    </div>
+                </div>
+                <div id="userInfo">
+                    <div class="row">
+                        <div id="loggedInAs" class="col-md-6"></div>
+                    </div>
+                </div>
+            </div>
 
-	<div class="modal-footer">
-	  <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-	  <button id="loginButton" type="button" onclick="tryAuthenticate();" class="btn btn-primary">Login</button>
-      <button id="logoutButton" type="button" onclick="logOut();" class="btn btn-primary">Logout</button>
-	</div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                <button id="loginButton" type="button" onclick="tryAuthenticate();" class="btn btn-primary">Login
+                </button>
+                <button id="logoutButton" type="button" onclick="logOut();" class="btn btn-primary">Logout</button>
+            </div>
 
-      </div>
+        </div>
     </div>
-  </div>
+</div>
 
-  <!-- Modal for creating and editing tasks -->
-  <div class="modal fade" id="createNewModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+<!-- Modal for creating and editing tasks -->
+<div class="modal fade" id="createNewModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
     <div class="modal-dialog" role="document">
-      <div class="modal-content">
-	<div class="modal-header">
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
-											 aria-hidden="true">&times;</span></button>
-          <h4 class="modal-title" id="myModalLabel">Task</h4>
-	</div>
-	<div id="modalbody" class="modal-body">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                        aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">Task</h4>
+            </div>
+            <div id="modalbody" class="modal-body">
 
-	  <!-- table with form goes here -->
+                <!-- table with form goes here -->
 
-          <table id="modaltable" class="display table-striped table-condensed table-bordered" cellspacing="0" width="100%">
+                <table id="modaltable" class="display table-striped table-condensed table-bordered" cellspacing="0"
+                       width="100%">
 
-	    <!-- Priority - dropdown -->
-            <tr>
-              <td class="col-md-1">
-                <span>Priority:</span>
-              </td>
-              <td class="col-md-3">
-                <a href="#" id="priority"></a></br>
-            </td>
-          </tr>
+                    <!-- Priority - dropdown -->
+                    <tr>
+                        <td class="col-md-1">
+                            <span>Priority:</span>
+                        </td>
+                        <td class="col-md-3">
+                            <a href="#" id="priority"></a></br>
+                        </td>
+                    </tr>
 
-          <tr>
-            <!-- Deadline - datetime picker -->
-            <td class="col-md-1">
-              <span>Deadline:</span>
-            </td>
+                    <tr>
+                        <!-- Deadline - datetime picker -->
+                        <td class="col-md-1">
+                            <span>Deadline:</span>
+                        </td>
 
-            <td class="col-md-3">
-              <div class="input-group date" id="deadline">
-                <input type="text" class="form-control" id="deadlinetext"/>
+                        <td class="col-md-3">
+                            <div class="input-group date" id="deadline">
+                                <input type="text" class="form-control" id="deadlinetext"/>
 		<span class="input-group-addon">
                   <span class="glyphicon glyphicon-calendar"></span>
 		</span>
 
-                <script type="text/javascript">
-                  $(function () {
-                  $("#deadline").datetimepicker({
-                  format: "YYYY-MM-DD",
-                  });
-                  });
-                </script>
-              </div>
-            </td>
-          </tr>
+                                <script type="text/javascript">
+                                    $(function () {
+                                        $("#deadline").datetimepicker({
+                                            format: "YYYY-MM-DD",
+                                        });
+                                    });
+                                </script>
+                            </div>
+                        </td>
+                    </tr>
 
-          <tr>
-            <td class="col-md-1">
-              <span>Task list:</span>
-            </td>
-            <td class="col-md-3">
-              <a href="#" id="tasklist"></a></br>
-          </td>
-        </tr>
+                    <tr>
+                        <td class="col-md-1">
+                            <span>Task list:</span>
+                        </td>
+                        <td class="col-md-3">
+                            <a href="#" id="tasklist"></a></br>
+                        </td>
+                    </tr>
 
-        <tr>
-          <td class="col-md-1">
-            <!-- title - empty -->
-            <span>Title:</span>
-          </td>
-          <td class="col-md-3">
-            <a href="#" id="title"></a></br>
-        </td>
-      </tr>
+                    <tr>
+                        <td class="col-md-1">
+                            <!-- title - empty -->
+                            <span>Title:</span>
+                        </td>
+                        <td class="col-md-3">
+                            <a href="#" id="title"></a></br>
+                        </td>
+                    </tr>
 
-      <tr>
-        <!-- Description - rich -->
-        <td class="col-md-1">
-          <span>Description:</span>
-        </td>
-        <td class="col-md-8">
-	  <textarea style="resize:none" rows="10" cols="60" id="description"></textarea>
-        </td>
-      </tr>
+                    <tr>
+                        <!-- Description - rich -->
+                        <td class="col-md-1">
+                            <span>Description:</span>
+                        </td>
+                        <td class="col-md-8">
+                            <textarea style="resize:none" rows="10" cols="60" id="description"></textarea>
+                        </td>
+                    </tr>
 
-      <tr>
-        <!-- user assgined - dropdown -->
-        <td class="col-md-1">
-          <span>Responsible:</span>
-        </td>
-        <td class="col-md-3">
-          <a href="#" id="responsible"></a></br>
-      </td>
-    </tr>
+                    <tr>
+                        <!-- user assgined - dropdown -->
+                        <td class="col-md-1">
+                            <span>Responsible:</span>
+                        </td>
+                        <td class="col-md-3">
+                            <a href="#" id="responsible"></a></br>
+                        </td>
+                    </tr>
 
-    <!--todo-->
-    <!--context - dropdown -->
-    <!-- availability - radio -->
-    <!-- status - dropdown -->
-    <!--table for modal window-->
+                    <!--todo-->
+                    <!--context - dropdown -->
+                    <!-- availability - radio -->
+                    <!-- status - dropdown -->
+                    <!--table for modal window-->
 
-  </table>
+                </table>
 
-</div>
-<div class="modal-footer">
-  <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-  <button type="button" onclick="submitTaskFromModal();" class="btn btn-primary">Submit</button>
-</div>
-<div id="content">
-  <ul id="modaltabs" class="nav nav-tabs" data-tabs="tabs">
-    <li class="active"><a href="#comments" data-toggle="tab">Comments</a></li>
-    <li><a href="#history" data-toggle="tab">History</a></li>
-  </ul>
-  <div id="my-tab-content" style="padding: 0px 15px 15px;" class="tab-content">
-    <div class="tab-pane active" id="comments">
-      <ul id="commentsList"></ul>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                <button type="button" onclick="submitTaskFromModal();" class="btn btn-primary">Submit</button>
+            </div>
+            <div id="content">
+                <ul id="modaltabs" class="nav nav-tabs" data-tabs="tabs">
+                    <li class="active"><a href="#comments" data-toggle="tab">Comments</a></li>
+                    <li><a href="#history" data-toggle="tab">History</a></li>
+                </ul>
+                <div id="my-tab-content" style="padding: 0px 15px 15px;" class="tab-content">
+                    <div class="tab-pane active" id="comments">
+                        <ul id="commentsList"></ul>
+                    </div>
+                    <div class="tab-pane" id="history">
+                        <ul id="historyList"></ul>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
-    <div class="tab-pane" id="history">
-      <ul id="historyList"></ul>
-    </div>
-  </div>
-</div>
-</div>
-</div>
 </div>
 
 <!-- table for data -->
 <table id="example" class="display table-striped table-condensed table-bordered" cellspacing="0" width="100%">
-  <thead>
+    <thead>
     <tr>
-      <th class="col-md-1"">Title</th>
-			   <th class="col-md-3">Description</th>
-    <th class="col-md-1">Deadline</th>
-    <th class="col-md-1">Responsible</th>
-    <th class="col-md-1">Author</th>
-    <th class="col-md-1">Tasklist</th>
-    <th class="col-md-1">Priority</th>
-  </tr>
-</thead>
+        <th class="col-md-1"
+        ">Title</th>
+        <th class="col-md-3">Description</th>
+        <th class="col-md-1">Deadline</th>
+        <th class="col-md-1">Responsible</th>
+        <th class="col-md-1">Author</th>
+        <th class="col-md-1">Tasklist</th>
+        <th class="col-md-1">Priority</th>
+    </tr>
+    </thead>
 
-<tfoot style="display: table-header-group;">
-  <tr>
-    <th>Title</th>
-    <th>Description</th>
-    <th>Deadline</th>
-    <th>Responsible</th>
-    <th>Author</th>
-    <th>Tasklist</th>
-    <th>Priority</th>
-  </tr>
-</tfoot>
+    <tfoot style="display: table-header-group;">
+    <tr>
+        <th>Title</th>
+        <th>Description</th>
+        <th>Deadline</th>
+        <th>Responsible</th>
+        <th>Author</th>
+        <th>Tasklist</th>
+        <th>Priority</th>
+    </tr>
+    </tfoot>
 
-<tr>
-  <td ></td>
-  <td ></td>
-  <td ></td>
-  <td ></td>
-  <td ></td>
-  <td ></td>
-  <td ></td>
-</tr>
+    <tr>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+    </tr>
 </table>
 </body>
 </html>

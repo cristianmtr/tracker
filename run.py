@@ -22,7 +22,9 @@ def is_loggedin(f):
     """checks if the user is logged in"""
     @wraps(f)
     def wrapper(*args, **kwargs):
-        if 'username' in session.keys() and session['username'].strip() != "":
+        token = request.cookies.get("token")
+        # TODO actual check
+        if token == "123456":
             return f(*args, **kwargs)
         else:
             return jsonify(data=-2)
@@ -59,11 +61,14 @@ def cookie():
         submitData = request.get_json()
         # hardcoded for testing
         if submitData['username'] == 'admin' and submitData['password'] == 'admin':
-            session['username'] = 'admin'
-            return jsonify(data="success")
-        return jsonify(data="failure")
+            # same for token
+            # TODO generate token
+            # with TTL 14 days
+            # save it in memory (or DB?) (or in memory db?)
+            return jsonify(code=200, data="123456")
+        return jsonify(code=400)
     elif request.method == 'GET':
-        return "session: {}".format(session['username'])
+        return "session: {}".format(request.cookies.get('token'))
 
     
 @app.route("/history/<taskid>", methods=["POST","GET"])
