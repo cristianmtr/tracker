@@ -46,3 +46,10 @@ def updateExistingTask(submitData):
     if try_flush_session() == 0:
         return submitData['id']
     return -1
+
+
+def check_token_username_combination(username, token):
+    # TODO actual work
+    if username == "admin" and token == "123456":
+        return True
+    return False

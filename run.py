@@ -1,13 +1,13 @@
 #! /usr/bin/env python
 from flask import Flask, render_template, jsonify, request, session
 from models import db, try_flush_session, build_priority_id_to_name,\
-    build_tasklist_id_to_name, build_user_id_to_name, check_token_username_combination
+    build_tasklist_id_to_name, build_user_id_to_name
 import logging
 from logging.handlers import RotatingFileHandler
 import json
 from functools import wraps
 from post import isNewTask, conditionalUpdateTaskWithSubmitDataIfExists,\
-    updateExistingTask, createNewTask
+    updateExistingTask, createNewTask, check_token_username_combination
 
 
 app = Flask(__name__)

@@ -14,13 +14,6 @@ Base = automap_base()
 Base.prepare(engine, reflect=True)
 
 
-def check_token_username_combination(username, token):
-    # TODO actual work
-    if username == "admin" and token == "123456":
-        return True
-    return False
-
-
 class Globals(object):
     """Will store db globals"""
 

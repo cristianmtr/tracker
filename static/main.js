@@ -70,12 +70,8 @@ function prepareModalForNewTask() {
 
 function setUItoLoggedIn() {
     username = docCookies.getItem("username");
-    var d =$("#userstatus");
-    console.log(d);
     $("#userstatus").text(username);
     $("#authHolder").hide();
-    var d =$("#loggedInAs");
-    console.log(d);
     $("#loggedInAs").text("Logged in as " + username);
     $("#userInfo").show();
     $("#loginButton").hide();
@@ -353,7 +349,6 @@ function fillHistorySection(historyEntries) {
 };
 
 function checkTokenAndUsernameCombinationCallback(response) {
-    console.log(response);
     if (response['code'] === 200) {
         setUItoLoggedIn();
     }
