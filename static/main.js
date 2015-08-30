@@ -1,12 +1,5 @@
 var table;
 
-var username;
-
-var rtncodes_messages = {
-    "-1": "There was a problem processing your request. Try again later",
-    "-2": "not logged in",
-}
-
 // this will be used for submitting POST data to server
 // should be -1 if the item submitted is new (doesn't exist in db)
 // should be a specific id for an existing item if it's an UPDATE
@@ -25,6 +18,8 @@ const newItemForModal = {
 var globalDataSources;
 
 function setUItoLoggedOut() {
+    docCookies.removeItem("username");
+    docCookies.removeItem("token");
     $("#userstatus").text("Not logged in");
     $("#authHolder").show();
     $("#userInfo").hide();
@@ -122,15 +117,20 @@ function tryAuthenticate() {
 function submitTaskFromModal() {
     var dataToSubmit = JSON.stringify(
         {
-            'id': currentItemId,
-            'priority': $('#priority').editable('getValue')['priority'],
-            'deadline': $('#deadline').data("DateTimePicker").date().format("YYYY-MM-DD"),
-            'tasklist': $('#tasklist').editable('getValue')['tasklist'],
-            'title': $('#title').editable('getValue')['title'],
-            'description': $('#description').val(),
-            'responsible': $('#responsible').editable('getValue')['responsible'],
+            'data': {
+                'id': currentItemId,
+                'priority': $('#priority').editable('getValue')['priority'],
+                'deadline': $('#deadline').data("DateTimePicker").date().format("YYYY-MM-DD"),
+                'tasklist': $('#tasklist').editable('getValue')['tasklist'],
+                'title': $('#title').editable('getValue')['title'],
+                'description': $('#description').val(),
+                'responsible': $('#responsible').editable('getValue')['responsible'],
+            },
+            'auth': {
+                'token': docCookies.getItem('token'),
+            },
         }
-    )
+    );
     $.ajax({
         url: '/post',
         type: 'POST',
@@ -192,27 +192,29 @@ function addNewRow(newTaskId, jsonDataObject) {
 
 function submitTaskSuccessCallback(response) {
     console.log(response);
-    var idToUpdate = response['data'];
-    if (rtncodes_messages.hasOwnProperty(idToUpdate)) {
-        alert(rtncodes_messages[idToUpdate]);
-        return;
+    if (response['code'] === 200) {
+        var idToUpdate = response['data'];
+        $.ajax({
+            url: '/task/' + idToUpdate,
+            async: true,
+            dataType: 'json',
+            success: function (jsonDataObject) {
+                jsonDataObject = jsonDataObject['data'];
+                jsonDataObject = replaceIdsWithValues([jsonDataObject])[0];
+                if (idExistsInTableRows(idToUpdate)) {
+                    setDataInRowById(idToUpdate, jsonDataObject);
+                }
+                else {
+                    addNewRow(idToUpdate, jsonDataObject);
+                }
+                table.draw();
+            }
+        });
     }
-    $.ajax({
-        url: '/task/' + idToUpdate,
-        async: true,
-        dataType: 'json',
-        success: function (jsonDataObject) {
-            jsonDataObject = jsonDataObject['data'];
-            jsonDataObject = replaceIdsWithValues([jsonDataObject])[0];
-            if (idExistsInTableRows(idToUpdate)) {
-                setDataInRowById(idToUpdate, jsonDataObject);
-            }
-            else {
-                addNewRow(idToUpdate, jsonDataObject);
-            }
-            table.draw();
-        }
-    });
+    else {
+        alert("Not logged in");
+    }
+
 };
 
 function setDataInRowById(DT_RowId, dataObject) {

@@ -1,13 +1,14 @@
 #! /usr/bin/env python
 from flask import Flask, render_template, jsonify, request, session
-from models import db, try_flush_session, build_priority_id_to_name,\
+from models import db, build_priority_id_to_name,\
     build_tasklist_id_to_name, build_user_id_to_name
 import logging
 from logging.handlers import RotatingFileHandler
 import json
 from functools import wraps
-from post import isNewTask, conditionalUpdateTaskWithSubmitDataIfExists,\
-    updateExistingTask, createNewTask, check_token_username_combination
+from post import isNewTask, remove_token, check_for_token_exists,\
+    updateExistingTask, createNewTask, check_token_username_combination, \
+    auth_is_valid, generate_token
 
 
 app = Flask(__name__)
@@ -22,12 +23,11 @@ def is_loggedin(f):
     """checks if the user is logged in"""
     @wraps(f)
     def wrapper(*args, **kwargs):
-        token = request.cookies.get("token")
-        # TODO actual check
-        if token == "123456":
+        submit_data = request.get_json()
+        if check_for_token_exists(submit_data['auth']['token']):
             return f(*args, **kwargs)
         else:
-            return jsonify(data=-2)
+            return jsonify(code=401)
     return wrapper
 
 
@@ -45,12 +45,14 @@ def comments(taskid):
     return jsonify(data=comments)
 
 
-@app.route("/logout", methods=["POST", "GET"])
-@is_loggedin
+@app.route("/logout", methods=["POST"])
 def logout():
     if request.method == 'POST':
-        del session['username']
-        return jsonify(data="success")
+        submit_data = request.get_json()
+        if check_token_username_combination(submit_data['username'], submit_data['token']):
+            if remove_token(submit_data['token']):
+                return jsonify(code=200)
+        return jsonify(code=400)
     else:
         return "nothing to see here"
 
@@ -59,14 +61,10 @@ def logout():
 def cookie():
     if request.method == 'POST':
         submit_data = request.get_json()
-        # hardcoded for testing
-        if submit_data['username'] == 'admin' and submit_data['password'] == 'admin':
-            # same for token
-            # TODO generate token
-            # with TTL 14 days
-            # save it in memory (or DB?) (or in memory db?)
+        if auth_is_valid(submit_data['username'], submit_data['password']):
+            token = generate_token(submit_data['username'])
             data = {
-                "token": "123456",
+                "token": token,
                 "username": submit_data['username']
             }
             return jsonify(code=200, data=data)
@@ -77,9 +75,9 @@ def cookie():
 def check():
     if request.method == "POST":
         submit_data = request.get_json()
-        yes = check_token_username_combination(submit_data['username'], submit_data['token'])
-        if yes:
-            return jsonify(code=200)
+        if 'username' in submit_data.keys() and 'token' in submit_data.keys():
+            if check_token_username_combination(submit_data['username'], submit_data['token']):
+                return jsonify(code=200)
         return jsonify(code=422)
 
     
@@ -107,12 +105,14 @@ returns -1 if there was a problem
 """
     submitData = request.get_json()
     print '/post : server received data: {}'.format(json.dumps(submitData))
+    # TODO refactor
+    submitData = submitData['data']
     idToUpdateInTable = -1
     if isNewTask(submitData['id']):
         idToUpdateInTable = createNewTask(submitData)
     else:
         idToUpdateInTable = updateExistingTask(submitData)
-    return jsonify(data=idToUpdateInTable)
+    return jsonify(code=200, data=idToUpdateInTable)
 
 
 @app.route("/task/<taskid>")

@@ -1,5 +1,43 @@
 #! /usr/bin/env python
 from models import db, try_flush_session
+import datetime
+
+
+# { token : { "username": username, "ttl" : ttl,
+# ... }
+TokenDB = {}
+
+
+def remove_token(token):
+    if token in TokenDB.keys():
+        del TokenDB[token]
+        return True
+    return False
+
+
+def check_for_token_exists(token):
+    if token in TokenDB.keys():
+        return True
+    return False
+
+
+def generate_token(username):
+    # TODO generate token
+    # save it in memory (or DB?) (or in memory db?)
+    token = "123456"
+    # ttl for 14 days
+    today = datetime.date.today()
+    delta14days = datetime.timedelta(14)
+    ttl = today + delta14days
+    TokenDB[token] = {"username": username, "ttl": ttl}
+    return token
+
+
+def auth_is_valid(username, password):
+    # hardcoded for testing
+    if username == 'admin' and password == 'admin':
+        return True
+    return False
 
 
 def isNewTask(submitDataId):
@@ -49,7 +87,9 @@ def updateExistingTask(submitData):
 
 
 def check_token_username_combination(username, token):
-    # TODO actual work
-    if username == "admin" and token == "123456":
-        return True
+    if token in TokenDB.keys():
+        if TokenDB[token]["username"] == username:
+            if datetime.date.today() < TokenDB[token]['ttl']:
+                return True
     return False
+
