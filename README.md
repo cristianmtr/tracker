@@ -1,7 +1,4 @@
 # TODO
-- have /task/<id> support POSTing to that task, w/o id;
-- have /task/ support POSTing to a new task, returning that new id;
-- [x] rewrite POST requests to get token from cookie;
 - figure out how to fit description textarea to proper size;
 - in order to accommodate for multiple users modifying and creating tasks in the database, I should do the following:
   - create a queue with submitData objects;
