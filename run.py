@@ -4,9 +4,8 @@ from models import db, build_priority_id_to_name,\
     build_tasklist_id_to_name, build_user_id_to_name
 import logging
 from logging.handlers import RotatingFileHandler
-import json
 from functools import wraps
-from post import isNewTask, remove_token, check_for_token_exists,\
+from backend import remove_token, check_for_token_exists,\
     updateExistingTask, createNewTask, check_token_username_combination, \
     auth_is_valid, generate_token
 
@@ -31,10 +30,15 @@ def is_loggedin(f):
     return wrapper
 
 
-@app.route("/comments/<taskid>", methods=["POST", "GET"])
-def comments(taskid):
+@app.route("/comments/<taskid>", methods=["POST"])
+def post_comment(taskid):
+    # TODO
+    return jsonify(code=500)
+
+@app.route("/comments/<taskid>", methods=["GET"])
+def get_comment(taskid):
     # comments = ['comment 1', 'comment 2', 'comment 3']
-    commentsDb = db.session.query(db.comment).filter(db.comment.itemId==taskid).all()
+    commentsDb = db.session.query(db.comment).filter(db.comment.itemId == taskid).all()
     comments = []
     for comm in commentsDb:
         newComm = {}
@@ -42,7 +46,7 @@ def comments(taskid):
         newComm["postDate"] = comm.postDate
         newComm["body"] = comm.body
         comments.append(newComm)
-    return jsonify(data=comments)
+    return jsonify(code=200, data=comments)
 
 
 @app.route("/logout", methods=["POST"])
@@ -80,8 +84,15 @@ def check():
                 return jsonify(code=200)
         return jsonify(code=422)
 
-    
-@app.route("/history/<taskid>", methods=["POST","GET"])
+
+@app.route("/history/<taskid>", methods=["POST"])
+@is_loggedin
+def post_history(taskid):
+    # TODO
+    return jsonify(code=500)
+
+
+@app.route("/history/<taskid>", methods=["GET"])
 def history(taskid):
     historyEntriesDb = db.session.query(db.history).filter(db.history.itemId==taskid).all()
     historyEntries = []
@@ -94,40 +105,35 @@ def history(taskid):
     return jsonify(data=historyEntries)
 
 
-@app.route("/post", methods=["POST", "GET"])
+@app.route("/task/", methods=["POST"])
 @is_loggedin
-def post():
-    """if the submitData is assoc. with an existing task entry, we will get its id
-if it's not, we get -1 instead for that id field
-depending on the success of either creating or updating a task
-returns ID of the newly created task (or updated) if successful
-returns -1 if there was a problem
-"""
-    submitData = request.get_json()
-    print '/post : server received data: {}'.format(json.dumps(submitData))
-    # TODO refactor
-    submitData = submitData['data']
-    idToUpdateInTable = -1
-    if isNewTask(submitData['id']):
-        idToUpdateInTable = createNewTask(submitData)
-    else:
-        idToUpdateInTable = updateExistingTask(submitData)
-    return jsonify(code=200, data=idToUpdateInTable)
+def post_new_task():
+    submit_data = request.get_json()
+    new_task_id = createNewTask(submit_data['data'])
+    return jsonify(code=200, data=new_task_id)
 
 
-@app.route("/task/<taskid>")
-def task(taskid):
+@app.route("/task/<taskid>", methods=["POST"])
+@is_loggedin
+def update_task(taskid):
+    submit_data = request.get_json()
+    updateExistingTask(submit_data['data'], taskid)
+    return jsonify(code=200)
+
+
+@app.route("/task/<taskid>", methods=["GET"])
+def gettask(taskid):
     task = db.session.query(db.task, db.task.itemId, db.task.title, db.task.description, db.task.deadlineDate, db.task.memberId, db.task.authorId,db.task.priority, db.task.projectId).filter(db.task.itemId == taskid).one()
     data = {
-        'title':task.title if task.title else None,
-        'priority':task.priority if task.priority else None,
-        'description':task.description.encode('utf-8')if task.description else None,
-        'deadline':task.deadlineDate.isoformat() if task.deadlineDate else None,
-        'tasklist':task.projectId if task.projectId else None,
-        'responsible':task.memberId if task.memberId else None,
-        'author':task.authorId if task.authorId else None,
+        'title': task.title if task.title else None,
+        'priority': task.priority if task.priority else None,
+        'description': task.description.encode('utf-8') if task.description else None,
+        'deadline': task.deadlineDate.isoformat() if task.deadlineDate else None,
+        'tasklist': task.projectId if task.projectId else None,
+        'responsible': task.memberId if task.memberId else None,
+        'author': task.authorId if task.authorId else None,
     }
-    return jsonify(data=data)
+    return jsonify(code=200, data=data)
 
 
 @app.route("/json/")
@@ -138,12 +144,12 @@ def jsonInit():
         this_task = {}
 
         this_task['DT_RowId'] = t.itemId
-        
+
         this_task['title'] = t.title
-        
+
         # keep formatting when displaying description
         this_task['description'] = t.description.encode('utf-8')
-        
+
         # handle empty fields, for deadlineDate or member info
         this_task['deadline'] = t.deadlineDate.isoformat() if t.deadlineDate else None
         this_task['responsible'] = t.memberId if t.memberId != 0 else None

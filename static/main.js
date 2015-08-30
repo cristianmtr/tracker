@@ -80,10 +80,10 @@ function authenticationResponseHandler(response) {
         $("#authModal").modal("hide");
         // as per server, it's 14 days
         var expirationDate = new Date();
-        expirationDate.setDate(expirationDate.getDate()+14);
+        expirationDate.setDate(expirationDate.getDate() + 14);
         //TODO change last parameter (https only) to true
-        docCookies.setItem("token",response['data']['token'], expirationDate.toGMTString(),null,null,null);
-        docCookies.setItem("username",response['data']['username']);
+        docCookies.setItem("token", response['data']['token'], expirationDate.toGMTString(), null, null, null);
+        docCookies.setItem("username", response['data']['username']);
         setUItoLoggedIn();
     }
     else {
@@ -114,11 +114,58 @@ function tryAuthenticate() {
     });
 }
 
+function getNewTaskAndInsert(idToUpdate) {
+    $.ajax({
+        url: '/task/' + idToUpdate,
+        async: true,
+        dataType: 'json',
+        success: function (jsonDataObject) {
+            jsonDataObject = jsonDataObject['data'];
+            jsonDataObject = replaceIdsWithValues([jsonDataObject])[0];
+            addNewRow(idToUpdate, jsonDataObject);
+            table.draw();
+        }
+    });
+}
+
+function getExistingTaskAndUpdateTable(idToUpdate) {
+    $.ajax({
+        url: '/task/' + idToUpdate,
+        async: true,
+        dataType: 'json',
+        success: function (jsonDataObject) {
+            jsonDataObject = jsonDataObject['data'];
+            jsonDataObject = replaceIdsWithValues([jsonDataObject])[0];
+            setDataInRowById(idToUpdate, jsonDataObject);
+        }
+    });
+}
+
+function submitTaskSuccessCallback(response, thisItemId) {
+    console.log(response);
+    if (response['code'] === 200) {
+        var idToUpdate = 0;
+        if (thisItemId === -1) {
+            // we have created a new task
+            idToUpdate = response['data'];
+            getNewTaskAndInsert(idToUpdate);
+        }
+        else {
+            // we have updated an existing task
+            idToUpdate = thisItemId;
+            getExistingTaskAndUpdateTable(idToUpdate);
+        };
+    }
+    else {
+        alert("Not logged in");
+    };
+}
+
 function submitTaskFromModal() {
+    var thisItemId = currentItemId;
     var dataToSubmit = JSON.stringify(
         {
             'data': {
-                'id': currentItemId,
                 'priority': $('#priority').editable('getValue')['priority'],
                 'deadline': $('#deadline').data("DateTimePicker").date().format("YYYY-MM-DD"),
                 'tasklist': $('#tasklist').editable('getValue')['tasklist'],
@@ -131,14 +178,21 @@ function submitTaskFromModal() {
             },
         }
     );
+    var url = "/task/";
+    if (thisItemId !== -1) {
+        url = "/task/" + thisItemId;
+    }
+    console.log("submit to " + url);
     $.ajax({
-        url: '/post',
+        url: url,
         type: 'POST',
         data: dataToSubmit,
         contentType: "application/json; charset=utf-8",
-        success: submitTaskSuccessCallback,
+        success: function (response) {
+            submitTaskSuccessCallback(response, thisItemId);
+        }
     });
-};
+}
 
 function replaceIdsWithValues(dataSet) {
     // we replace the ID numbers we get from the server
@@ -190,33 +244,6 @@ function addNewRow(newTaskId, jsonDataObject) {
     });
 };
 
-function submitTaskSuccessCallback(response) {
-    console.log(response);
-    if (response['code'] === 200) {
-        var idToUpdate = response['data'];
-        $.ajax({
-            url: '/task/' + idToUpdate,
-            async: true,
-            dataType: 'json',
-            success: function (jsonDataObject) {
-                jsonDataObject = jsonDataObject['data'];
-                jsonDataObject = replaceIdsWithValues([jsonDataObject])[0];
-                if (idExistsInTableRows(idToUpdate)) {
-                    setDataInRowById(idToUpdate, jsonDataObject);
-                }
-                else {
-                    addNewRow(idToUpdate, jsonDataObject);
-                }
-                table.draw();
-            }
-        });
-    }
-    else {
-        alert("Not logged in");
-    }
-
-};
-
 function setDataInRowById(DT_RowId, dataObject) {
     console.log("trying to update row " + DT_RowId + " with data " + JSON.stringify(dataObject));
     table.row("#" + DT_RowId).data(dataObject);
@@ -251,7 +278,7 @@ function updateDataInModalFromId() {
         dataType: 'json',
         success: function (modalDataObject) {
             modalDataObject = modalDataObject['data'];
-            console.log("got data from server: " + JSON.stringify(modalDataObject));
+            console.log("got task from server: " + JSON.stringify(modalDataObject));
             setDataInModal(modalDataObject);
         }
     });
@@ -261,7 +288,7 @@ function updateDataInModalFromId() {
         dataType: 'json',
         success: function (comments) {
             comments = comments['data'];
-            console.log("got data from server: " + JSON.stringify(comments));
+            console.log("got comments from server: " + JSON.stringify(comments));
             fillCommentSection(comments);
         }
     });
@@ -271,7 +298,7 @@ function updateDataInModalFromId() {
         dataType: 'json',
         success: function (historyEntries) {
             historyEntries = historyEntries['data'];
-            console.log("got data from server: " + JSON.stringify(historyEntries));
+            console.log("got history from server: " + JSON.stringify(historyEntries));
             fillHistorySection(historyEntries);
         }
     });

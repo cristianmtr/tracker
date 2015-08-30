@@ -40,12 +40,6 @@ def auth_is_valid(username, password):
     return False
 
 
-def isNewTask(submitDataId):
-    if submitDataId == -1:
-        return True
-    return False
-
-
 def conditionalUpdateTaskWithSubmitDataIfExists(taskObject, dataToProcess):
     """checks if the data to be submitted contains data in the keys specific to the task table
 if so, adds them to the task object
@@ -56,11 +50,9 @@ return newly updated task object"""
         taskObject.deadlineDate = dataToProcess['deadline']
     if 'tasklist' in dataToProcess.keys() and dataToProcess['tasklist'] != "":
         taskObject.projectId = dataToProcess['tasklist']
-    # it title is empty, the key will not exist in the json POST
     if 'title' in dataToProcess.keys() and dataToProcess['title'] != "":
         taskObject.title = dataToProcess['title']
-    # description can not be NULL, empty string is OK
-    if 'description' in dataToProcess.keys() and dataToProcess['description'] != "":
+    if 'description' in dataToProcess.keys():
         taskObject.description = dataToProcess['description']
     if 'responsible' in dataToProcess.keys() and dataToProcess['responsible'] != "":
         taskObject.memberId = dataToProcess['responsible']
@@ -77,12 +69,12 @@ def createNewTask(submitData):
     return -1
 
 
-def updateExistingTask(submitData):
-    taskToModify = db.session.query(db.task).filter(db.task.itemId == submitData['id']).one()
+def updateExistingTask(submitData, task_id):
+    taskToModify = db.session.query(db.task).filter(db.task.itemId == task_id).one()
     taskToModify = conditionalUpdateTaskWithSubmitDataIfExists(taskToModify, submitData)
     db.session.add(taskToModify)
     if try_flush_session() == 0:
-        return submitData['id']
+        return task_id
     return -1
 
 
