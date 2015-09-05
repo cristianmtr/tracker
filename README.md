@@ -1,9 +1,11 @@
 # TODO
-- figure out how to fit description textarea to proper size;
 - in order to accommodate for multiple users modifying and creating tasks in the database, I should do the following:
-  - create a queue with submitData objects;
-  - have a process pop from the queue and do the task;
-  - after each task is processed, the client browser should be informed what row_id it needs to update;
+  - have a dict mapping user_token to last time the user got an update;
+  - have another dict mapping time of entry update/creation to type of item and its unique id;
+  - periodically, js client will send a request and get back a list of all the items it has to update;
+  - go through the list, asking for the data;
+    - each piece, update the table or its in-memory store of user_ids, tasklists etc.;
+- figure out how to fit description textarea to proper size;
 
 ## PROBLEMATIC
 - to handle token authorization
