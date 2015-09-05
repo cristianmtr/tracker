@@ -3,7 +3,8 @@
   - have a dict mapping user_token to last time the user got an update;
   - have another dict mapping time of entry update/creation to type of item and its unique id;
   - periodically, js client will send a request and get back a list of all the items it has to update;
-  - go through the list, asking for the data;
+  - will have a counter displayed for the user;
+  - on click, go through the list, asking for the data;
     - each piece, update the table or its in-memory store of user_ids, tasklists etc.;
 - figure out how to fit description textarea to proper size;
 
