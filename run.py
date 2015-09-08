@@ -1,5 +1,4 @@
-#! /usr/bin/env python
-from flask import Flask, render_template, jsonify, request, session
+from flask import Flask, render_template, jsonify, request
 from models import db, build_priority_id_to_name,\
     build_tasklist_id_to_name, build_user_id_to_name
 import logging
@@ -7,7 +6,7 @@ from logging.handlers import RotatingFileHandler
 from functools import wraps
 from backend import remove_token, check_for_token_exists,\
     updateExistingTask, createNewTask, check_token_username_combination, \
-    auth_is_valid, generate_token
+    auth_is_valid, generate_token, get_username_from_token, check_for_updates
 
 
 app = Flask(__name__)
@@ -23,17 +22,33 @@ def is_loggedin(f):
     @wraps(f)
     def wrapper(*args, **kwargs):
         submit_data = request.get_json()
-        if check_for_token_exists(submit_data['auth']['token']):
-            return f(*args, **kwargs)
+        if "auth" in submit_data.keys():
+            if "token" in submit_data['auth'].keys():
+                if check_for_token_exists(submit_data['auth']['token']):
+                    return f(*args, **kwargs)
         else:
             return jsonify(code=401)
     return wrapper
+
+
+@app.route("/updates", methods=["POST"])
+@is_loggedin
+def updates():
+    import pdb
+    pdb.set_trace()
+    submit_data = request.get_json()
+    username = get_username_from_token(submit_data['auth']['token'])
+    data = {
+        "updates_list": check_for_updates(username),
+    }
+    return jsonify(code=200, data=data)
 
 
 @app.route("/comments/<taskid>", methods=["POST"])
 def post_comment(taskid):
     # TODO
     return jsonify(code=500)
+
 
 @app.route("/comments/<taskid>", methods=["GET"])
 def get_comment(taskid):
@@ -182,4 +197,4 @@ if __name__ == "__main__":
     handler.setLevel(logging.INFO)
     app.logger.addHandler(handler)
     # db = Globals()
-    app.run(host='0.0.0.0', port=80)
+    app.run(host='0.0.0.0', port=5000)
