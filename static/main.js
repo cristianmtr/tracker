@@ -73,7 +73,7 @@ function setUItoLoggedIn() {
     $("#logoutButton").show();
 }
 
-function authenticationResponseHandler(response) {
+function authenticationResponseHandler(response, username) {
     console.log(JSON.stringify(response));
     console.log(response);
     if (response['code'] == 200) {
@@ -83,7 +83,7 @@ function authenticationResponseHandler(response) {
         expirationDate.setDate(expirationDate.getDate() + 14);
         //TODO change last parameter (https only) to true
         docCookies.setItem("token", response['data']['token'], expirationDate.toGMTString(), null, null, null);
-        docCookies.setItem("username", response['data']['username']);
+        docCookies.setItem("username", username);
         setUItoLoggedIn();
     }
     else {
@@ -91,9 +91,7 @@ function authenticationResponseHandler(response) {
         // saying 'try again'
         $("#authmessage").text("Failure. Try again");
     }
-
-
-};
+}
 
 function tryAuthenticate() {
     var username = $("#username").val();
@@ -101,7 +99,7 @@ function tryAuthenticate() {
     var dataToSubmit = JSON.stringify(
         {
             'username': username,
-            'password': password,
+            'password': password
         }
     );
     $("#authmessage").text("");
@@ -110,7 +108,9 @@ function tryAuthenticate() {
         type: 'POST',
         data: dataToSubmit,
         contentType: "application/json; charset=utf-8",
-        success: authenticationResponseHandler,
+        success: function (response) {
+            authenticationResponseHandler(response, username);
+        }
     });
 }
 

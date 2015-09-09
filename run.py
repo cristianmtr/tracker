@@ -83,7 +83,6 @@ def cookie():
             token = generate_token(submit_data['username'])
             data = {
                 "token": token,
-                "username": submit_data['username']
             }
             return jsonify(code=200, data=data)
         return jsonify(code=422)
