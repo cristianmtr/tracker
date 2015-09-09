@@ -1,4 +1,5 @@
 # TODO
+- HIGH Priority: figure out empty strings to NULL;
 - switch to normal input fields, since having to always tick "confirm" for each field will become tedious and misleading;
     - users might think that by ticking they have submitted the data in fact;
 - optimization: when submitting an update to a task (or creating one), don't do a full get afterwards:

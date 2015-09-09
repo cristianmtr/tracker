@@ -6,7 +6,7 @@ var table;
 var currentItemId = -1;
 
 const newItemForModal = {
-    'title': '',
+    'title': "",
     'deadline': new moment().format("YYYY-MM-DD"),
     'priority': 2,
     'responsible': '',
@@ -114,65 +114,43 @@ function tryAuthenticate() {
     });
 }
 
-function getNewTaskAndInsert(idToUpdate) {
-    $.ajax({
-        url: '/task/' + idToUpdate,
-        async: true,
-        dataType: 'json',
-        success: function (jsonDataObject) {
-            jsonDataObject = jsonDataObject['data'];
-            jsonDataObject = replaceIdsWithValues([jsonDataObject])[0];
-            addNewRow(idToUpdate, jsonDataObject);
-            table.draw();
-        }
-    });
-}
-
-function getExistingTaskAndUpdateTable(idToUpdate) {
-    $.ajax({
-        url: '/task/' + idToUpdate,
-        async: true,
-        dataType: 'json',
-        success: function (jsonDataObject) {
-            jsonDataObject = jsonDataObject['data'];
-            jsonDataObject = replaceIdsWithValues([jsonDataObject])[0];
-            setDataInRowById(idToUpdate, jsonDataObject);
-        }
-    });
-}
-
-function submitTaskSuccessCallback(response, thisItemId) {
+function submitTaskSuccessCallback(response, thisItemId, dataToSubmit) {
     console.log(response);
     if (response['code'] === 200) {
-        var idToUpdate = 0;
         if (thisItemId === -1) {
             // we have created a new task
-            idToUpdate = response['data'];
-            getNewTaskAndInsert(idToUpdate);
+            // we get the id assigned to the newly
+            // created task from the response
+            thisItemId = response['data'];
+            addNewRow(thisItemId, dataToSubmit);
         }
         else {
             // we have updated an existing task
-            idToUpdate = thisItemId;
-            getExistingTaskAndUpdateTable(idToUpdate);
+            setDataInRowById(thisItemId, dataToSubmit);
         };
     }
-    else {
+    else if (response['code'] === 401){
         alert("Not logged in");
-    };
+    }
+    else {
+        alert("Something went wrong. Please try again later");
+    }
 }
 
 function submitTaskFromModal() {
     var thisItemId = currentItemId;
+    var data = {
+        'title': $("#title").val(),
+        'priority': $('#priority').editable('getValue')['priority'],
+        'deadline': $('#deadline').data("DateTimePicker").date().format("YYYY-MM-DD"),
+        'tasklist': $('#tasklist').editable('getValue')['tasklist'],
+        'description': $('#description').val(),
+        'responsible': $('#responsible').editable('getValue')['responsible'],
+        'author':$('#author').editable('getValue')['author']
+    };
     var dataToSubmit = JSON.stringify(
         {
-            'data': {
-                'priority': $('#priority').editable('getValue')['priority'],
-                'deadline': $('#deadline').data("DateTimePicker").date().format("YYYY-MM-DD"),
-                'tasklist': $('#tasklist').editable('getValue')['tasklist'],
-                'title': $('#title').editable('getValue')['title'],
-                'description': $('#description').val(),
-                'responsible': $('#responsible').editable('getValue')['responsible'],
-            },
+            'data': data,
             'auth': {
                 'token': docCookies.getItem('token'),
             },
@@ -189,38 +167,41 @@ function submitTaskFromModal() {
         data: dataToSubmit,
         contentType: "application/json; charset=utf-8",
         success: function (response) {
-            submitTaskSuccessCallback(response, thisItemId);
+            submitTaskSuccessCallback(response, thisItemId, data);
         }
     });
 }
 
-function replaceIdsWithValues(dataSet) {
+function replaceIdsWithValuesInDataSet(dataSet) {
+    for (var i = 0; i < dataSet.length; i++) {
+        dataSet[i] = replaceIdsWithValues(dataSet[i]);
+    }
+    return dataSet;
+}
+
+function replaceIdsWithValues(dataObject) {
     // we replace the ID numbers we get from the server
     // with the names from the dictionary mapping we will store client-side
-    for (var i = 0; i < dataSet.length; i++) {
-        var responsible_id = dataSet[i]['responsible'];
-        var author_id = dataSet[i]['author'];
-        var tasklist_id = dataSet[i]['tasklist'];
-        var priority = dataSet[i]['priority'];
-        if (responsible_id != null) {
-            dataSet[i]['responsible'] = dataSources['responsible'][responsible_id];
-        }
-        ;
-        if (author_id != null) {
-            dataSet[i]['author'] = dataSources['responsible'][author_id];
-        }
-        ;
-        if (tasklist_id != null) {
-            dataSet[i]['tasklist'] = dataSources['tasklist'][tasklist_id];
-        }
-        ;
-        if (priority != null) {
-            dataSet[i]['priority'] = dataSources['priority'][priority];
-        }
-        ;
+    var responsible_id = dataObject['responsible'];
+    var author_id = dataObject['author'];
+    var tasklist_id = dataObject['tasklist'];
+    var priority = dataObject['priority'];
+    if (responsible_id != null) {
+        dataObject['responsible'] = dataSources['responsible'][responsible_id];
     }
     ;
-    return dataSet;
+    if (author_id != null) {
+        dataObject['author'] = dataSources['responsible'][author_id];
+    }
+    ;
+    if (tasklist_id != null) {
+        dataObject['tasklist'] = dataSources['tasklist'][tasklist_id];
+    }
+    ;
+    if (priority != null) {
+        dataObject['priority'] = dataSources['priority'][priority];
+    };
+    return dataObject;
 
 };
 
@@ -232,6 +213,7 @@ function idExistsInTableRows(idToCheck) {
 };
 
 function addNewRow(newTaskId, jsonDataObject) {
+    jsonDataObject = replaceIdsWithValues(jsonDataObject);
     table.row.add({
         "title": jsonDataObject['title'],
         "description": jsonDataObject['description'],
@@ -242,11 +224,22 @@ function addNewRow(newTaskId, jsonDataObject) {
         "author": jsonDataObject["author"],
         "DT_RowId": newTaskId,
     });
+    table.draw();
 };
 
 function setDataInRowById(DT_RowId, dataObject) {
+    dataObject = replaceIdsWithValues(dataObject);
     console.log("trying to update row " + DT_RowId + " with data " + JSON.stringify(dataObject));
-    table.row("#" + DT_RowId).data(dataObject);
+    table.row("#" + DT_RowId).data({
+        "title": dataObject['title'],
+        "description": dataObject['description'],
+        "tasklist": dataObject["tasklist"],
+        "priority": dataObject["priority"],
+        "deadline": dataObject["deadline"],
+        "responsible": dataObject["responsible"],
+        "author": dataObject["author"],
+        "DT_RowId": DT_RowId,
+    });
 };
 
 function iterateDataSources() {
@@ -434,7 +427,7 @@ $(document).ready(function () {
         console.log('got data from /json');
         dataSources = data['dataSources'];
         dataSet = data['data'];
-        dataSet = replaceIdsWithValues(dataSet);
+        dataSet = replaceIdsWithValuesInDataSet(dataSet);
         table = $('#example').DataTable({
             "dom": 'C<"clear"><"toolbar">lfrtip',
             "data": dataSet,
