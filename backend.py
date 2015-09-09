@@ -86,8 +86,8 @@ def updateExistingTask(submitData, task_id):
     taskToModify = conditionalUpdateTaskWithSubmitDataIfExists(taskToModify, submitData)
     db.session.add(taskToModify)
     if try_flush_session() == 0:
-        return task_id
         new_update("task", task_id)
+        return task_id
     return -1
 
 

@@ -132,8 +132,10 @@ def post_new_task():
 @is_loggedin
 def update_task(taskid):
     submit_data = request.get_json()
-    updateExistingTask(submit_data['data'], taskid)
-    return jsonify(code=200)
+    rtn_code = updateExistingTask(submit_data['data'], taskid)
+    if rtn_code == taskid:
+        return jsonify(code=200)
+    return jsonify(code=500)
 
 
 @app.route("/task/<taskid>", methods=["GET"])
