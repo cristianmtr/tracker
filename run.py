@@ -6,7 +6,7 @@ from logging.handlers import RotatingFileHandler
 from functools import wraps
 from backend import remove_token, check_for_token_exists,\
     updateExistingTask, createNewTask, check_token_username_combination, \
-    auth_is_valid, generate_token, get_username_from_token, check_for_updates
+    auth_is_valid, generate_token, get_username_from_token, get_notifications
 
 
 app = Flask(__name__)
@@ -31,15 +31,15 @@ def is_loggedin(f):
     return wrapper
 
 
-@app.route("/updates", methods=["POST"])
+@app.route("/notify", methods=["POST"])
 @is_loggedin
-def updates():
+def notify():
     import pdb
     pdb.set_trace()
     submit_data = request.get_json()
     username = get_username_from_token(submit_data['auth']['token'])
     data = {
-        "updates_list": check_for_updates(username),
+        "notifications": get_notifications(username),
     }
     return jsonify(code=200, data=data)
 

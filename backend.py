@@ -6,10 +6,10 @@ DATE_FORMAT = "%a %b %d %H:%M:%S %Y"
 
 # 0 - tokens
 # 1 - last_time_checked_DB
-# 2 - updates
+# 2 - notifications
 TOKENS = redis.Redis('localhost', db=0)
 LTC = redis.Redis('localhost', db=1)
-UPDATES = redis.Redis('localhost', db=2)
+NOTIFICATIONS = redis.Redis('localhost', db=2)
 
 
 def datetime_to_string(date_obj):
@@ -76,7 +76,7 @@ def createNewTask(submitData):
     db.session.add(newTask)
     if try_flush_session() == 0:
         db.session.refresh(newTask)
-        new_update("new_task", newTask.itemId)
+        new_notification("new_task", newTask.itemId)
         return newTask.itemId
     return -1
 
@@ -86,7 +86,7 @@ def updateExistingTask(submitData, task_id):
     taskToModify = conditionalUpdateTaskWithSubmitDataIfExists(taskToModify, submitData)
     db.session.add(taskToModify)
     if try_flush_session() == 0:
-        new_update("task", task_id)
+        new_notification("task", task_id)
         return task_id
     return -1
 
@@ -108,26 +108,26 @@ def get_username_from_token(token):
     return None
 
 
-def check_for_updates(username):
+def get_notifications(username):
     # ltc - LAST TIME CHECKED
-    # the last datetime.datetime the user checked for updates
-    list_of_updates = []
+    # the last datetime.datetime the user checked for notifications
+    notifications = []
     ltc = None
     ltc_string = LTC.get(username)
     if ltc_string:
         ltc = string_to_datetime(ltc_string)
-    for timestamp in UPDATES.keys():
+    for timestamp in NOTIFICATIONS.keys():
         if ltc is None or string_to_datetime(timestamp) > ltc:
-            list_of_updates.append(UPDATES.hgetall(timestamp))
+            notifications.append(NOTIFICATIONS.hgetall(timestamp))
     ltc_now = datetime.datetime.today()
     ltc_now_string = datetime_to_string(ltc_now)
     LTC.set(username, ltc_now_string)
-    return list_of_updates
+    return notifications
 
 
-def new_update(event_type, unique_id):
+def new_notification(event_type, unique_id):
     time_of_creation = datetime.datetime.today()
     time_of_creation_string = datetime_to_string(time_of_creation)
-    print time_of_creation_string
-    UPDATES.hmset(time_of_creation_string, {"type": event_type, "id": unique_id})
+    print "notification {}: {} {}".format(time_of_creation_string, event_type, unique_id)
+    NOTIFICATIONS.hmset(time_of_creation_string, {"type": event_type, "id": unique_id})
     return
