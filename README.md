@@ -1,4 +1,6 @@
 # TODO
+- switch to normal input fields, since having to always tick "confirm" for each field will become tedious and misleading;
+    - users might think that by ticking they have submitted the data in fact;
 - optimization: when submitting an update to a task (or creating one), don't do a full get afterwards:
   - store the modifications as they are, and only wait for a response from the server that the data has been successfully submitted;
 	- if so, the row is simply updated / created;
