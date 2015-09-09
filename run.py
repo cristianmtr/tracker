@@ -34,8 +34,6 @@ def is_loggedin(f):
 @app.route("/notify", methods=["POST"])
 @is_loggedin
 def notify():
-    import pdb
-    pdb.set_trace()
     submit_data = request.get_json()
     username = get_username_from_token(submit_data['auth']['token'])
     data = {
