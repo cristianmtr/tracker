@@ -1,4 +1,7 @@
 # TODO
+- optimization: when submitting an update to a task (or creating one), don't do a full get afterwards:
+  - store the modifications as they are, and only wait for a response from the server that the data has been successfully submitted;
+	- if so, the row is simply updated / created;
 - in order to accommodate for multiple users modifying and creating tasks in the database, I should do the following:
   - have a dict mapping user_token to last time the user got an update;
   - have another dict mapping time of entry update/creation to type of item and its unique id;
@@ -6,6 +9,7 @@
   - will have a counter displayed for the user;
   - on click, go through the list, asking for the data;
     - each piece, update the table or its in-memory store of user_ids, tasklists etc.;
+	- for the editing the user has done, we will maintain another list of objects ({"id":<id>,"type":<type>}) and at the time of going through the notifications list, we will NOT get these;
 - figure out how to fit description textarea to proper size;
 
 ## PROBLEMATIC
