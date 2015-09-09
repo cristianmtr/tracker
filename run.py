@@ -35,7 +35,8 @@ def is_loggedin(f):
 @is_loggedin
 def notify():
     submit_data = request.get_json()
-    username = get_username_from_token(submit_data['auth']['token'])
+    token = get_username_from_token(submit_data['auth']['token'])
+    username = get_username_from_token(token)
     data = {
         "notifications": get_notifications(username),
     }
