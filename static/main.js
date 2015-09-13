@@ -6,13 +6,13 @@ var table;
 var currentItemId = -1;
 
 const newItemForModal = {
-    'title': "",
+    'title': '',
     'deadline': new moment().format("YYYY-MM-DD"),
-    'priority': 2,
+    'priority': "Normal",
     'responsible': '',
     'description': '',
     'author': '',
-    'tasklist': 2,
+    'tasklist': "General OPS",
 }
 
 var globalDataSources;
@@ -114,8 +114,15 @@ function tryAuthenticate() {
     });
 }
 
+function alertModal(message) {
+    $("#alertMessage").text(message);
+    $("#alertModal").modal("toggle");
+}
+
 function submitTaskSuccessCallback(response, thisItemId, dataToSubmit) {
     console.log(response);
+
+
     if (response['code'] === 200) {
         if (thisItemId === -1) {
             // we have created a new task
@@ -127,13 +134,14 @@ function submitTaskSuccessCallback(response, thisItemId, dataToSubmit) {
         else {
             // we have updated an existing task
             setDataInRowById(thisItemId, dataToSubmit);
-        };
+        }
+        ;
     }
-    else if (response['code'] === 401){
-        alert("Not logged in");
+    else if (response['code'] === 401) {
+        alertModal("Not logged in");
     }
     else {
-        alert("Something went wrong. Please try again later");
+        alertModal("Something went wrong. Please try again later");
     }
 }
 
@@ -141,12 +149,12 @@ function submitTaskFromModal() {
     var thisItemId = currentItemId;
     var data = {
         'title': $("#title").val(),
-        'priority': $('#priority').editable('getValue')['priority'],
+        'priority': $('#priority').val(),
         'deadline': $('#deadline').data("DateTimePicker").date().format("YYYY-MM-DD"),
-        'tasklist': $('#tasklist').editable('getValue')['tasklist'],
+        'tasklist': $('#tasklist').val(),
         'description': $('#description').val(),
-        'responsible': $('#responsible').editable('getValue')['responsible'],
-        'author':$('#author').editable('getValue')['author']
+        'responsible': $('#responsible').val(),
+        'author': $('#author').val(),
     };
     var dataToSubmit = JSON.stringify(
         {
@@ -200,10 +208,35 @@ function replaceIdsWithValues(dataObject) {
     ;
     if (priority != null) {
         dataObject['priority'] = dataSources['priority'][priority];
-    };
+    }
+    ;
     return dataObject;
 
 };
+
+function addValueFieldsToRowObject(dataObject) {
+    var responsible_id = dataObject['responsible'];
+    var author_id = dataObject['author'];
+    var tasklist_id = dataObject['tasklist'];
+    var priority = dataObject['priority'];
+    if (responsible_id != null) {
+        dataObject['responsible_text'] = dataSources['responsible'][responsible_id];
+    }
+    ;
+    if (author_id != null) {
+        dataObject['author_text'] = dataSources['responsible'][author_id];
+    }
+    ;
+    if (tasklist_id != null) {
+        dataObject['tasklist_text'] = dataSources['tasklist'][tasklist_id];
+    }
+    ;
+    if (priority != null) {
+        dataObject['priority_text'] = dataSources['priority'][priority];
+    }
+    ;
+    return dataObject;
+}
 
 function idExistsInTableRows(idToCheck) {
     if (table.row("#" + idToCheck).data() == undefined) {
@@ -213,33 +246,17 @@ function idExistsInTableRows(idToCheck) {
 };
 
 function addNewRow(newTaskId, jsonDataObject) {
-    jsonDataObject = replaceIdsWithValues(jsonDataObject);
-    table.row.add({
-        "title": jsonDataObject['title'],
-        "description": jsonDataObject['description'],
-        "tasklist": jsonDataObject["tasklist"],
-        "priority": jsonDataObject["priority"],
-        "deadline": jsonDataObject["deadline"],
-        "responsible": jsonDataObject["responsible"],
-        "author": jsonDataObject["author"],
-        "DT_RowId": newTaskId,
-    });
+    jsonDataObject = addValueFieldsToRowObject(jsonDataObject);
+    jsonDataObject['DT_RowId'] = newTaskId;
+    table.row.add(jsonDataObject);
     table.draw();
 };
 
 function setDataInRowById(DT_RowId, dataObject) {
-    dataObject = replaceIdsWithValues(dataObject);
+    dataObject = addValueFieldsToRowObject(dataObject);
+    dataObject['DT_RowId'] = DT_RowId;
     console.log("trying to update row " + DT_RowId + " with data " + JSON.stringify(dataObject));
-    table.row("#" + DT_RowId).data({
-        "title": dataObject['title'],
-        "description": dataObject['description'],
-        "tasklist": dataObject["tasklist"],
-        "priority": dataObject["priority"],
-        "deadline": dataObject["deadline"],
-        "responsible": dataObject["responsible"],
-        "author": dataObject["author"],
-        "DT_RowId": DT_RowId,
-    });
+    table.row("#" + DT_RowId).data(dataObject);
 };
 
 function iterateDataSources() {
@@ -264,17 +281,53 @@ function onClickTableRow(e) {
     $("#content").show();
 };
 
-function updateDataInModalFromId() {
-    $.ajax({
-        url: '/task/' + currentItemId,
-        async: true,
-        dataType: 'json',
-        success: function (modalDataObject) {
-            modalDataObject = modalDataObject['data'];
-            console.log("got task from server: " + JSON.stringify(modalDataObject));
-            setDataInModal(modalDataObject);
+function replaceValuesWithIds(modalDataObject) {
+    var thisPriority = modalDataObject['priority'];
+    var thisTasklist = modalDataObject['tasklist'];
+    var thisResponsible = modalDataObject['responsible'];
+    var thisAuthor = modalDataObject['author'];
+    //for (var i=0;i<dataSources['priority'];i++) {
+    //    if (dataSources['priority'][i] == thisPriority) {
+    //        modalDataObject['priority'] = i;
+    //    }
+    //}
+    //for (var i=0;i<dataSources['tasklist'];i++) {
+    //    if (dataSources['tasklist'][i] == thisTasklist) {
+    //        modalDataObject['tasklist'] = i;
+    //    }
+    //}
+    //for (var i=0;i<dataSources['responsible'];i++) {
+    //    if (dataSources['responsible'][i] == thisResponsible) {
+    //        modalDataObject['responsible'] = i;
+    //    }
+    //    if (dataSources['responsible'][i] == thisAuthor) {
+    //        modalDataObject['author'] = i;
+    //    }
+    //}
+    for (var i in dataSources['priority']) {
+        if (dataSources['priority'][i] === thisPriority) {
+            modalDataObject['priority'] = i;
         }
-    });
+    }
+    for (var i in dataSources['tasklist']) {
+        if (dataSources['tasklist'][i] === thisTasklist) {
+            modalDataObject['tasklist'] = i;
+        }
+    }
+    for (var i in dataSources['responsible']) {
+        if (dataSources['responsible'][i] === thisResponsible) {
+            modalDataObject['responsible'] = i;
+        }
+        if (dataSources['responsible'][i] === thisAuthor) {
+            modalDataObject['author'] = i;
+        }
+    }
+    return modalDataObject;
+}
+
+function updateDataInModalFromId() {
+    var modalDataObject = table.row("#" + currentItemId).data();
+    setDataInModal(modalDataObject);
     $.ajax({
         url: '/comments/' + currentItemId,
         async: true,
@@ -302,53 +355,79 @@ function toggleModal() {
 };
 
 function setDataInModal(modalDataObject) {
-    $('#priority').editable('setValue', modalDataObject['priority']);
+    $('#priority').val(modalDataObject["priority"]);
     $('#deadline').data("DateTimePicker").date(modalDataObject['deadline']);
-    $('#tasklist').editable('setValue', modalDataObject['tasklist']);
-    $('#title').editable('setValue', modalDataObject['title']);
+    $("#tasklist").val(modalDataObject["tasklist"]);
+    $("#title").val(modalDataObject["title"]);
     $('#description').val(modalDataObject['description']);
-    $('#responsible').editable('setValue', modalDataObject['responsible']);
-
+    $("#responsible").val(modalDataObject["responsible"]);
     console.log('data modal has been updated with ' + JSON.stringify(modalDataObject));
 };
 
+function getPriorityIDfromValue(priority) {
+    for (var x in dataSources['priority']) {
+        if (dataSources['priority'][x] === priority) {
+            return x;
+        }
+    }
+}
+
+function getTasklistIDfromValue(tasklist) {
+    for (var x in dataSources['tasklist']) {
+        if (dataSources['tasklist'][x] === tasklist) {
+            return x;
+        }
+    }
+}
+
+function getMemberIDfromValue(member) {
+    for (var x in dataSources['responsible']) {
+        if (dataSources['responsible'][x] === member) {
+            return x;
+        }
+    }
+}
+
+function generateSelectOptionsForPriority() {
+    var prioritySelect = $("#priority");
+    prioritySelect.find("option").remove().end();
+    for (var x in dataSources['priority']) {
+        var opt = document.createElement('option');
+        opt.value = x;
+        opt.innerHTML = dataSources['priority'][x];
+        prioritySelect.append(opt);
+    }
+}
+
+function generateSelectOptionsForTasklist() {
+    var tasklistSelect = $("#tasklist");
+    tasklistSelect.find("option").remove().end();
+    for (var x in dataSources['tasklist']) {
+        var opt = document.createElement('option');
+        opt.value = x;
+        opt.innerHTML = dataSources['tasklist'][x];
+        tasklistSelect.append(opt);
+    }
+}
+
+function generateSelectOptionsForResponsible() {
+    var responsibleSelect = $("#responsible");
+    responsibleSelect.find("option").remove().end();
+    for (var x in dataSources['responsible']) {
+        var opt = document.createElement('option');
+        opt.value = x;
+        opt.innerHTML = dataSources['responsible'][x];
+        responsibleSelect.append(opt);
+    }
+}
+
 function initializeEditables() {
-    $.fn.editable.defaults.mode = 'inline';
 
-    $('#priority').editable({
-        type: 'select',
-        title: 'Priority',
-        placement: 'right',
-        value: 2,
-        source: globalDataSources['priority'],
-    });
+    generateSelectOptionsForPriority();
 
-    $('#tasklist').editable({
-        type: 'select',
-        title: 'Task list',
-        placement: 'right',
-        value: 1,
-        source: globalDataSources['tasklist'],
-    });
+    generateSelectOptionsForTasklist();
 
-    $("#title").editable({
-        type: 'text',
-        title: 'Title',
-        clear: true,
-        placeholder: 'task title',
-    });
-
-    // description is now an independent textarea
-    // not using editable because it doesn't look nice
-
-    $("#responsible").editable({
-        type: 'select',
-        value: 1,
-        title: 'Responsible',
-        placement: 'right',
-        source: globalDataSources['responsible'],
-    });
-
+    generateSelectOptionsForResponsible();
 };
 
 function fillCommentSection(comments) {
@@ -376,7 +455,7 @@ function checkTokenAndUsernameCombinationCallback(response) {
     }
     else {
         setUItoLoggedOut();
-        alert("There was a problem with your credentials. Please try logging in again");
+        alertModal("There was a problem with your credentials. Please try logging in again");
     }
 }
 
@@ -406,7 +485,40 @@ function checkForTokenCookie() {
 
 }
 
+function loadRowsFromDataSet(dataSet) {
+    for (var x in dataSet) {
+        var row = dataSet[x];
+        addNewRow(row['DT_RowId'], row);
+    }
+}
+
 $(document).ready(function () {
+
+    var opts = {
+        lines: 13 // The number of lines to draw
+        , length: 28 // The length of each line
+        , width: 14 // The line thickness
+        , radius: 42 // The radius of the inner circle
+        , scale: 1 // Scales overall size of the spinner
+        , corners: 1 // Corner roundness (0..1)
+        , color: '#000' // #rgb or #rrggbb or array of colors
+        , opacity: 0.25 // Opacity of the lines
+        , rotate: 0 // The rotation offset
+        , direction: 1 // 1: clockwise, -1: counterclockwise
+        , speed: 1.5 // Rounds per second
+        , trail: 100 // Afterglow percentage
+        , fps: 20 // Frames per second when using setTimeout() as a fallback for CSS
+        , zIndex: 2e9 // The z-index (defaults to 2000000000)
+        , className: 'spinner' // The CSS class to assign to the spinner
+        , top: '50%' // Top position relative to parent
+        , left: '50%' // Left position relative to parent
+        , shadow: true // Whether to render a shadow
+        , hwaccel: true // Whether to use hardware acceleration
+        , position: 'absolute' // Element positioning
+    }
+    var target = document.getElementById('foo')
+    var spinner = new Spinner(opts).spin(target);
+    $("body").addClass("loading");
 
     // Setup - add a text input to each footer cell
     // but they become header cells due to the CSS added in index.html
@@ -416,29 +528,28 @@ $(document).ready(function () {
         $(this).html('<input style="width: 100%;" type="text" placeholder="search..." />');
     });
 
-    function test() {
+    function loadData() {
         return $.getJSON('/json');
     }
 
-    // init bootstrap tab menu in modal
-    $('#modaltabs').tab();
+    //// init bootstrap tab menu in modal
+    //$('#modaltabs').tab();
 
-    $.when(test()).then(function (data) {
+    $.when(loadData()).then(function (data) {
         console.log('got data from /json');
         dataSources = data['dataSources'];
         dataSet = data['data'];
-        dataSet = replaceIdsWithValuesInDataSet(dataSet);
         table = $('#example').DataTable({
             "dom": 'C<"clear"><"toolbar">lfrtip',
-            "data": dataSet,
+            "data": null,
             "columns": [
                 {"data": "title"},
                 {"data": "description"},
                 {"data": "deadline"},
-                {"data": "responsible"},
-                {"data": "author"},
-                {"data": "tasklist"},
-                {"data": "priority"},
+                {"data": "responsible_text"},
+                {"data": "author_text"},
+                {"data": "tasklist_text"},
+                {"data": "priority_text"},
             ]
         });
 
@@ -463,6 +574,10 @@ $(document).ready(function () {
         globalDataSources = dataSources;
         initializeEditables();
         checkForTokenCookie();
+
+
+        loadRowsFromDataSet(dataSet);
+        $("body").removeClass("loading");
     });
 
 

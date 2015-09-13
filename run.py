@@ -26,8 +26,7 @@ def is_loggedin(f):
             if "token" in submit_data['auth'].keys():
                 if check_for_token_exists(submit_data['auth']['token']):
                     return f(*args, **kwargs)
-        else:
-            return jsonify(code=401)
+        return jsonify(code=401)
     return wrapper
 
 
