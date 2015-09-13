@@ -9,3 +9,4 @@ diff
 .ipynb*
 tags
 datetime_timedelta_updates_db.ipynb
+venv/*
