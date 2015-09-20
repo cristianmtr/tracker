@@ -222,19 +222,27 @@ function addValueFieldsToRowObject(dataObject) {
     if (responsible_id != null) {
         dataObject['responsible_text'] = dataSources['responsible'][responsible_id];
     }
-    ;
+    else {
+        dataObject['responsible_text'] = "";
+    }
     if (author_id != null) {
         dataObject['author_text'] = dataSources['responsible'][author_id];
     }
-    ;
+    else {
+        dataObject['author_text'] = "";
+    }
     if (tasklist_id != null) {
         dataObject['tasklist_text'] = dataSources['tasklist'][tasklist_id];
     }
-    ;
+    else {
+        dataObject['tasklist_text'] = "";
+    }
     if (priority != null) {
         dataObject['priority_text'] = dataSources['priority'][priority];
     }
-    ;
+    else {
+        dataObject['priority_text'] = "";
+    }
     return dataObject;
 }
 
