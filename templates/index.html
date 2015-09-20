@@ -1,3 +1,5 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <title>TaskFreak - Advanced</title>
@@ -20,26 +22,26 @@
 
     <!-- datatables js -->
     <script type="text/javascript" language="javascript"
-            src="/static/thirdparty/datatables.js"></script>
+            src="static/thirdparty/datatables.js"></script>
 
     <!-- datatables jquery js -->
     <script src="https://cdn.datatables.net/1.10.7/js/jquery.dataTables.min.js"></script>
 
     <!-- datatables col vis selector js -->
     <script type="text/javascript" language="javascript"
-            src="/static/thirdparty/datatables.colvis.js"></script>
+            src="static/thirdparty/datatables.colvis.js"></script>
 
     <!-- datatables col vis selector css -->
     <link rel="stylesheet" type="text/css"
-          href="/static/thirdparty/datatables.colvis.css"></link>
+          href="static/thirdparty/datatables.colvis.css"></link>
 
     <!-- datatables bootstrap css -->
     <link rel="stylesheet" type="text/css"
-          href="/static/thirdparty/datatablesbootstrap.css"></link>
+          href="static/thirdparty/datatablesbootstrap.css"></link>
 
     <!-- datatables bootstrap js -->
     <script type="text/javascript" language="javascript"
-            src="/static/thirdparty/datatablesbootstrap.js"></script>
+            src="static/thirdparty/datatablesbootstrap.js"></script>
 
     <!-- cdn for edit in place functionality -->
     <!-- css -->
@@ -50,7 +52,7 @@
     <script src="//cdnjs.cloudflare.com/ajax/libs/x-editable/1.5.0/bootstrap3-editable/js/bootstrap-editable.min.js"></script>
 
     <!-- moment js -->
-    <script src="/static/thirdparty/moment.js"></script>
+    <script src="static/thirdparty/moment.js"></script>
 
     <!--date time picker for bs3-->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.14.30/js/bootstrap-datetimepicker.min.js"></script>
@@ -59,10 +61,9 @@
 
     <!--cookies lib-->
     <script src="/static/thirdparty/cookies.js"></script>
-    <script src="/static/thirdparty/spin.min.js"></script>
 
     <!-- main -->
-    <script src="/static/main.js"></script>
+    <script src="static/main.js"></script>
 </head>
 <body>
 
@@ -73,8 +74,6 @@
         Create new
         </button></li>
 </ul>
-
-<div id="foo" class="loadingmodal"></div>
 
 <!-- Modal for authentication -->
 <div id="authModal" class="modal fade" role="dialog">
@@ -115,7 +114,6 @@
     </div>
 </div>
 
-
 <!-- Modal for creating and editing tasks -->
 <div class="modal fade" id="createNewModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
     <div class="modal-dialog" role="document">
@@ -138,14 +136,12 @@
                             <span>Priority:</span>
                         </td>
                         <td class="col-md-3">
-                            <select id="priority" class="form-control">
-                            </select>
+                            <a href="#" id="priority"></a></br>
                         </td>
                     </tr>
 
-                    <!-- Deadline - datetime picker -->
                     <tr>
-
+                        <!-- Deadline - datetime picker -->
                         <td class="col-md-1">
                             <span>Deadline:</span>
                         </td>
@@ -173,7 +169,7 @@
                             <span>Task list:</span>
                         </td>
                         <td class="col-md-3">
-                            <select id="tasklist" class="form-control"></select>
+                            <a href="#" id="tasklist"></a></br>
                         </td>
                     </tr>
 
@@ -183,7 +179,7 @@
                             <span>Title:</span>
                         </td>
                         <td class="col-md-3">
-                            <input id="title" type="text" class="form-control">
+                            <a href="#" id="title"></a></br>
                         </td>
                     </tr>
 
@@ -193,8 +189,7 @@
                             <span>Description:</span>
                         </td>
                         <td class="col-md-8">
-                                <textarea style="resize:none" rows="10" cols="60" id="description"
-                                          class="form-control"></textarea>
+                            <textarea style="resize:none" rows="10" cols="60" id="description"></textarea>
                         </td>
                     </tr>
 
@@ -204,7 +199,7 @@
                             <span>Responsible:</span>
                         </td>
                         <td class="col-md-3">
-                            <select id="responsible" class="form-control"></select>
+                            <a href="#" id="responsible"></a></br>
                         </td>
                     </tr>
 
@@ -276,22 +271,6 @@
         <td></td>
     </tr>
 </table>
-
-<!--modal for alert messages to user-->
-<div id="alertModal" class="modal fade" role="dialog">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal">&times;</button>
-
-                <div id="alertMessage" class="row">
-
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-
 </body>
 </html>
 
