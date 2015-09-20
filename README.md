@@ -12,6 +12,8 @@ Work in progress
 
 ## FEATURE
 
+- move to SQLAlchemy for schema;
+
 - in order to accommodate for multiple users modifying and creating tasks in the database, I should do the following:
   - have a dict mapping user_token to last time the user got an update;
   - have another dict mapping time of entry update/creation to type of item and its unique id;
