@@ -1,10 +1,17 @@
+# TRACKER
+
+A simple task tracker. With REST API, token authentication, and datatables integration.
+
+Work in progress
+
 # TODO
-- HIGH Priority: figure out empty strings to NULL;
-- switch to normal input fields, since having to always tick "confirm" for each field will become tedious and misleading;
-    - users might think that by ticking they have submitted the data in fact;
-- optimization: when submitting an update to a task (or creating one), don't do a full get afterwards:
-  - store the modifications as they are, and only wait for a response from the server that the data has been successfully submitted;
-	- if so, the row is simply updated / created;
+
+## FIX
+
+- figure out how to fit description textarea to proper size;
+
+## FEATURE
+
 - in order to accommodate for multiple users modifying and creating tasks in the database, I should do the following:
   - have a dict mapping user_token to last time the user got an update;
   - have another dict mapping time of entry update/creation to type of item and its unique id;
@@ -13,15 +20,14 @@
   - on click, go through the list, asking for the data;
     - each piece, update the table or its in-memory store of user_ids, tasklists etc.;
 	- for the editing the user has done, we will maintain another list of objects ({"id":<id>,"type":<type>}) and at the time of going through the notifications list, we will NOT get these;
-- figure out how to fit description textarea to proper size;
 
-## PROBLEMATIC
 - to handle token authorization
     - client sends username and password to /auth;
     - server generates token (with TTL) and returns it to client;
         - is stored in memory;
     - client js stores it as cookie (?);
     - is used as parameter for every request;
+    
 - caching dictionary of user ids to user names (and others) will need to be refreshed when there's a change;
   - poss. solution: if a submitData req. affects any of these, the row_id to be updated will be a reserved code (e.g. -1);
   - stress the client, not the server;
@@ -67,7 +73,7 @@ table.row("#93").data();
     - otoh, when calling Edit Task (todo), call the function in js to fill the fields in the modal with the values from the task;
 - options for selects should be provided by the server on the initial call and stored in some client-side variable; 
   
-### DEPLOYMENT
+### INSTALL
 
 - I am using an existing database based on [taskfreak](http://www.taskfreak.com/);
 - username and password are provided in a config.json file;
