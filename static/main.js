@@ -516,7 +516,7 @@ $(document).ready(function () {
         , hwaccel: true // Whether to use hardware acceleration
         , position: 'absolute' // Element positioning
     }
-    var target = document.getElementById('foo')
+    var target = document.getElementById('foo');
     var spinner = new Spinner(opts).spin(target);
     $("body").addClass("loading");
 
