@@ -6,3 +6,5 @@ tags
 .pydevproject
 .idea/*
 .ipynb_checkpoints/*
+redis/*
+venv/*
