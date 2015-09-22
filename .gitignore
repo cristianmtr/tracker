@@ -1,0 +1,8 @@
+*.pyc
+*.log
+config.json
+tags
+.project
+.pydevproject
+.idea/*
+.ipynb_checkpoints/*
