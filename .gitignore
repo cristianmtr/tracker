@@ -1,0 +1,8 @@
+*.log
+*.pyc
+flask/
+redis/
+jinja2/
+wheel/
+cacert.pem
+
