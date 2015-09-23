@@ -1,13 +1,8 @@
 from flask import Flask, render_template, jsonify, request
-from models import db, build_priority_id_to_name,\
-    build_tasklist_id_to_name, build_user_id_to_name
 import logging
 from logging.handlers import RotatingFileHandler
 from functools import wraps
-from backend import remove_token, check_for_token_exists,\
-    updateExistingTask, createNewTask, check_token_username_combination, \
-    auth_is_valid, generate_token, get_username_from_token, get_notifications
-
+import backend
 
 app = Flask(__name__)
 
@@ -24,7 +19,7 @@ def is_loggedin(f):
         submit_data = request.get_json()
         if "auth" in submit_data.keys():
             if "token" in submit_data['auth'].keys():
-                if check_for_token_exists(submit_data['auth']['token']):
+                if backend.check_for_token_exists(submit_data['auth']['token']):
                     return f(*args, **kwargs)
         return jsonify(code=401)
     return wrapper
@@ -34,10 +29,10 @@ def is_loggedin(f):
 @is_loggedin
 def notify():
     submit_data = request.get_json()
-    token = get_username_from_token(submit_data['auth']['token'])
-    username = get_username_from_token(token)
+    token = backend.get_username_from_token(submit_data['auth']['token'])
+    username = backend.get_username_from_token(token)
     data = {
-        "notifications": get_notifications(username),
+        "notifications": backend.get_notifications(username),
     }
     return jsonify(code=200, data=data)
 
@@ -51,7 +46,7 @@ def post_comment(taskid):
 @app.route("/comments/<taskid>", methods=["GET"])
 def get_comment(taskid):
     # comments = ['comment 1', 'comment 2', 'comment 3']
-    commentsDb = db.session.query(db.comment).filter(db.comment.itemId == taskid).all()
+    commentsDb = backend.get_comments_from_taskid(taskid)
     comments = []
     for comm in commentsDb:
         newComm = {}
@@ -66,8 +61,8 @@ def get_comment(taskid):
 def logout():
     if request.method == 'POST':
         submit_data = request.get_json()
-        if check_token_username_combination(submit_data['username'], submit_data['token']):
-            if remove_token(submit_data['token']):
+        if backend.check_token_username_combination(submit_data['username'], submit_data['token']):
+            if backend.remove_token(submit_data['token']):
                 return jsonify(code=200)
         return jsonify(code=400)
     else:
@@ -78,8 +73,8 @@ def logout():
 def cookie():
     if request.method == 'POST':
         submit_data = request.get_json()
-        if auth_is_valid(submit_data['username'], submit_data['password']):
-            token = generate_token(submit_data['username'])
+        if backend.auth_is_valid(submit_data['username'], submit_data['password']):
+            token = backend.generate_token(submit_data['username'])
             data = {
                 "token": token,
             }
@@ -92,7 +87,7 @@ def check():
     if request.method == "POST":
         submit_data = request.get_json()
         if 'username' in submit_data.keys() and 'token' in submit_data.keys():
-            if check_token_username_combination(submit_data['username'], submit_data['token']):
+            if backend.check_token_username_combination(submit_data['username'], submit_data['token']):
                 return jsonify(code=200)
         return jsonify(code=422)
 
@@ -106,7 +101,7 @@ def post_history(taskid):
 
 @app.route("/history/<taskid>", methods=["GET"])
 def history(taskid):
-    historyEntriesDb = db.session.query(db.history).filter(db.history.itemId==taskid).all()
+    historyEntriesDb = backend.get_history_from_taskid(taskid)
     historyEntries = []
     for entry in historyEntriesDb:
         newEntry = {}
@@ -121,7 +116,7 @@ def history(taskid):
 @is_loggedin
 def post_new_task():
     submit_data = request.get_json()
-    new_task_id = createNewTask(submit_data['data'])
+    new_task_id = backend.createNewTask(submit_data['data'])
     return jsonify(code=200, data=new_task_id)
 
 
@@ -129,7 +124,7 @@ def post_new_task():
 @is_loggedin
 def update_task(taskid):
     submit_data = request.get_json()
-    rtn_code = updateExistingTask(submit_data['data'], taskid)
+    rtn_code = backend.updateExistingTask(submit_data['data'], taskid)
     if rtn_code == taskid:
         return jsonify(code=200)
     return jsonify(code=500)
@@ -137,7 +132,7 @@ def update_task(taskid):
 
 @app.route("/task/<taskid>", methods=["GET"])
 def gettask(taskid):
-    task = db.session.query(db.task, db.task.itemId, db.task.title, db.task.description, db.task.deadlineDate, db.task.memberId, db.task.authorId,db.task.priority, db.task.projectId).filter(db.task.itemId == taskid).one()
+    task = backend.get_task(taskid)
     data = {
         'title': task.title if task.title else None,
         'priority': task.priority if task.priority else None,
@@ -150,10 +145,10 @@ def gettask(taskid):
     return jsonify(code=200, data=data)
 
 
-@app.route("/json/")
+@app.route("/json")
 def jsonInit():
     data = []
-    tasks = db.session.query(db.task, db.task.projectId, db.task.priority, db.task.itemId, db.task.title, db.task.description, db.task.deadlineDate, db.task.memberId, db.task.authorId).all()
+    tasks = backend.get_task()
     for t in tasks:
         this_task = {}
 
@@ -179,21 +174,23 @@ def jsonInit():
         # ['<button onclick="btnclick(this);">2</button>',"this is description nr 2", "2more", "responsible2", "authorId"],
         # ]
     dataSources = {
-        'priority': build_priority_id_to_name(),
-        'tasklist': build_tasklist_id_to_name(),
-        'responsible': build_user_id_to_name(),
+        'priority': backend.build_priority_id_to_name(),
+        'tasklist': backend.build_tasklist_id_to_name(),
+        'responsible': backend.build_user_id_to_name(),
     }
     return jsonify(
         data=data,
         dataSources=dataSources
     )
 
-
-if __name__ == "__main__":
+def main():
     app.debug = True
     app.secret_key = "123456"
     handler = RotatingFileHandler('app.log', maxBytes=10000, backupCount=1)
     handler.setLevel(logging.INFO)
     app.logger.addHandler(handler)
-    # db = Globals()
     app.run(host='0.0.0.0', port=5000)
+
+if __name__ == "__main__":
+    main()
+
