@@ -442,8 +442,10 @@ function fillCommentSection(comments) {
     var commentsContainer = $("#commentsList");
     commentsContainer.html("");
     for (var i in comments) {
-        // TODO proper
-        commentsContainer.prepend("<p>" + JSON.stringify(comments[i]) + "</p>");
+        var cmdiv = '<div class="row task-modal-list-item">' + dataSources['responsible'][comments[i].author_id] + ", at " + comments[i].postDate + "</div>";
+        cmdiv += "<div class='row'>" + comments[i].body + "</div>";
+        commentsContainer.append(cmdiv);
+            //(cmdiv);
     }
     ;
 };
@@ -451,8 +453,11 @@ function fillCommentSection(comments) {
 function fillHistorySection(historyEntries) {
     var historyContainer = $("#historyList");
     historyContainer.html("");
-    for (var i = 0; i < historyEntries.length; i++) {
-        historyContainer.prepend("<p>" + JSON.stringify(historyEntries[i]) + "</p>");
+    for (var i in historyEntries) {
+        var hsdiv = '<div class="row task-modal-list-item">';
+        hsdiv += "Set to " + parseInt(historyEntries[i].statusKey) * 20 + "% by " + dataSources['responsible'][historyEntries[i].memberId] + " at " + historyEntries[i].statusDate;
+        hsdiv += '</div>';
+        historyContainer.append(hsdiv);
     }
     ;
 };
