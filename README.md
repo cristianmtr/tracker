@@ -9,6 +9,7 @@ Work in progress
 ## FIX
 
 - figure out how to fit description textarea to proper size;
+- don't submit data if it has been changed in the meanwhile;
 
 ## FEATURE
 
@@ -22,6 +23,14 @@ Work in progress
   - on click, go through the list, asking for the data;
     - each piece, update the table or its in-memory store of user_ids, tasklists etc.;
 	- for the editing the user has done, we will maintain another list of objects ({"id":<id>,"type":<type>}) and at the time of going through the notifications list, we will NOT get these;
+  - when clicking SUBMIT, check if the data has been changed in the db before possibly overwriting it;
+    - have a timestamp on each entry, 'lastmodified', with date_time;
+    - check if greater than the timestamp the user has in memory on the client side;
+    - don't drop the changes he/she made in the form;
+      - offer dialogue option: overwrite, reload and drop, store;
+        - store: keep what the user has written in memory;
+	- show in the form what is now in the database;
+	- dialogue in the form (that is normally hidden) : keep this or overwrite;
 
 - to handle token authorization
     - client sends username and password to /auth;
