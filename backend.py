@@ -1,8 +1,10 @@
-from models import db, try_flush_session
+import models
 import datetime
 import redis
 
 DATE_FORMAT = "%a %b %d %H:%M:%S %Y"
+
+db = models.Globals()
 
 # 0 - tokens
 # 1 - last_time_checked_DB
@@ -74,7 +76,7 @@ def createNewTask(submitData):
     newTask = db.task()
     newTask = conditionalUpdateTaskWithSubmitDataIfExists(newTask, submitData)
     db.session.add(newTask)
-    if try_flush_session() == 0:
+    if db.try_flush_session() == 0:
         db.session.refresh(newTask)
         new_notification("new_task", newTask.itemId)
         return newTask.itemId
@@ -85,7 +87,7 @@ def updateExistingTask(submitData, task_id):
     taskToModify = db.session.query(db.task).filter(db.task.itemId == task_id).one()
     taskToModify = conditionalUpdateTaskWithSubmitDataIfExists(taskToModify, submitData)
     db.session.add(taskToModify)
-    if try_flush_session() == 0:
+    if db.try_flush_session() == 0:
         new_notification("task", task_id)
         return task_id
     return -1
@@ -131,3 +133,56 @@ def new_notification(event_type, unique_id):
     print "notification {}: {} {}".format(time_of_creation_string, event_type, unique_id)
     NOTIFICATIONS.hmset(time_of_creation_string, {"type": event_type, "id": unique_id})
     return
+
+def get_comments_from_taskid(taskid):
+    return db.session.query(db.comment).filter(db.comment.itemId == taskid).all()
+
+def get_history_from_taskid(taskid):
+    return db.session.query(db.history).filter(db.history.itemId==taskid).all()
+
+
+def get_task(taskid=None):
+
+    """
+
+    :param taskid: the id of the task. if None or not passed, will return all tasks
+    :return:
+    """
+    if taskid:
+        return db.session.query(db.task, db.task.itemId, db.task.title, db.task.description, db.task.deadlineDate, db.task.memberId, db.task.authorId,db.task.priority, db.task.projectId).filter(db.task.itemId == taskid).one()
+    else:
+        return db.session.query(db.task, db.task.projectId, db.task.priority, db.task.itemId, db.task.title, db.task.description, db.task.deadlineDate, db.task.memberId, db.task.authorId).all()
+
+
+def build_user_id_to_name():
+    """returns dictionary mapping users ids to user names"""
+    user_id_to_name = {}
+    users = db.session.query(db.user, db.user.memberId, db.user.firstName).all()
+    for u in users:
+        user_id_to_name[u.memberId] = u.firstName
+    return user_id_to_name
+
+
+def build_tasklist_id_to_name():
+    """returns dictionary mapping tasklist (projects) IDs to their names"""
+    tasklists_dict = {}
+    all_tasklists = db.session.query(db.tasklist, db.tasklist.projectId, db.tasklist.name).all()
+    for tsklst in all_tasklists:
+        tasklists_dict[tsklst.projectId] = tsklst.name
+    return tasklists_dict
+
+
+def build_priority_id_to_name():
+    """returns dictionary mapping priority ids to names"""
+    priority = {
+        1: 'Urgent',
+        2: 'High priority',
+        3: 'Medium',
+        4: 'Normal',
+        5: 'Low priority',
+        6: 'Low priority',
+        7: 'Very Low priority',
+        8: 'Very Low priority',
+        9: 'Whatever',
+    }
+    return priority
