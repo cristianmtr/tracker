@@ -10,6 +10,7 @@ Work in progress
 
 - figure out how to fit description textarea to proper size;
 - don't submit data if it has been changed in the meanwhile;
+- <pre> tags on description fields;
 
 ## FEATURE
 
