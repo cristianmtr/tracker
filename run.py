@@ -150,7 +150,7 @@ def gettask(taskid):
     return jsonify(code=200, data=data)
 
 
-@app.route("/json/")
+@app.route("/json")
 def jsonInit():
     data = []
     tasks = db.session.query(db.task, db.task.projectId, db.task.priority, db.task.itemId, db.task.title, db.task.description, db.task.deadlineDate, db.task.memberId, db.task.authorId).all()
