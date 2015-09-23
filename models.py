@@ -6,8 +6,10 @@ from sqlalchemy.orm import Session
 import json
 with open('config.json') as config_file:
     config = json.load(config_file)
-    
-engine = create_engine('mysql+mysqlconnector://{}:{}@localhost:3306/taskfreak'.format(config['username'],config['password']))
+    print "Using config:"
+    print json.dumps(config, sort_keys=False, indent=4, separators=(',',': '))
+
+engine = create_engine('mysql+mysqlconnector://{0}:{1}@{2}:{3}/{4}'.format(config['username'],config['password']), config['host'], config['port'], config['database'])
 
 Base = automap_base()
 # declare objects
