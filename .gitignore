@@ -11,3 +11,12 @@ tags
 datetime_timedelta_updates_db.ipynb
 venv/*
 redis/*
+flask/
+redis/
+jinja2/
+wheel/
+cacert.pem
+itsdangerous.py
+markupsafe/
+sqlalchemy/
+werkzeug/

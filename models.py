@@ -2,12 +2,7 @@ from sqlalchemy import create_engine
 from sqlalchemy.ext.automap import automap_base
 from sqlalchemy.orm import Session
 
-# load config secrets
-import json
-with open('config.json') as config_file:
-    config = json.load(config_file)
-    
-engine = create_engine('mysql+mysqlconnector://{}:{}@localhost:3306/taskfreak'.format(config['username'],config['password']))
+engine = create_engine('mysql+mysqlconnector://root@10.4.8.77:3306/taskfreak')
 
 Base = automap_base()
 # declare objects
@@ -98,3 +93,4 @@ def create_history_object():
     return Base.classes.frk_itemStatus
 
 db = Globals()
+
