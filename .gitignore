@@ -6,3 +6,7 @@ jinja2/
 wheel/
 cacert.pem
 
+itsdangerous.py
+markupsafe/
+sqlalchemy/
+werkzeug/
