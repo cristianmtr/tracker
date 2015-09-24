@@ -1,53 +1,60 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <title>TaskFreak - Advanced</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"></meta>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <!-- icon -->
-    <link rel="shortcut icon" href="/static/favicon.ico"></link>
+    <link rel="shortcut icon" href="/static/favicon.ico">
 
     <!--main css-->
-    <link rel="stylesheet" href="/static/main.css"></link>
+    <link rel="stylesheet" href="/static/main.css">
 
-    <!-- jquery -->
-    <script type="text/javascript" language="javascript"
-            src="/static/thirdparty/jquery.js"></script>
+    <link rel="stylesheet" type="text/css" href="static/datatables.min.css"/>
 
-    <!-- bootstrap css -->
-    <link href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css" rel="stylesheet"></link>
+    <script type="text/javascript" src="static/datatables.min.js"></script>
 
-    <!-- bootstrap3 js -->
-    <script src="//netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
+{#    <!-- jquery -->#}
+{#    <script type="text/javascript" language="javascript"#}
+{#            src="/static/thirdparty/jquery.js"></script>#}
+{##}
+{#    <!-- bootstrap css -->#}
+{#    <link href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css" rel="stylesheet">#}
+{##}
+{#    <!-- bootstrap3 js -->#}
+{#    <script src="//netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>#}
+{##}
+{#    <!-- datatables js -->#}
+{#    <script type="text/javascript" language="javascript"#}
+{#            src="/static/thirdparty/datatables.js"></script>#}
+{##}
+{#    <!-- datatables jquery js -->#}
+{#    <script src="https://cdn.datatables.net/1.10.7/js/jquery.dataTables.min.js"></script>#}
+{##}
+{#    <!-- datatables col vis selector js -->#}
+{#    <script type="text/javascript" language="javascript"#}
+{#            src="/static/thirdparty/datatables.colvis.js"></script>#}
+{##}
+{#    <!-- datatables col vis selector css -->#}
+{#    <link rel="stylesheet" type="text/css"#}
+{#          href="/static/thirdparty/datatables.colvis.css">#}
+{##}
+{#    <!-- datatables bootstrap css -->#}
+{#    <link rel="stylesheet" type="text/css"#}
+{#          href="/static/thirdparty/datatablesbootstrap.css">#}
+{##}
+{#    <!-- datatables bootstrap js -->#}
+{#    <script type="text/javascript" language="javascript"#}
+{#            src="/static/thirdparty/datatablesbootstrap.js"></script>#}
+{##}
+{#    <script type="text/javascript" language="javascript"#}
+{#            src="https://cdn.datatables.net/responsive/1.0.7/js/dataTables.responsive.min.js"></script>#}
 
-    <!-- datatables js -->
-    <script type="text/javascript" language="javascript"
-            src="/static/thirdparty/datatables.js"></script>
-
-    <!-- datatables jquery js -->
-    <script src="https://cdn.datatables.net/1.10.7/js/jquery.dataTables.min.js"></script>
-
-    <!-- datatables col vis selector js -->
-    <script type="text/javascript" language="javascript"
-            src="/static/thirdparty/datatables.colvis.js"></script>
-
-    <!-- datatables col vis selector css -->
-    <link rel="stylesheet" type="text/css"
-          href="/static/thirdparty/datatables.colvis.css"></link>
-
-    <!-- datatables bootstrap css -->
-    <link rel="stylesheet" type="text/css"
-          href="/static/thirdparty/datatablesbootstrap.css"></link>
-
-    <!-- datatables bootstrap js -->
-    <script type="text/javascript" language="javascript"
-            src="/static/thirdparty/datatablesbootstrap.js"></script>
-
-    <!-- cdn for edit in place functionality -->
-    <!-- css -->
-    <link href="//cdnjs.cloudflare.com/ajax/libs/x-editable/1.5.0/bootstrap3-editable/css/bootstrap-editable.css"
-          rel="stylesheet"/>
-
-    <!-- js -->
-    <script src="//cdnjs.cloudflare.com/ajax/libs/x-editable/1.5.0/bootstrap3-editable/js/bootstrap-editable.min.js"></script>
+{#    <!-- cdn for edit in place functionality -->#}
+{#    <!-- css -->#}
+{#    <link href="//cdnjs.cloudflare.com/ajax/libs/x-editable/1.5.0/bootstrap3-editable/css/bootstrap-editable.css"#}
+{#          rel="stylesheet"/>#}
+{##}
+{#    <!-- js -->#}
+{#    <script src="//cdnjs.cloudflare.com/ajax/libs/x-editable/1.5.0/bootstrap3-editable/js/bootstrap-editable.min.js"></script>#}
 
     <!-- moment js -->
     <script src="/static/thirdparty/moment.js"></script>
@@ -65,13 +72,14 @@
     <script src="/static/main.js"></script>
 </head>
 <body>
-
+<div class="row">
+<div class="col-md-12">
 <!-- button for creating new task -->
 <ul class="nav nav-pills nav-justified">
     <li button type="button" class="btn btn-primary btn-lg" data-toggle="modal" onclick="prepareModalForNewTask();"
         data-target="#createNewModal">
         Create new
-        </button></li>
+        </li>
 </ul>
 
 <div id="foo" class="loadingmodal"></div>
@@ -90,11 +98,11 @@
                 <div id="authHolder">
                     <div id="authmessage" class="row"></div>
                     <div class="row"><span class="col-md-3">Username</span><input class="col-md-3" type="text"
-                                                                                  id="username"></input></div>
+                                                                                  id="username"></div>
                     <div class="row" style="margin-top:20px;"><span class="col-md-3">Password</span><input
                             class="col-md-3"
                             type="password"
-                            id="password"></input>
+                            id="password">
                     </div>
                 </div>
                 <div id="userInfo">
@@ -240,35 +248,37 @@
 </div>
 
 <!-- table for data -->
-<table id="example" class="display table-striped table-condensed table-bordered" cellspacing="0" width="100%">
+
+<table id="example" class="table table-striped table-hover dt-responsive" cellspacing="0" width="100%"
+       role="grid">
     <thead>
     <tr>
-        <th class="col-md-1">ID</th>
-        <th class="col-md-1">Title</th>
-        <th class="col-md-3">Description</th>
-        <th class="col-md-1">Deadline</th>
-        <th class="col-md-1">Responsible</th>
-        <th class="col-md-1">Author</th>
-        <th class="col-md-1">Tasklist</th>
-        <th class="col-md-1">Priority</th>
+        <th >#</th>
+        <th >Title</th>
+        <th >Description</th>
+        <th >Deadline</th>
+        <th >Responsible</th>
+        <th >Author</th>
+        <th >Tasklist</th>
+        <th >Priority</th>
     </tr>
     </thead>
 
     <tfoot style="display: table-header-group;">
     <tr>
-        <th class="col-md-1">ID</th>
-        <th class="col-md-1">Title</th>
-        <th class="col-md-3">Description</th>
-        <th class="col-md-1">Deadline</th>
-        <th class="col-md-1">Responsible</th>
-        <th class="col-md-1">Author</th>
-        <th class="col-md-1">Tasklist</th>
-        <th class="col-md-1">Priority</th>
+        <th >#</th>
+        <th >Title</th>
+        <th >Description</th>
+        <th >Deadline</th>
+        <th >Responsible</th>
+        <th >Author</th>
+        <th >Tasklist</th>
+        <th >Priority</th>
     </tr>
     </tfoot>
 
 </table>
-
+</div>
 <!--modal for alert messages to user-->
 <div id="alertModal" class="modal fade" role="dialog">
     <div class="modal-dialog">
@@ -283,7 +293,7 @@
         </div>
     </div>
 </div>
-
+</div>
 </body>
 </html>
 

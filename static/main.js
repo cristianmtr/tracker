@@ -254,7 +254,7 @@ function idExistsInTableRows(idToCheck) {
 };
 
 function setAdditionalIDField(dataObject) {
-        // WORKAROUND: dataTables does not read the ID field
+    // WORKAROUND: dataTables does not read the ID field
     // to be displayed as column
     dataObject['ID'] = dataObject['DT_RowId'];
     return dataObject;
@@ -454,7 +454,7 @@ function fillCommentSection(comments) {
         var cmdiv = '<div class="row task-modal-list-item">' + dataSources['responsible'][comments[i].author_id] + ", at " + comments[i].postDate + "</div>";
         cmdiv += "<div class='row'>" + comments[i].body + "</div>";
         commentsContainer.append(cmdiv);
-            //(cmdiv);
+        //(cmdiv);
     }
     ;
 };
@@ -563,7 +563,12 @@ $(document).ready(function () {
         dataSet = data['data'];
         table = $('#example').DataTable({
             "dom": 'C<"clear"><"toolbar">lfrtip',
-            "data": null,
+            scrollY: 800,
+            scrollX: 300,
+            scrollCollapse: true,
+            fixedHeader: true,
+            responsive: true,
+            pagination: false,
             "columns": [
                 {"data": "ID"},
                 {"data": "title"},
@@ -572,9 +577,9 @@ $(document).ready(function () {
                 {"data": "responsible_text"},
                 {"data": "author_text"},
                 {"data": "tasklist_text"},
-                {"data": "priority_text"},
+                {"data": "priority_text"}
             ],
-            "order": [[3, "desc"]],
+            "order": [[3, "desc"]]
         });
 
         $("div.toolbar").html('<button id="userstatus" type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#authModal">Not logged in</button><div id="otherdiv"></div>');
