@@ -253,9 +253,17 @@ function idExistsInTableRows(idToCheck) {
     return true;
 };
 
+function setAdditionalIDField(dataObject) {
+        // WORKAROUND: dataTables does not read the ID field
+    // to be displayed as column
+    dataObject['ID'] = dataObject['DT_RowId'];
+    return dataObject;
+}
+
 function addNewRow(newTaskId, jsonDataObject) {
     jsonDataObject = addValueFieldsToRowObject(jsonDataObject);
     jsonDataObject['DT_RowId'] = newTaskId;
+    jsonDataObject = setAdditionalIDField(jsonDataObject);
     table.row.add(jsonDataObject);
     table.draw();
 };
@@ -263,6 +271,7 @@ function addNewRow(newTaskId, jsonDataObject) {
 function setDataInRowById(DT_RowId, dataObject) {
     dataObject = addValueFieldsToRowObject(dataObject);
     dataObject['DT_RowId'] = DT_RowId;
+    jsonDataObject = setAdditionalIDField(jsonDataObject);
     console.log("trying to update row " + DT_RowId + " with data " + JSON.stringify(dataObject));
     table.row("#" + DT_RowId).data(dataObject);
 };
@@ -556,6 +565,7 @@ $(document).ready(function () {
             "dom": 'C<"clear"><"toolbar">lfrtip',
             "data": null,
             "columns": [
+                {"data": "ID"},
                 {"data": "title"},
                 {"data": "description"},
                 {"data": "deadline"},
@@ -564,7 +574,7 @@ $(document).ready(function () {
                 {"data": "tasklist_text"},
                 {"data": "priority_text"},
             ],
-            "order": [[2, "desc"]],
+            "order": [[3, "desc"]],
         });
 
         $("div.toolbar").html('<button id="userstatus" type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#authModal">Not logged in</button><div id="otherdiv"></div>');
