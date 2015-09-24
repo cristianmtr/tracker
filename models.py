@@ -41,3 +41,4 @@ class Globals(object):
             print 'ERROR FLUSHING DB: {}\nROLLING BACK'.format(e)
             self.session.rollback()
             return -1
+
