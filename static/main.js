@@ -563,7 +563,8 @@ $(document).ready(function () {
                 {"data": "author_text"},
                 {"data": "tasklist_text"},
                 {"data": "priority_text"},
-            ]
+            ],
+            "order": [[2, "desc"]],
         });
 
         $("div.toolbar").html('<button id="userstatus" type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#authModal">Not logged in</button><div id="otherdiv"></div>');
