@@ -271,7 +271,7 @@ function addNewRow(newTaskId, jsonDataObject) {
 function setDataInRowById(DT_RowId, dataObject) {
     dataObject = addValueFieldsToRowObject(dataObject);
     dataObject['DT_RowId'] = DT_RowId;
-    jsonDataObject = setAdditionalIDField(jsonDataObject);
+    dataObject = setAdditionalIDField(dataObject);
     console.log("trying to update row " + DT_RowId + " with data " + JSON.stringify(dataObject));
     table.row("#" + DT_RowId).data(dataObject);
 };
