@@ -564,7 +564,6 @@ $(document).ready(function () {
         table = $('#example').DataTable({
             "dom": 'C<"clear"><"toolbar">lfrtip',
             scrollY: 800,
-            scrollX: 300,
             scrollCollapse: true,
             fixedHeader: true,
             responsive: true,
