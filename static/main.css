@@ -2,6 +2,11 @@ div#authmessage {
     color: red;
 }
 
+/*for comments and history items in task modal*/
+.task-modal-list-item {
+    padding-top: 10px;
+}
+
 .loadingmodal {
     display:    none;
     position:   fixed;

@@ -42,4 +42,3 @@ class Globals(object):
             self.session.rollback()
             return -1
 
-# db = Globals()

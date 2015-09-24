@@ -134,11 +134,15 @@ def new_notification(event_type, unique_id):
     NOTIFICATIONS.hmset(time_of_creation_string, {"type": event_type, "id": unique_id})
     return
 
+
 def get_comments_from_taskid(taskid):
-    return db.session.query(db.comment).filter(db.comment.itemId == taskid).all()
+    return db.session.query(db.comment.body, db.comment.memberId, db.comment.postDate, db.comment.lastChangeDate).\
+        filter(db.comment.itemId == taskid).order_by(db.comment.postDate).all()[::-1]
+
 
 def get_history_from_taskid(taskid):
-    return db.session.query(db.history).filter(db.history.itemId==taskid).all()
+    return db.session.query(db.history.memberId, db.history.statusDate, db.history.statusKey).\
+        filter(db.history.itemId == taskid).order_by(db.history.statusDate).all()[::-1]
 
 
 def get_task(taskid=None):
