@@ -1,0 +1,3 @@
+- show percentage, with colours in table;
+- default sorting to "deadline", descending;
+- show id in table, first column;
