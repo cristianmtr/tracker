@@ -7,7 +7,9 @@ Work in progress
 # TODO
 
 ## FIX
-
+- fix UI issues: no showing "+" sign when shrinking table;
+	- make it scroll instead, always;
+	- make sure columns match and scroll as well;
 - add <id-type column>_text to json endpoints;
 - support proper encoding of national chars;
 - UI: fix scrollX size to viewport;
