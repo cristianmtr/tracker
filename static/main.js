@@ -147,10 +147,16 @@ function submitTaskSuccessCallback(response, thisItemId, dataToSubmit) {
 
 function submitTaskFromModal() {
     var thisItemId = currentItemId;
+    //validate if deadline field is empty or invalid data
+    var deadline_in_form = $('#deadline').data("DateTimePicker").date();
+    if ( deadline_in_form !== null && deadline_in_form !== "" )
+    {
+        deadline_in_form = deadline_in_form.format("YYYY-MM-DD");
+    }
     var data = {
         'title': $("#title").val(),
         'priority': $('#priority').val(),
-        'deadline': $('#deadline').data("DateTimePicker").date().format("YYYY-MM-DD"),
+        'deadline': deadline_in_form,
         'tasklist': $('#tasklist').val(),
         'description': $('#description').val(),
         'responsible': $('#responsible').val(),

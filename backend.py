@@ -53,30 +53,27 @@ def auth_is_valid(username, password):
     return False
 
 
-def conditionalUpdateTaskWithSubmitDataIfExists(taskObject, dataToProcess):
+def update_model_object_with_submit_data(expectedKeys, dataToProcess, modelObject):
     """checks if the data to be submitted contains data in the keys specific to the task table
 if so, adds them to the task object
 return newly updated task object"""
-    if 'priority' in dataToProcess.keys() and dataToProcess['priority'] != "":
-        taskObject.priority = dataToProcess['priority']
-    if 'deadline' in dataToProcess.keys() and dataToProcess['deadline'] != "":
-        taskObject.deadlineDate = dataToProcess['deadline']
-    if 'tasklist' in dataToProcess.keys() and dataToProcess['tasklist'] != "":
-        taskObject.projectId = dataToProcess['tasklist']
-    if 'title' in dataToProcess.keys() and dataToProcess['title'] != "":
-        taskObject.title = dataToProcess['title']
-    if 'description' in dataToProcess.keys():
-        taskObject.description = dataToProcess['description']
-    if 'responsible' in dataToProcess.keys() and dataToProcess['responsible'] != "":
-        taskObject.memberId = dataToProcess['responsible']
-    return taskObject
+    for key in expectedKeys:
+        if key in dataToProcess.keys() and dataToProcess[key] is not None and dataToProcess[key].strip() != "":
+            modelObject.key = dataToProcess[key]
+    return modelObject
+
+
+def update_task_object_with_submit_data(modelObject, dataToProcess):
+    expectedKeys = ['priority', 'deadline', 'tasklist', 'title', 'description', 'responsible']
+    modelObject = update_model_object_with_submit_data(expectedKeys, dataToProcess, modelObject)
+    return modelObject
 
 
 def createNewTask(submitData):
     newTask = db.task()
-    newTask = conditionalUpdateTaskWithSubmitDataIfExists(newTask, submitData)
+    newTask = update_task_object_with_submit_data(newTask, submitData)
     db.session.add(newTask)
-    if db.try_flush_session() == 0:
+    if db.try_commit() == 0:
         db.session.refresh(newTask)
         new_notification("new_task", newTask.itemId)
         return newTask.itemId
@@ -84,10 +81,12 @@ def createNewTask(submitData):
 
 
 def updateExistingTask(submitData, task_id):
+    # import pdb
+    # pdb.set_trace()
     taskToModify = db.session.query(db.task).filter(db.task.itemId == task_id).one()
-    taskToModify = conditionalUpdateTaskWithSubmitDataIfExists(taskToModify, submitData)
+    taskToModify = update_task_object_with_submit_data(taskToModify, submitData)
     db.session.add(taskToModify)
-    if db.try_flush_session() == 0:
+    if db.try_commit() == 0:
         new_notification("task", task_id)
         return task_id
     return -1

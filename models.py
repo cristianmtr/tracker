@@ -2,6 +2,7 @@ from sqlalchemy import create_engine
 from sqlalchemy.ext.automap import automap_base
 from sqlalchemy.orm import Session
 import json
+import sys
 
 
 def create_engine_from_config(config_file="config.json"):
@@ -9,9 +10,9 @@ def create_engine_from_config(config_file="config.json"):
         config = json.load(config_file_handle)
         print "Using config:"
         print json.dumps(config, sort_keys=False, indent=4, separators=(',',': '))
-    engine = create_engine('mysql+mysqlconnector://%s:%s@%s:%s/%s' %(config['username'],config['password'], config['host'], config['port'], config['database']))
+    engine = create_engine('mysql+mysqlconnector://%s:%s@%s:%s/%s' %(config['username'],config['password'], config['host'], config['port'], config['database']),
+                           pool_recycle=3600)
     return engine
-
 
 
 # declare objects
@@ -29,16 +30,17 @@ class Globals(object):
         self.comment = Base.classes.frk_itemComment
         self.history = Base.classes.frk_itemStatus
 
-
-    def try_flush_session(self):
-        """tries to flush session
-    if it fails, it rolls back and returns -1
-    it it's ok, return 0"""
+    def try_commit(self):
+        """
+        tries to commit session as is
+        :rtype : int
+        returns 0 on success
+        - 1 on fail
+        """
         try:
-            self.session.flush()
+            self.session.commit()
             return 0
         except Exception as e:
-            print 'ERROR FLUSHING DB: {}\nROLLING BACK'.format(e)
+            print >> sys.stderr, 'ERROR COMMITTING DB: {}\nROLLING BACK'.format(e)
             self.session.rollback()
             return -1
-
