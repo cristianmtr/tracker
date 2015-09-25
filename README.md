@@ -8,7 +8,6 @@ Work in progress
 
 ## FIX
 
-- remove db.<modelname> from query statements where you only needs certain columns;
 - figure out how to fit description textarea to proper size;
 - don't submit data if it has been changed in the meanwhile;
 
