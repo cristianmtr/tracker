@@ -8,6 +8,7 @@ Work in progress
 
 ## FIX
 
+- don't depend on mappings between client-side attributes and database ones (see: feature - move to SQLA);
 - figure out how to fit description textarea to proper size;
 - don't submit data if it has been changed in the meanwhile;
 

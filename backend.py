@@ -57,14 +57,20 @@ def update_model_object_with_submit_data(expectedKeys, dataToProcess, modelObjec
     """checks if the data to be submitted contains data in the keys specific to the task table
 if so, adds them to the task object
 return newly updated task object"""
-    for key in expectedKeys:
+    for key in expectedKeys.keys():
         if key in dataToProcess.keys() and dataToProcess[key] is not None and dataToProcess[key].strip() != "":
-            modelObject.key = dataToProcess[key]
+            attribute_to_modify = expectedKeys[key]
+            modelObject.__setattr__(attribute_to_modify, dataToProcess[key])
     return modelObject
 
 
 def update_task_object_with_submit_data(modelObject, dataToProcess):
-    expectedKeys = ['priority', 'deadline', 'tasklist', 'title', 'description', 'responsible']
+    expectedKeys = {'priority': 'priority',
+                    'deadline': 'deadlineDate',
+                    'tasklist': 'projectId',
+                    'title': 'title',
+                    'description': 'description',
+                    'responsible': 'memberId'}
     modelObject = update_model_object_with_submit_data(expectedKeys, dataToProcess, modelObject)
     return modelObject
 
@@ -135,26 +141,28 @@ def new_notification(event_type, unique_id):
 
 
 def get_comments_from_taskid(taskid):
-    return db.session.query(db.comment.body, db.comment.memberId, db.comment.postDate, db.comment.lastChangeDate).\
-        filter(db.comment.itemId == taskid).order_by(db.comment.postDate).all()[::-1]
+    return db.session.query(db.comment.body, db.comment.memberId, db.comment.postDate, db.comment.lastChangeDate). \
+               filter(db.comment.itemId == taskid).order_by(db.comment.postDate).all()[::-1]
 
 
 def get_history_from_taskid(taskid):
-    return db.session.query(db.history.memberId, db.history.statusDate, db.history.statusKey).\
-        filter(db.history.itemId == taskid).order_by(db.history.statusDate).all()[::-1]
+    return db.session.query(db.history.memberId, db.history.statusDate, db.history.statusKey). \
+               filter(db.history.itemId == taskid).order_by(db.history.statusDate).all()[::-1]
 
 
 def get_task(taskid=None):
-
     """
 
     :param taskid: the id of the task. if None or not passed, will return all tasks
     :return:
     """
     if taskid:
-        return db.session.query(db.task, db.task.itemId, db.task.title, db.task.description, db.task.deadlineDate, db.task.memberId, db.task.authorId,db.task.priority, db.task.projectId).filter(db.task.itemId == taskid).one()
+        return db.session.query(db.task, db.task.itemId, db.task.title, db.task.description, db.task.deadlineDate,
+                                db.task.memberId, db.task.authorId, db.task.priority, db.task.projectId).filter(
+            db.task.itemId == taskid).one()
     else:
-        return db.session.query(db.task, db.task.projectId, db.task.priority, db.task.itemId, db.task.title, db.task.description, db.task.deadlineDate, db.task.memberId, db.task.authorId).all()
+        return db.session.query(db.task, db.task.projectId, db.task.priority, db.task.itemId, db.task.title,
+                                db.task.description, db.task.deadlineDate, db.task.memberId, db.task.authorId).all()
 
 
 def build_user_id_to_name():
