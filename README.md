@@ -8,6 +8,7 @@ Work in progress
 
 ## FIX
 
+- add <id-type column>_text to json endpoints;
 - support proper encoding of national chars;
 - UI: fix scrollX size to viewport;
 - don't depend on mappings between client-side attributes and database ones (see: feature - move to SQLA);
