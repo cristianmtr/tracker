@@ -30,7 +30,55 @@ body.loading .loadingmodal {
     display: block;
 }
 
-table.dataTable th,
-table.dataTable td {
-    white-space: pre-line;
+table {
+    table-layout: fixed;
+}
+
+table th,
+table td {
+    white-space: pre-wrap;
+    word-wrap: break-word;
+}
+
+.countTable table tr td:nth-child(1), thead th:nth-child(1) {
+    /*color: yellow;*/
+    width: 10%;
+    max-width: 10%;
+}
+
+.countTable table tr td:nth-child(2), thead th:nth-child(2) {
+    /*color: yellow;*/
+    width: 10%;
+    max-width: 10%;
+}
+
+.countTable table tr td:nth-child(3), thead th:nth-child(3) {
+    /*color: yellow;*/
+    width: 30%;
+    max-width: 30%;
+}
+
+.countTable table tr td:nth-child(4), thead th:nth-child(4) {
+    width: 10%;
+    max-width: 10%;
+}
+
+.countTable table tr td:nth-child(5), thead th:nth-child(5) {
+    width: 10%;
+    max-width: 10%;
+}
+
+.countTable table tr td:nth-child(6), thead th:nth-child(6) {
+   width: 10%;
+    max-width: 10%;
+}
+
+.countTable table tr td:nth-child(7), thead th:nth-child(7) {
+    width: 10%;
+    max-width: 10%;
+}
+
+.countTable table tr td:nth-child(8), thead th:nth-child(8) {
+  width: 10%;
+    max-width: 10%;
 }

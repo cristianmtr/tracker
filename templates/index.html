@@ -1,5 +1,7 @@
+<!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
+    <meta charset="UTF-8"/>
     <title>TaskFreak - Advanced</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <!-- icon -->
@@ -11,50 +13,6 @@
     <link rel="stylesheet" type="text/css" href="static/datatables.min.css"/>
 
     <script type="text/javascript" src="static/datatables.min.js"></script>
-
-{#    <!-- jquery -->#}
-{#    <script type="text/javascript" language="javascript"#}
-{#            src="/static/thirdparty/jquery.js"></script>#}
-{##}
-{#    <!-- bootstrap css -->#}
-{#    <link href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css" rel="stylesheet">#}
-{##}
-{#    <!-- bootstrap3 js -->#}
-{#    <script src="//netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>#}
-{##}
-{#    <!-- datatables js -->#}
-{#    <script type="text/javascript" language="javascript"#}
-{#            src="/static/thirdparty/datatables.js"></script>#}
-{##}
-{#    <!-- datatables jquery js -->#}
-{#    <script src="https://cdn.datatables.net/1.10.7/js/jquery.dataTables.min.js"></script>#}
-{##}
-{#    <!-- datatables col vis selector js -->#}
-{#    <script type="text/javascript" language="javascript"#}
-{#            src="/static/thirdparty/datatables.colvis.js"></script>#}
-{##}
-{#    <!-- datatables col vis selector css -->#}
-{#    <link rel="stylesheet" type="text/css"#}
-{#          href="/static/thirdparty/datatables.colvis.css">#}
-{##}
-{#    <!-- datatables bootstrap css -->#}
-{#    <link rel="stylesheet" type="text/css"#}
-{#          href="/static/thirdparty/datatablesbootstrap.css">#}
-{##}
-{#    <!-- datatables bootstrap js -->#}
-{#    <script type="text/javascript" language="javascript"#}
-{#            src="/static/thirdparty/datatablesbootstrap.js"></script>#}
-{##}
-{#    <script type="text/javascript" language="javascript"#}
-{#            src="https://cdn.datatables.net/responsive/1.0.7/js/dataTables.responsive.min.js"></script>#}
-
-{#    <!-- cdn for edit in place functionality -->#}
-{#    <!-- css -->#}
-{#    <link href="//cdnjs.cloudflare.com/ajax/libs/x-editable/1.5.0/bootstrap3-editable/css/bootstrap-editable.css"#}
-{#          rel="stylesheet"/>#}
-{##}
-{#    <!-- js -->#}
-{#    <script src="//cdnjs.cloudflare.com/ajax/libs/x-editable/1.5.0/bootstrap3-editable/js/bootstrap-editable.min.js"></script>#}
 
     <!-- moment js -->
     <script src="/static/thirdparty/moment.js"></script>
@@ -73,13 +31,14 @@
 </head>
 <body>
 <div class="row">
-<div class="col-md-12">
+    <div class="col-md-12">
 <!-- button for creating new task -->
-<ul class="nav nav-pills nav-justified">
-    <li button type="button" class="btn btn-primary btn-lg" data-toggle="modal" onclick="prepareModalForNewTask();"
+<ul class="row nav nav-pills nav-justified">
+    <li button type="button" class="btn btn-primary btn-lg" data-toggle="modal"
+        onclick="prepareModalForNewTask();"
         data-target="#createNewModal">
         Create new
-        </li>
+    </li>
 </ul>
 
 <div id="foo" class="loadingmodal"></div>
@@ -114,9 +73,11 @@
 
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-                <button id="loginButton" type="button" onclick="tryAuthenticate();" class="btn btn-primary">Login
+                <button id="loginButton" type="button" onclick="tryAuthenticate();" class="btn btn-primary">
+                    Login
                 </button>
-                <button id="logoutButton" type="button" onclick="logOut();" class="btn btn-primary">Logout</button>
+                <button id="logoutButton" type="button" onclick="logOut();" class="btn btn-primary">Logout
+                </button>
             </div>
 
         </div>
@@ -137,8 +98,8 @@
 
                 <!-- table with form goes here -->
 
-                <table id="modaltable" class="display table-striped table-condensed table-bordered" cellspacing="0"
-                       width="100%">
+                <table id="modaltable" class="display table-striped table-condensed table-bordered"
+                       cellspacing="0">
 
                     <!-- Priority - dropdown -->
                     <tr>
@@ -248,36 +209,36 @@
 </div>
 
 <!-- table for data -->
+<div class="countTable">
+    <table id="example" class="table table-striped"
+           style="width: 100%;">
+        <thead>
+        <tr>
+            <th>#</th>
+            <th>Title</th>
+            <th>Description</th>
+            <th>Deadline</th>
+            <th>Responsible</th>
+            <th>Author</th>
+            <th>Tasklist</th>
+            <th>Priority</th>
+        </tr>
+        </thead>
 
-<table id="example" class="table table-striped table-hover dt-responsive" cellspacing="0" width="100%"
-       role="grid">
-    <thead>
-    <tr>
-        <th >#</th>
-        <th >Title</th>
-        <th >Description</th>
-        <th >Deadline</th>
-        <th >Responsible</th>
-        <th >Author</th>
-        <th >Tasklist</th>
-        <th >Priority</th>
-    </tr>
-    </thead>
+        <tfoot style="display: table-header-group;">
+        <tr>
+            <th>#</th>
+            <th>Title</th>
+            <th>Description</th>
+            <th>Deadline</th>
+            <th>Responsible</th>
+            <th>Author</th>
+            <th>Tasklist</th>
+            <th>Priority</th>
+        </tr>
+        </tfoot>
 
-    <tfoot style="display: table-header-group;">
-    <tr>
-        <th >#</th>
-        <th >Title</th>
-        <th >Description</th>
-        <th >Deadline</th>
-        <th >Responsible</th>
-        <th >Author</th>
-        <th >Tasklist</th>
-        <th >Priority</th>
-    </tr>
-    </tfoot>
-
-</table>
+    </table>
 </div>
 <!--modal for alert messages to user-->
 <div id="alertModal" class="modal fade" role="dialog">
@@ -292,8 +253,8 @@
             </div>
         </div>
     </div>
-</div>
-</div>
+        </div>
+    </div>
 </body>
 </html>
 

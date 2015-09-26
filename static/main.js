@@ -569,11 +569,6 @@ $(document).ready(function () {
         dataSet = data['data'];
         table = $('#example').DataTable({
             "dom": 'C<"clear"><"toolbar">lfrtip',
-            scrollY: 800,
-            scrollCollapse: true,
-            fixedHeader: true,
-            responsive: true,
-            pagination: false,
             "columns": [
                 {"data": "ID"},
                 {"data": "title"},
