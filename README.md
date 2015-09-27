@@ -15,6 +15,27 @@ Work in progress
 
 ## FEATURE
 
+- better REST design:
+    - from [here](http://www.vinaysahni.com/best-practices-for-a-pragmatic-restful-api) mostly;
+    - move comments and history to task resources;
+        - GET /task/12/comments
+        - GET /task/12/history
+        - with possibility of specifying id
+            - GET /task/12/comments/2
+    - separate creation and editing into POST and PUT/PATCH;
+        - POST /task - creates new;
+        - PUT /task/12 - edits;
+    - query parameter searching;
+        - GET /task?responsible=16
+        - GET /task?sort=-priority,deadline (desc order of priority, then asc for deadline)
+    - on POSTing new resources, return HTTP 201 with location (HEADER) of new item;
+    - embed related fields;
+        - GET /task?embed=responsible.name
+
+- SSL
+
+- gzip!
+
 - move to SQLAlchemy for schema;
 
 - in order to accommodate for multiple users modifying and creating tasks in the database, I should do the following:
