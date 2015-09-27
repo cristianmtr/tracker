@@ -7,14 +7,10 @@ Work in progress
 # TODO
 
 ## FIX
-- fix UI issues: no showing "+" sign when shrinking table;
-	- make it scroll instead, always;
-	- make sure columns match and scroll as well;
+
 - add <id-type column>_text to json endpoints;
 - support proper encoding of national chars;
-- UI: fix scrollX size to viewport;
 - don't depend on mappings between client-side attributes and database ones (see: feature - move to SQLA);
-- figure out how to fit description textarea to proper size;
 - don't submit data if it has been changed in the meanwhile;
 
 ## FEATURE
