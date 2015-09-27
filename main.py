@@ -142,7 +142,7 @@ def gettask(taskid):
     data = {
         'title': task.title if task.title else None,
         'priority': task.priority if task.priority else None,
-        'description': task.description.encode('utf-8') if task.description else None,
+        'description': task.description if task.description else None,
         'deadline': task.deadlineDate.isoformat() if task.deadlineDate else None,
         'tasklist': task.projectId if task.projectId else None,
         'responsible': task.memberId if task.memberId else None,
@@ -159,12 +159,8 @@ def jsonInit():
         this_task = {}
 
         this_task['DT_RowId'] = t.itemId
-
         this_task['title'] = t.title
-
-        # keep formatting when displaying description
-        this_task['description'] = t.description.encode('utf-8')
-
+        this_task['description'] = t.description
         # handle empty fields, for deadlineDate or member info
         this_task['deadline'] = t.deadlineDate.isoformat() if t.deadlineDate else None
         this_task['responsible'] = t.memberId if t.memberId != 0 else None
