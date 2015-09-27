@@ -4,6 +4,12 @@ A simple task tracker. With REST API, token authentication, and a nice [datatabl
 
 Work in progress
 
+# SERVING WITH NGINX AND UWSGI
+
+- Copy nginx conf to sites-enabled/
+- Restart nginx
+- Start uwsgi --ini tracker_uwsgi.ini
+
 # TODO
 
 ## FIX
