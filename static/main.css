@@ -30,12 +30,12 @@ body.loading .loadingmodal {
     display: block;
 }
 
-table {
+table.dataTable {
     table-layout: fixed;
 }
 
-table th,
-table td {
+table.dataTable th,
+table.dataTable td {
     white-space: pre-wrap;
     word-wrap: break-word;
 }
