@@ -8,6 +8,7 @@ Work in progress
 
 ## FIX
 
+- investigate what the bottleneck is for page init., /json or loading rows;
 - add <id-type column>_text to json endpoints;
 - support proper encoding of national chars;
 - don't depend on mappings between client-side attributes and database ones (see: feature - move to SQLA);
