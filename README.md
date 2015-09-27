@@ -1,6 +1,6 @@
 # TRACKER
 
-A simple task tracker. With REST API, token authentication, and datatables integration.
+A simple task tracker. With REST API, token authentication, and a nice [datatables](http://datatables.net/)-based UI
 
 Work in progress
 
