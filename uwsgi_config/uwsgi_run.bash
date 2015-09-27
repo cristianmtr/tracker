@@ -1,1 +1,1 @@
-uwsgi --ini tracker_uwsgi.ini --py-autoreload 1
+uwsgi --ini $(pwd)/uwsgi_config/tracker_uwsgi.ini --py-autoreload 1
