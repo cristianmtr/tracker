@@ -5,6 +5,10 @@ from functools import wraps
 import backend
 
 app = Flask(__name__)
+app.debug = True
+app.secret_key = "123456"
+handler = RotatingFileHandler('app.log', maxBytes=10000, backupCount=1)
+handler.setLevel(logging.INFO)
 
 
 @app.route("/")
@@ -14,6 +18,7 @@ def index():
 
 def is_loggedin(f):
     """checks if the user is logged in"""
+
     @wraps(f)
     def wrapper(*args, **kwargs):
         submit_data = request.get_json()
@@ -22,6 +27,7 @@ def is_loggedin(f):
                 if backend.check_for_token_exists(submit_data['auth']['token']):
                     return f(*args, **kwargs)
         return jsonify(code=401)
+
     return wrapper
 
 
@@ -183,14 +189,6 @@ def jsonInit():
         dataSources=dataSources
     )
 
-def main():
-    app.debug = True
-    app.secret_key = "123456"
-    handler = RotatingFileHandler('app.log', maxBytes=10000, backupCount=1)
-    handler.setLevel(logging.INFO)
-    app.logger.addHandler(handler)
-    app.run(host='0.0.0.0', port=5000)
 
-if __name__ == "__main__":
-    main()
-
+# if __name__ == "__main__":
+#     app.run(port=5000)
