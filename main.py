@@ -43,13 +43,13 @@ def notify():
     return jsonify(code=200, data=data)
 
 
-@app.route("/comments/<taskid>", methods=["POST"])
+@app.route("/task/<taskid>/comments", methods=["POST"])
 def post_comment(taskid):
     # TODO
     return jsonify(code=500)
 
 
-@app.route("/comments/<taskid>", methods=["GET"])
+@app.route("/task/<taskid>/comments", methods=["GET"])
 def get_comment(taskid):
     # comments = ['comment 1', 'comment 2', 'comment 3']
     commentsDb = backend.get_comments_from_taskid(taskid)
@@ -98,14 +98,14 @@ def check():
         return jsonify(code=422)
 
 
-@app.route("/history/<taskid>", methods=["POST"])
+@app.route("/task/<taskid>/history", methods=["POST"])
 @is_loggedin
 def post_history(taskid):
     # TODO
     return jsonify(code=500)
 
 
-@app.route("/history/<taskid>", methods=["GET"])
+@app.route("/task/<taskid>/history", methods=["GET"])
 def history(taskid):
     historyEntriesDb = backend.get_history_from_taskid(taskid)
     historyEntries = []

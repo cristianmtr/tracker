@@ -352,7 +352,7 @@ function updateDataInModalFromId() {
     var modalDataObject = table.row("#" + currentItemId).data();
     setDataInModal(modalDataObject);
     $.ajax({
-        url: '/comments/' + currentItemId,
+        url: '/task/' + currentItemId + '/comments',
         async: true,
         dataType: 'json',
         success: function (comments) {
@@ -362,7 +362,7 @@ function updateDataInModalFromId() {
         }
     });
     $.ajax({
-        url: '/history/' + currentItemId,
+        url: '/task/' + currentItemId + '/history',
         async: true,
         dataType: 'json',
         success: function (historyEntries) {
