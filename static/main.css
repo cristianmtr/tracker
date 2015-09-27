@@ -42,14 +42,14 @@ table td {
 
 .countTable table tr td:nth-child(1), thead th:nth-child(1) {
     /*color: yellow;*/
-    width: 10%;
-    max-width: 10%;
+    width: 5%;
+    max-width: 5%;
 }
 
 .countTable table tr td:nth-child(2), thead th:nth-child(2) {
     /*color: yellow;*/
-    width: 10%;
-    max-width: 10%;
+    width: 15%;
+    max-width: 15%;
 }
 
 .countTable table tr td:nth-child(3), thead th:nth-child(3) {
