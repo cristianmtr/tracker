@@ -78,9 +78,10 @@ def update_task_object_with_submit_data(modelObject, dataToProcess):
 def createNewTask(submitData):
     newTask = db.task()
     newTask = update_task_object_with_submit_data(newTask, submitData)
-    db.session.add(newTask)
-    if db.try_commit() == 0:
-        db.session.refresh(newTask)
+    session = db.session()
+    session.add(newTask)
+    if db.try_commit(session) == 0:
+        session.refresh(newTask)
         new_notification("new_task", newTask.itemId)
         return newTask.itemId
     return -1
@@ -89,10 +90,11 @@ def createNewTask(submitData):
 def updateExistingTask(submitData, task_id):
     # import pdb
     # pdb.set_trace()
-    taskToModify = db.session.query(db.task).filter(db.task.itemId == task_id).one()
+    session = db.session()
+    taskToModify = session.query(db.task).filter(db.task.itemId == task_id).one()
     taskToModify = update_task_object_with_submit_data(taskToModify, submitData)
-    db.session.add(taskToModify)
-    if db.try_commit() == 0:
+    session.add(taskToModify)
+    if db.try_commit(session) == 0:
         new_notification("task", task_id)
         return task_id
     return -1
@@ -141,12 +143,14 @@ def new_notification(event_type, unique_id):
 
 
 def get_comments_from_taskid(taskid):
-    return db.session.query(db.comment.body, db.comment.memberId, db.comment.postDate, db.comment.lastChangeDate). \
+    session = db.session()
+    return session.query(db.comment.body, db.comment.memberId, db.comment.postDate, db.comment.lastChangeDate). \
                filter(db.comment.itemId == taskid).order_by(db.comment.postDate).all()[::-1]
 
 
 def get_history_from_taskid(taskid):
-    return db.session.query(db.history.memberId, db.history.statusDate, db.history.statusKey). \
+    session = db.session()
+    return session.query(db.history.memberId, db.history.statusDate, db.history.statusKey). \
                filter(db.history.itemId == taskid).order_by(db.history.statusDate).all()[::-1]
 
 
@@ -156,19 +160,21 @@ def get_task(taskid=None):
     :param taskid: the id of the task. if None or not passed, will return all tasks
     :return:
     """
+    session = db.session()
     if taskid:
-        return db.session.query(db.task, db.task.itemId, db.task.title, db.task.description, db.task.deadlineDate,
+        return session.query(db.task, db.task.itemId, db.task.title, db.task.description, db.task.deadlineDate,
                                 db.task.memberId, db.task.authorId, db.task.priority, db.task.projectId).filter(
             db.task.itemId == taskid).one()
     else:
-        return db.session.query(db.task, db.task.projectId, db.task.priority, db.task.itemId, db.task.title,
+        return session.query(db.task, db.task.projectId, db.task.priority, db.task.itemId, db.task.title,
                                 db.task.description, db.task.deadlineDate, db.task.memberId, db.task.authorId).all()
 
 
 def build_user_id_to_name():
     """returns dictionary mapping users ids to user names"""
     user_id_to_name = {}
-    users = db.session.query(db.user, db.user.memberId, db.user.firstName).all()
+    session = db.session()
+    users = session.query(db.user, db.user.memberId, db.user.firstName).all()
     for u in users:
         user_id_to_name[u.memberId] = u.firstName
     return user_id_to_name
@@ -177,7 +183,8 @@ def build_user_id_to_name():
 def build_tasklist_id_to_name():
     """returns dictionary mapping tasklist (projects) IDs to their names"""
     tasklists_dict = {}
-    all_tasklists = db.session.query(db.tasklist, db.tasklist.projectId, db.tasklist.name).all()
+    session = db.session()
+    all_tasklists = session.query(db.tasklist, db.tasklist.projectId, db.tasklist.name).all()
     for tsklst in all_tasklists:
         tasklists_dict[tsklst.projectId] = tsklst.name
     return tasklists_dict
