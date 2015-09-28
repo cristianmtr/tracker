@@ -266,10 +266,15 @@ function setAdditionalIDField(dataObject) {
     return dataObject;
 }
 
-function addNewRow(newTaskId, jsonDataObject) {
+function prepareTaskRowFromDb(jsonDataObject, newTaskId) {
     jsonDataObject = addValueFieldsToRowObject(jsonDataObject);
     jsonDataObject['DT_RowId'] = newTaskId;
     jsonDataObject = setAdditionalIDField(jsonDataObject);
+    return jsonDataObject;
+}
+
+function addNewRow(newTaskId, jsonDataObject) {
+    jsonDataObject = prepareTaskRowFromDb(jsonDataObject, newTaskId);
     table.row.add(jsonDataObject);
     table.draw();
 };
@@ -567,8 +572,12 @@ $(document).ready(function () {
         console.log('got data from /json');
         dataSources = data['dataSources'];
         dataSet = data['data'];
+        for (var i in dataSet) {
+            dataSet[i] = prepareTaskRowFromDb(dataSet[i], dataSet[i]['DT_RowId']);
+        }
         table = $('#example').DataTable({
             "dom": 'C<"clear"><"toolbar">lfrtip',
+            "data": dataSet,
             "columns": [
                 {"data": "ID"},
                 {"data": "title"},
@@ -601,11 +610,10 @@ $(document).ready(function () {
         });
 
         globalDataSources = dataSources;
+
         initializeEditables();
         checkForTokenCookie();
 
-
-        loadRowsFromDataSet(dataSet);
         $("body").removeClass("loading");
     });
 
