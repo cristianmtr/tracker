@@ -41,8 +41,6 @@ Work in progress
 
 - SSL
 
-- gzip!
-
 - move to SQLAlchemy for schema;
 
 - in order to accommodate for multiple users modifying and creating tasks in the database, I should do the following:
