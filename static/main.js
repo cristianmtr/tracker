@@ -15,7 +15,7 @@ const newItemForModal = {
     'tasklist': "General OPS",
 }
 
-var globalDataSources;
+var dataSources;
 
 function setUItoLoggedOut() {
     docCookies.removeItem("username");
@@ -608,8 +608,6 @@ $(document).ready(function () {
                     .draw();
             });
         });
-
-        globalDataSources = dataSources;
 
         initializeEditables();
         checkForTokenCookie();
