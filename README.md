@@ -14,6 +14,8 @@ Work in progress
 
 ## FIX
 
+- .encode('latin1') for work branch (db issue with PHP);
+	- print "– ".decode("utf8").encode("utf8") for the special dash char.;
 - investigate what the bottleneck is for page init., /json or loading rows;
 - add <id-type column>_text to json endpoints;
 - support proper encoding of national chars;
