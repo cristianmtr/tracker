@@ -20,3 +20,4 @@ itsdangerous.py
 markupsafe/
 sqlalchemy/
 werkzeug/
+*~
