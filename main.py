@@ -4,7 +4,7 @@ from logging.handlers import RotatingFileHandler
 from functools import wraps
 import backend
 
-app = Flask(__name__)
+app = Flask(__name__, template_folder="frontend", static_folder="frontend")
 app.debug = True
 app.secret_key = "123456"
 handler = RotatingFileHandler('app.log', maxBytes=10000, backupCount=1)
