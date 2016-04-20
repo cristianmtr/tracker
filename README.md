@@ -2,7 +2,7 @@
 
 A simple task tracker. With REST API, token authentication, and a nice [datatables](http://datatables.net/)-based UI
 
-Work in progress
+**ATTENTION** Work has moved to the Java version: [here](https://github.com/cristianmtr/tracker-java)
 
 # SERVING WITH NGINX AND UWSGI
 
